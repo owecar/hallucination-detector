@@ -1,17 +1,25 @@
 package com.example.hallucinationdetector.model;
 
 public class Claim {
-    private String text; // It will check the text
-    private String label; // Labels as supported, unsupported or contradicted
-    private String source; // source document that backs up or contradicts the claim
 
-    public Claim(String text, String label, String source){
+    private final String text;
+    private final String label;
+    private final String bestSource;
+    private final double score;
+    private final boolean hallucination;
+
+    public Claim(String text, String label, String bestSource,
+                 double score, boolean hallucination) {
         this.text = text;
         this.label = label;
-        this.source = source;
-
+        this.bestSource = bestSource;
+        this.score = score;
+        this.hallucination = hallucination;
     }
 
-
-    
+    public String getText() { return text; }
+    public String getLabel() { return label; }
+    public String getBestSource() { return bestSource; }
+    public double getScore() { return score; }
+    public boolean isHallucination() { return hallucination; }
 }
