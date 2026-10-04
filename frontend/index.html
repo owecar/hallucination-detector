@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hallucination Detector</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}" href="style.css">
+    </head>
+    <body>
+        <h1>Hallucination Detector</h1>
+        <h2>User Questions</h2>
+        <p th:text="'Welcome to the Hallucination Detector!'">"Our mission is to detect that AI is lying to us!"</p>
+        
+        <form th:action="@{/submit}" method="post"> //I need Anna's controller
+            <div>
+                <label for="question">Enter your question:</label>
+                <input type="text" id="question" name="question" required>
+            </div>
+            <div>
+                <button type="Reset">Reset</button>
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+            
+        </form>
+    </body>
+</html>
