@@ -2,60 +2,52 @@ package com.example.hallucinationdetector.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.hallucinationdetector.claim.ClaimExtractor;
-import com.example.hallucinationdetector.detector.HallucinationDetector;
-import com.example.hallucinationdetector.factcheck.FactChecker;
-import com.example.hallucinationdetector.factcheck.VerificationResult;
-import com.example.hallucinationdetector.llm.LLMClient;
 import com.example.hallucinationdetector.model.CheckResponse;
 import com.example.hallucinationdetector.model.Claim;
+import com.example.hallucinationdetector.model.SavedQuery;
+import com.example.hallucinationdetector.repository.SavedQueryRepository;
+import com.example.hallucinationdetector.service.LLMClient;
 
-@RestController
-@RequestMapping("/api")
-@CrossOrigin // lets a separate frontend call this; tighten the origin later
+@Controller
 public class QuestionController {
+    private final LLMClient llm;
+    private final ClaimExtractor extractor;
+    private final SavedQueryRepository repository;
+    public QuestionController(LLMClient llm, ClaimExtractor extractor,
+                              SavedQueryRepository repository) {
+        this.llm = llm;
+        this.extractor = extractor;
+        this.repository = repository;
+    }
 
-    private final LLMClient llm = new LLMClient();
-    private final ClaimExtractor extractor = new ClaimExtractor();
-    private final FactChecker checker = new FactChecker();
-    private final HallucinationDetector detector = new HallucinationDetector();
+    @GetMapping("/")
+    public String showForm() {
+        return "index";
+    }
 
-    // POST /api/check   body: {"question": "Who wrote Hamlet?"}
-    @PostMapping("/check")
-    public ResponseEntity<CheckResponse> check(@RequestBody Map<String, String> body) {
-
-        String question = body.get("question");
-        if (question == null || question.isBlank()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        String aiAnswer = llm.askLLM(question);
-        List<String> claimTexts = extractor.extractClaims(aiAnswer);
+    @PostMapping("/submit")
+    public String submit(@RequestParam("question") String question, Model model) {
+        String answer = llm.askLLM(question);
 
         List<Claim> claims = new ArrayList<>();
-        for (String claimText : claimTexts) {
-            // TODO: replace with real retrieved passages once retrieval is built
-            List<String> sources = List.of("... placeholder for trusted sources to check ...");
-
-            VerificationResult result = checker.verifyClaim(claimText, sources);
-
-            claims.add(new Claim(
-                    claimText,
-                    result.label(),
-                    result.bestSource,
-                    result.score,
-                    detector.isHallucination(result)));
+        for (String text : extractor.extractClaims(answer)) {
+            claims.add(new Claim(text, "Unchecked", "N/A"));
         }
+        CheckResponse response = new CheckResponse(question, answer, claims);
 
-        return ResponseEntity.ok(new CheckResponse(question, aiAnswer, claims));
+        repository.save(new SavedQuery(question, answer));
+
+        model.addAttribute("question", response.getQuestion());
+        model.addAttribute("answer", response.getAnswer());
+        model.addAttribute("claims", response.getClaims());
+        return "results";
     }
 }
