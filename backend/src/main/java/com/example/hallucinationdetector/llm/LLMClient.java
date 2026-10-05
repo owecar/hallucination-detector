@@ -1,20 +1,19 @@
 package com.example.hallucinationdetector.llm;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LLMClient {
-
     private final String apiKey = System.getenv("GEMINI_API_KEY");
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
     private static final Pattern CONTENT_PATTERN =
             Pattern.compile("\"content\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
-
     public String askLLM(String prompt) {
         try {
             String escapedPrompt = prompt.replace("\\", "\\\\").replace("\"", "\\\"");
@@ -41,7 +40,6 @@ public class LLMClient {
                         .replace("\\\\", "\\");
             }
             return "Error: could not parse the AI response.";
-
         } catch (Exception e) {
             return "Error: could not reach the AI model.";
         }
