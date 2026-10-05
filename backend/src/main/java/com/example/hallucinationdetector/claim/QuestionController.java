@@ -36,9 +36,9 @@ public class QuestionController {
         return "index";
     }
 
-    // POST /check -> templates/results.html
-    @PostMapping("/check")
-    public String check(@RequestParam("question") String question, Model model) {
+    // POST /submit -> templates/results.html (matches the form in index.html)
+    @PostMapping("/submit")
+    public String submit(@RequestParam("question") String question, Model model) {
 
         String answer = llm.askLLM(question);
 
