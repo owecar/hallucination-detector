@@ -4,22 +4,15 @@ public class Claim {
 
     private final String text;
     private final String label;
-    private final String bestSource;
-    private final double score;
-    private final boolean hallucination;
+    private final String source;
 
-    public Claim(String text, String label, String bestSource,
-                 double score, boolean hallucination) {
+    public Claim(String text, String label, String source) {
         this.text = text;
         this.label = label;
-        this.bestSource = bestSource;
-        this.score = score;
-        this.hallucination = hallucination;
+        this.source = source;
     }
 
     public String getText() { return text; }
     public String getLabel() { return label; }
-    public String getBestSource() { return bestSource; }
-    public double getScore() { return score; }
-    public boolean isHallucination() { return hallucination; }
+    public String getSource() { return source; }
 }
