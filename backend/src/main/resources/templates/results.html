@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Results</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
     <h1>Your question</h1>
     <p th:text="${question}"></p>
+
+    <h2>AI answer</h2>
+    <p th:text="${answer}" style="white-space: pre-wrap;"></p>
+
+    <h2>Claims</h2>
+    <p th:if="${#lists.isEmpty(claims)}">No claims were detected.</p>
+    <ul>
+        <li th:each="claim : ${claims}">
+            <span th:text="${claim.text}"></span><br>
+            <strong>Label:</strong> <span th:text="${claim.label}"></span> |
+            <strong>Source:</strong> <span th:text="${claim.source}"></span>
+        </li>
+    </ul>
+
     <a href="/">Ask another question</a>
 </body>
 </html>
