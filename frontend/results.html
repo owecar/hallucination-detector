@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Results - Hallucination Detector</title>
+        <link rel="stylesheet" th:href="@{/style.css}">
+    </head>
+    <body>
+        <h1>Results</h1>
+
+        <h2>Your question</h2>
+        <p th:text="${question}"></p>
+
+        <h2>AI answer</h2>
+        <p th:text="${answer}" style="white-space: pre-wrap;"></p>
+
+        <h2>Claims</h2>
+        <p th:if="${#lists.isEmpty(claims)}">No claims were detected.</p>
+        <ul>
+            <li th:each="claim : ${claims}">
+                <span th:text="${claim.text}"></span><br>
+                <strong>Label:</strong> <span th:text="${claim.label}"></span> |
+                <strong>Source:</strong> <span th:text="${claim.source}"></span>
+            </li>
+        </ul>
+
+        <p><a th:href="@{/}">Ask another question</a></p>
+    </body>
+</html>
