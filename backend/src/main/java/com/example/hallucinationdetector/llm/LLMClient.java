@@ -15,7 +15,7 @@ public class LLMClient {
     @Value("${gemini.api.key:}")
     private String configuredKey;
 
-    @Value("${gemini.model:gemini-2.5-flash}")
+    @Value("${gemini.model:gemini-3.8-flash}")
     private String model;
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private static final String API_URL =
