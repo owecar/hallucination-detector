@@ -1,1 +1,37 @@
+package com.example.hallucinationdetector.controller;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.example.hallucinationdetector.claim.ClaimExtractor;
+import com.example.hallucinationdetector.llm.LLMClient;
+import com.example.hallucinationdetector.model.SavedQuery;
+import com.example.hallucinationdetector.repository.SavedQueryRepository;
+import com.example.hallucinationdetector.verification.ClaimVerifier;
+import com.example.hallucinationdetector.verification.TopicValidator;
+import com.example.hallucinationdetector.verification.VerificationSummary;
+import com.example.hallucinationdetector.verification.VerificationClaim;
 
+@Controller
+public class VerificationController{
+  private final LLMClient llm;
+  private final ClaimExtractor extractor;
+  private final TopicValidator topicValidator;
+  private final ClaimVerifier verifier;
+  private final SavedQueryRepository repository;
+
+  public VerificationController(LLMClient llm, ClaimExtractor extractor, TopicValidator, topicValidator, ClaimVerifier verifier, SavedQueryRepository, repository){
+    this.llm = llm;
+    this.extractor = extractor;
+    this.topicValidator = topicValidator;
+    this.verifier = verifier;
+    this.repository = repository;
+  }
+
+  @GetMapping("/verify")
+  public String showForm(){
+    return "verify"
+  }
+}
