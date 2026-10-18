@@ -34,4 +34,35 @@ public class VerificationController{
   public String showForm(){
     return "verify"
   }
+  @PostMapping("/verify")
+  public String verify(@RequestParam("question") String question, Model model){
+    String q = question == numm ? "" : question.trim();
+    if (q.isEmoty()){
+      model.addAttribute("error", "please enter a question ");
+      return "verify";
+    }
+    String problem = topicValidator.check(q);
+    if (problem != null){
+      model.addAttribute("error", problem);
+      return "verify";
+    }
+    String answer = llm.askLLM(q);
+    if(answer == null){
+      answer = "error, no reply from AI service";
+    }
+    List<VerifiedClaim> claims = new ArrayList<>();
+    if(!answer.startsWith("Error:")){
+      claims = verifier.verify(extractor.extractClaims(answer));
+      try {
+        repository.save(new SavedQuery(q, answer));
+      } catch (RuntimeException e){
+          model.addAttribute("notice", "answer shown but could not be saved to history");
+      }
+    }
+    model.addAttribute("question", q);
+    model.addAttribute("answer", answer);
+    model.addAttribute("claims", claims);
+    model.addAttribute("summary", VerificationSummary.from(claims));
+    return "verify-results";
+  }
 }
