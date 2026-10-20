@@ -1,2 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question History - Hallucination Detector</title>
+    <link rel="stylesheet" th:href="@{/Css/style.css}" href="Css/style.css">
+</head>
+<body>
+
+    <h1>Question History</h1>
+    <p>View and manage previously submitted questions.</p>
+
+    <p th:if="${message}" th:text="${message}"></p>
+
+    <div th:if="${#lists.isEmpty(history)}">
+        <p>No questions have been saved yet.</p>
+    </div>
+
+    <div th:each="item : ${history}" class="history-item">
+
+        <h2 th:text="${item.question}">Question</h2>
+
+        <p th:text="${item.answer}">AI Answer</p>
+
+        <p>
+            Submitted:
+            <span th:text="${item.createdAt}">Date</span>
+        </p>
+
+        <form th:action="@{/history/delete/{id}(id=${item.id})}"
+              method="post"
+              class="delete-form">
+
+            <button type="submit" class="delete-button">
+                Delete Question
+            </button>
+
+        </form>
+
+    </div>
+
+    <p>
+        <a th:href="@{/}" href="index.html">Back to Homepage</a>
+    </p>
+
+    <script th:src="@{/JavaScript/script.js}"
+            src="JavaScript/script.js" defer></script>
+
+</body>
+</html>
