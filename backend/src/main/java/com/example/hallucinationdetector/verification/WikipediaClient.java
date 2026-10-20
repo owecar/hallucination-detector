@@ -68,3 +68,75 @@ public class WikipediaClient{
     list.sort((a, b) -> Integer.compare(a.getRank(), b.getRank()));
     return list;
   }
+  static String readText(String piece, String key){
+    String marker = "\"" + key + "\":\"";
+    int start = piece.indexOf(marker);
+    if(start < 0){
+      return "";
+    }
+    start += marker.length();
+    int end = start;
+    while(end < piece.length()){
+      char c = piece.charAt(end);
+      if(c == '\\'){
+        end += 2;
+      } else if(c == '"'){
+          break;
+      }else{
+        end++;
+      }
+    }
+    if(end > piece.length()){
+      end = piece.length();
+    }
+    return enescape(piece.substring(start, end));
+  }
+  static int readNUmber(String piece, String key){
+    String marker = "\"" + key + "\":";
+    int start = piece.indexOf(marker);
+    if(start < 0){
+      return 999;
+    }
+    start +=marker.length();
+    int end = start;
+    while(end < piece.length() && Character.isDigit(piece.charAt(end))){
+      end++;
+    }
+    if(end == start){
+      return 999;
+    }
+    return Integer.parseInt(piece.substring(start, end));
+  }
+  static String unescape(String s){
+    StringBuilder sb = new StringBuilder();
+    for(int i = 0; i < s.length(); i++){
+      char c = s.charAt(i);
+      if(c != '\\' || i + 1 >= s.length()){
+        sb.append(c);
+        continue;
+      }
+      char next = s.charAt(++i);
+      if(next == 'n'){
+        sb.append(' ');
+      } else if(next == 't'){
+          sb.append(' ');
+      } else if(next == 'u' && i + 4 < s.length()){
+          try{
+            sb.append((char) Integer.parseInt(s.substring(i + 1, + 5), 16));
+            i += 4;
+          } catch(Exception e){
+              sb.append('u');
+          } 
+        else{
+         sb.append(next);   
+        }
+      }
+      return sb.toString();
+    }
+  static String makeUrl(String title){
+    return "https://en.wikipedia.org/wiki/" + encode(title.replace('', '_'));
+  }
+  private static String encode(String s){
+    return URLEncode.encode(s, StandardCharsets.UTF_8);
+  }
+}
