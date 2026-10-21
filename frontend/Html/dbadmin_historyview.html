@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Question History | Database Administration</title>
+
+    <link rel="stylesheet" href="../Css/style.css">
+    <script src="../JavaScript/dbadmin_data.js" defer></script>
+</head>
+
+<body class="dbadmin-page" data-dbadmin-page="history">
+
+    <main class="dbadmin-container">
+
+        <nav class="dbadmin-topnav"
+             aria-label="Database administration navigation">
+
+            <a class="dbadmin-link" href="dbadmin_mainview.html">
+                ← Database Admin Dashboard
+            </a>
+
+            <div class="dbadmin-actions">
+
+                <a class="dbadmin-link"
+                   href="dbadmin_databaseview.html">
+                    View Data
+                </a>
+
+                <a class="dbadmin-link"
+                   href="dbadmin_updateview.html">
+                    Edit Records
+                </a>
+
+                <a class="dbadmin-link"
+                   href="dbadmin_historyview.html">
+                    Question History
+                </a>
+
+            </div>
+        </nav>
+
+        <header class="dbadmin-header">
+
+            <p class="dbadmin-eyebrow">
+                HALLUCINATION DETECTION SYSTEM
+            </p>
+
+            <h1>Question History</h1>
+
+            <p class="dbadmin-subtitle">
+                Review saved questions and generated answers.
+            </p>
+
+        </header>
+
+        <p class="dbadmin-notice">
+            Frontend demonstration only — records shown here
+            are sample data stored in this browser, not in PostgreSQL.
+        </p>
+
+        <section class="dbadmin-stats"
+                 id="dbadmin-stats">
+        </section>
+
+        <section class="dbadmin-panel">
+
+            <h2>Saved Question History</h2>
+
+            <div class="dbadmin-toolbar">
+
+                <label>
+                    <span class="dbadmin-label">
+                        Search questions and answers
+                    </span>
+
+                    <input class="dbadmin-input"
+                           id="dbadmin-search"
+                           type="search"
+                           placeholder="Search history...">
+                </label>
+
+                <label>
+                    <span class="dbadmin-label">
+                        Sort
+                    </span>
+
+                    <select class="dbadmin-select"
+                            id="dbadmin-history-sort">
+
+                        <option value="newest">
+                            Newest First
+                        </option>
+
+                        <option value="oldest">
+                            Oldest First
+                        </option>
+
+                    </select>
+                </label>
+
+                <button class="dbadmin-button dbadmin-button-secondary"
+                        id="dbadmin-clear-search"
+                        type="button">
+                    Clear Search
+                </button>
+
+            </div>
+
+            <p class="dbadmin-muted"
+               id="dbadmin-row-count"
+               aria-live="polite">
+            </p>
+
+            <div class="dbadmin-table-wrap"
+                 id="dbadmin-table-container">
+            </div>
+
+        </section>
+
+        <section class="dbadmin-panel">
+
+            <p class="dbadmin-muted">
+                This preview displays all sample saved questions.
+            </p>
+
+            <a class="dbadmin-link"
+               href="dbadmin_updateview.html">
+                Edit Saved-Query Records →
+            </a>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
