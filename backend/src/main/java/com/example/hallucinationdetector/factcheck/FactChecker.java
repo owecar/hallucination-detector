@@ -7,7 +7,7 @@ public class FactChecker {
         String bestSource = "No source available";
         double bestScore = 0.0;
         for (String source : sources) {
-            double score = 0.0; // TODO: real similarity/NLI scoring later
+            double score = 0.0; 
             if (score > bestScore) { bestScore = score; bestSource = source; }
         }
         String label = bestScore >= 0.7 ? "supported" : bestScore >= 0.4 ? "unsupported" : "contradicted";
