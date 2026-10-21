@@ -1,4 +1,3 @@
-"use strict";
 const DBADMIN_KEY = "hallucination_dbadmin_demo_v1";
 const DBADMIN_SCHEMA = {
   app_user: {key:"id", columns:["id","username","email","role","created_at"], readonly:["id","created_at"]},
@@ -27,9 +26,45 @@ function dbadminPopulateRecords(){const table=dbadminCurrentTable(),select=dbadm
 function dbadminSelectedRecord(){const table=dbadminCurrentTable(),key=DBADMIN_SCHEMA[table].key,id=dbadminElement("dbadmin-record-select")?.value;return dbadminData[table].find(row=>String(row[key])===id);}
 function dbadminRenderForm(){const target=dbadminElement("dbadmin-form-fields");if(!target)return;target.replaceChildren();const table=dbadminCurrentTable(),record=dbadminSelectedRecord();if(!record){target.append(dbadminMake("p","No records available."));return;}DBADMIN_SCHEMA[table].columns.forEach(col=>{const label=dbadminMake("label",undefined,col==="question"||col==="answer"||col==="ai_claim_text"?"dbadmin-field-full":"");const caption=dbadminMake("span",col,"dbadmin-label");label.append(caption);let field;if(col==="answer"||col==="question"||col==="ai_claim_text"){field=dbadminMake("textarea",undefined,"dbadmin-textarea");field.rows=3;field.value=String(record[col]??"");}else if(col==="role"||col==="verdict"){field=dbadminMake("select",undefined,"dbadmin-select");(col==="role"?["USER","ADMIN","DB_ADMIN"]:["SUPPORTED","UNSUPPORTED","UNCERTAIN"]).forEach(value=>{const option=dbadminMake("option",value);option.value=value;field.append(option);});field.value=record[col];}else{field=dbadminMake("input",undefined,"dbadmin-input");field.type=col==="email"?"email":col==="score"?"number":"text";field.value=String(record[col]??"");if(col==="score"){field.min="0";field.max="1";field.step="0.01";}}field.name=col;field.disabled=DBADMIN_SCHEMA[table].readonly.includes(col);if(!field.disabled)field.required=true;label.append(field);target.append(label);});const feedback=dbadminElement("dbadmin-feedback");if(feedback)feedback.textContent="";dbadminRenderTable(table,dbadminData[table]);}
 function dbadminSave(event){event.preventDefault();const table=dbadminCurrentTable(),record=dbadminSelectedRecord(),form=dbadminElement("dbadmin-edit-form"),feedback=dbadminElement("dbadmin-feedback");if(!record||!form)return;if(!form.reportValidity())return;const data=new FormData(form);const changes={};for(const col of DBADMIN_SCHEMA[table].columns){if(DBADMIN_SCHEMA[table].readonly.includes(col))continue;const value=String(data.get(col)||"").trim();if(!value){feedback.textContent=`${col} cannot be empty.`;feedback.className="dbadmin-error";return;}if(col==="score"&&(Number(value)<0||Number(value)>1)){feedback.textContent="Score must be between 0 and 1.";feedback.className="dbadmin-error";return;}if(col==="ai_claim_id"&&table==="result"&&!dbadminData.ai_claim.some(row=>String(row.ai_claim_id)===value)){feedback.textContent="Claim ID must match an existing ai_claim record.";feedback.className="dbadmin-error";return;}changes[col]=(col==="score"?Number(value):col==="ai_claim_id"?Number(value):value);}Object.assign(record,changes);const saved=dbadminPersist();feedback.textContent=saved?"Sample record updated successfully.":"Updated in memory, but browser storage is unavailable.";feedback.className=saved?"dbadmin-success":"dbadmin-error";dbadminPopulateRecords();feedback.textContent=saved?"Sample record updated successfully.":"Updated in memory, but browser storage is unavailable.";feedback.className=saved?"dbadmin-success":"dbadmin-error";}
+function dbadminDeleteRecord() {
+  const table = dbadminCurrentTable();
+  const record = dbadminSelectedRecord();
+  const feedback = dbadminElement("dbadmin-feedback");
+  if (!record) return;
+
+  const key = DBADMIN_SCHEMA[table].key;
+  const id = record[key];
+
+  // Prevent deleting a claim referenced by a result record.
+  if (table === "ai_claim" && dbadminData.result.some(
+    result => String(result.ai_claim_id) === String(id)
+  )) {
+    feedback.textContent = "Cannot delete this claim while a result references it.";
+    feedback.className = "dbadmin-error";
+    return;
+  }
+
+  if (!window.confirm(`Delete ${table} record ${id}? This cannot be undone in the demo unless you reset the sample data.`)) {
+    return;
+  }
+
+  dbadminData[table] = dbadminData[table].filter(
+    row => String(row[key]) !== String(id)
+  );
+
+  const saved = dbadminPersist();
+  dbadminPopulateRecords();
+  if (feedback) {
+    feedback.textContent = saved
+      ? `Record ${id} deleted from the browser demo data.`
+      : `Record ${id} deleted for this session, but browser storage is unavailable.`;
+    feedback.className = saved ? "dbadmin-success" : "dbadmin-error";
+  }
+}
+
 function dbadminClearSearch(){const search=dbadminElement("dbadmin-search");if(search){search.value="";search.focus();}dbadminRenderBrowse();}
 function dbadminReset(){if(!window.confirm("Reset all sample records to their original demo values?"))return;dbadminData=dbadminClone(DBADMIN_SAMPLE);dbadminPersist();dbadminRenderBrowse();}
 function dbadminSetupBrowse(){dbadminElement("dbadmin-table-select")?.addEventListener("change",dbadminRenderBrowse);dbadminElement("dbadmin-search")?.addEventListener("input",dbadminRenderBrowse);dbadminElement("dbadmin-clear-search")?.addEventListener("click",dbadminClearSearch);dbadminElement("dbadmin-reset-data")?.addEventListener("click",dbadminReset);dbadminElement("dbadmin-history-sort")?.addEventListener("change",dbadminRenderBrowse);dbadminRenderBrowse();}
-function dbadminSetupEditor(){dbadminElement("dbadmin-table-select")?.addEventListener("change",dbadminPopulateRecords);dbadminElement("dbadmin-record-select")?.addEventListener("change",dbadminRenderForm);dbadminElement("dbadmin-edit-form")?.addEventListener("submit",dbadminSave);dbadminElement("dbadmin-cancel")?.addEventListener("click",dbadminRenderForm);dbadminPopulateRecords();}
+function dbadminSetupEditor(){dbadminElement("dbadmin-table-select")?.addEventListener("change",dbadminPopulateRecords);dbadminElement("dbadmin-record-select")?.addEventListener("change",dbadminRenderForm);dbadminElement("dbadmin-edit-form")?.addEventListener("submit",dbadminSave);dbadminElement("dbadmin-cancel")?.addEventListener("click",dbadminRenderForm);dbadminElement("dbadmin-delete")?.addEventListener("click",dbadminDeleteRecord);dbadminPopulateRecords();}
 function dbadminInitialize(){dbadminData=dbadminLoad();const page=document.body.dataset.dbadminPage;if(page==="history"){const selector=dbadminElement("dbadmin-table-select");if(!selector){const hidden=dbadminMake("select");hidden.id="dbadmin-table-select";hidden.hidden=true;const option=dbadminMake("option","saved_query");option.value="saved_query";hidden.append(option);document.body.append(hidden);}dbadminSetupBrowse();}else if(page==="view")dbadminSetupBrowse();else if(page==="update")dbadminSetupEditor();}
 document.addEventListener("DOMContentLoaded",dbadminInitialize);
