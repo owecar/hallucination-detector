@@ -29,6 +29,11 @@ function dbadminSave(event){event.preventDefault();const table=dbadminCurrentTab
 function dbadminDeleteRecord() {
   const table = dbadminCurrentTable();
   const record = dbadminSelectedRecord();
+  const saveButton = dbadminElement("dbadmin-save");
+  const deleteButton = dbadminElement("dbadmin-delete");
+
+  if (saveButton) saveButton.disabled = !record;
+  if (deleteButton) deleteButton.disabled = !record;
   const feedback = dbadminElement("dbadmin-feedback");
   if (!record) return;
 
