@@ -1,0 +1,186 @@
+.userhistory-page {
+    min-height: 100vh;
+}
+
+.userhistory-container {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 35px 20px 65px;
+}
+
+.userhistory-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.userhistory-header h1 {
+    font-size: clamp(32px, 5vw, 50px);
+    margin-bottom: 10px;
+}
+
+.userhistory-header p,
+.userhistory-account p {
+    color: #c9d1e8;
+    line-height: 1.6;
+}
+
+.userhistory-account,
+.userhistory-card {
+    background: rgba(10, 15, 40, 0.82);
+    border: 1px solid rgba(0, 245, 255, 0.45);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.1);
+}
+
+.userhistory-account {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 12px;
+}
+
+.userhistory-account > div {
+    flex: 1 1 100%;
+}
+
+.userhistory-account h2 {
+    margin: 0;
+}
+
+.userhistory-account label {
+    font-weight: bold;
+}
+
+.userhistory-account input {
+    padding: 12px;
+    color: white;
+    background: #111c3a;
+    border: 1px solid #8290b2;
+    border-radius: 10px;
+}
+
+.userhistory-account button {
+    margin-top: 0;
+}
+
+.userhistory-current {
+    margin: 25px 0 15px;
+    color: #8defff;
+    font-weight: bold;
+}
+
+/* Saved questions: answer, verification verdict, and confidence */
+.userhistory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.userhistory-card h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.userhistory-card-header,
+.userhistory-score-row,
+.userhistory-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.userhistory-date,
+.userhistory-label {
+    color: #b9c8e6;
+    font-size: 14px;
+}
+
+.userhistory-answer {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.65;
+}
+
+.userhistory-verification {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #435170;
+}
+
+.userhistory-verdict {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    background: #243d60;
+    color: #8defff;
+}
+
+.userhistory-verdict.supported {
+    color: #a3f5d1;
+}
+
+.userhistory-verdict.unsupported {
+    color: #ff9abb;
+}
+
+.userhistory-verdict.uncertain {
+    color: #ffe59a;
+}
+
+.userhistory-score-track {
+    height: 10px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #28334f;
+}
+
+.userhistory-score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00f5ff, #9d4edd);
+}
+
+.userhistory-card-actions {
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.userhistory-delete {
+    background: #80214b;
+    border: 1px solid #ff70a6;
+}
+
+.userhistory-delete:hover,
+.userhistory-delete:focus-visible {
+    background: #a12c61;
+}
+
+.userhistory-empty {
+    text-align: center;
+    padding: 35px;
+    color: #c9d1e8;
+}
+
+.userhistory-feedback {
+    min-height: 20px;
+    color: #a3f5d1;
+}
+
+.userhistory-home {
+    color: #74ecff;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .userhistory-container {
+        padding: 20px 14px 45px;
+    }
+
+    .userhistory-account,
+    .userhistory-card {
+        padding: 17px;
+    }
+}
