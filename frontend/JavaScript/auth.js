@@ -21,10 +21,16 @@ function validateLoginForm(event) {
         event.preventDefault();
         loginError.textContent = "Please enter your username.";
         usernameInput.focus();
+        return;
+    }
+
+    if (passwordInput.value.trim() === "") {
+        event.preventDefault();
+        loginError.textContent = "Please enter your password.";
+        passwordInput.focus();
+        return;
     }
 }
-
-loginForm.addEventListener("submit", validateLoginForm);
 
 function clearLoginError() {
     loginError.textContent = "";
