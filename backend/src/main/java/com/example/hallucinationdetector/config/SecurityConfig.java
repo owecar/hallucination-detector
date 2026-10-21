@@ -14,6 +14,9 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(access -> access
                 .requestMatchers(
+                        "/dbadmin", "/dbadmin/**", "/Html/dbadmin*"
+                ).hasRole("DB_ADMIN")
+                .requestMatchers(
                         "/login", "/register",
                         "/Css/**", "/JavaScript/**", "/Images/**"
                 ).permitAll()
@@ -23,7 +26,17 @@ public class SecurityConfig {
         http.formLogin(login -> login
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/", true)
+                .successHandler((request, response, authentication) -> {
+                        boolean databaseAdmin = authentication.getAuthorities().stream()
+                                .anyMatch(authority ->
+                                        authority.getAuthority().equals("ROLE_DB_ADMIN"));
+
+                        if (databaseAdmin) {
+                                response.sendRedirect(request.getContextPath() + "/dbadmin");
+                        } else {
+                                response.sendRedirect(request.getContextPath() + "/");
+                        }
+})
                 .failureUrl("/login?error")
                 .permitAll()
         );

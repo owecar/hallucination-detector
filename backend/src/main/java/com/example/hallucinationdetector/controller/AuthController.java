@@ -30,6 +30,11 @@ public class AuthController {
         return "Html/register";
     }
 
+    @GetMapping("/dbadmin")
+    public String showDatabaseAdmin() {
+        return "Html/dbadmin_mainview";
+    }    
+
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String role, Model model) {
 
