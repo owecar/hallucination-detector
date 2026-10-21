@@ -1,51 +1,42 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question History - Hallucination Detector</title>
-    <link rel="stylesheet" th:href="@{/Css/style.css}" href="Css/style.css">
+    <title>My Question History | Hallucination Detector</title>
+    <link rel="stylesheet" href="../Css/style.css">
+    <link rel="stylesheet" href="../Css/userhistory.css">
+    <script src="../JavaScript/userhistory.js" defer></script>
 </head>
-<body>
+<body class="userhistory-page">
+    <header class="site-header">
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="index.html">Home</a>
+            <a href="userhistory.html" aria-current="page">Question History</a>
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
 
-    <h1>User Question History</h1>
-    <p>View and manage previously submitted questions.</p>
+    <main class="userhistory-container">
+        <header class="userhistory-header">
+            <h1>My Question History</h1>
+            <p>Review your previous questions, AI answers, and verification results.</p>
+        </header>
 
-    <p th:if="${message}" th:text="${message}"></p>
+        <section class="userhistory-account" aria-label="Demo account selection">
+            <div>
+                <h2>Frontend Account Preview</h2>
+                <p>This demonstration uses browser-only sample history, not real login or database records.</p>
+            </div>
+            <label for="userhistory-account-name">Demo username</label>
+            <input id="userhistory-account-name" type="text" maxlength="40" autocomplete="off" placeholder="Enter a demo username">
+            <button id="userhistory-switch-account" type="button">View Account</button>
+        </section>
 
-    <div th:if="${#lists.isEmpty(history)}">
-        <p>No questions have been saved yet.</p>
-    </div>
-
-    <div th:each="item : ${history}" class="history-item">
-
-        <h2 th:text="${item.question}">Question</h2>
-
-        <p th:text="${item.answer}">AI Answer</p>
-
-        <p>
-            Submitted:
-            <span th:text="${item.createdAt}">Date</span>
-        </p>
-
-        <form th:action="@{/history/delete/{id}(id=${item.id})}"
-              method="post"
-              class="delete-form">
-
-            <button type="submit" class="delete-button">
-                Delete Question
-            </button>
-
-        </form>
-
-    </div>
-
-    <p>
-        <a th:href="@{/}" href="index.html">Back to Homepage</a>
-    </p>
-
-    <script th:src="@{/JavaScript/script.js}"
-            src="JavaScript/script.js" defer></script>
-
+        <p class="userhistory-current" id="userhistory-current-account" aria-live="polite"></p>
+        <section id="userhistory-list" class="userhistory-list" aria-label="Saved questions"></section>
+        <p id="userhistory-feedback" class="userhistory-feedback" role="status" aria-live="polite"></p>
+        <a class="userhistory-home" href="index.html">← Return to Homepage</a>
+    </main>
 </body>
 </html>
