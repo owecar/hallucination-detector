@@ -14,10 +14,21 @@
 
     <body>
         <header class="site-header">
-            <nav class="main-nav" araia-label="Main navigation">
-                <a th:href="@{/}" href="index.html">Home</a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a th:href="@{/}" href="index.html">
+                    Home
+                </a>
+
                 <a th:href="@{/history}" href="userhistory.html">
                     Question History
+                </a>
+
+                <a th:href="@{/login}" href="login.html">
+                    Login
+                </a>
+
+                <a th:href="@{/register}" href="register.html">
+                    Register
                 </a>
             </nav>
         </header>
