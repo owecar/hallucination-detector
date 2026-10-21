@@ -98,3 +98,20 @@ button {
 
     cursor: pointer;
 }
+
+.dbadmin-page { min-height: 100vh; padding: 48px 20px; box-sizing: border-box; }
+.dbadmin-container { max-width: 1050px; margin: 0 auto; }
+.dbadmin-header { text-align: center; margin-bottom: 36px; }
+.dbadmin-eyebrow { color: #74ecff; letter-spacing: 0.18em; font-size: 12px; font-weight: 700; }
+.dbadmin-header h1 { font-size: clamp(32px, 5vw, 55px); margin: 12px 0; }
+.dbadmin-subtitle { color: #d1d7ef; font-size: 17px; }
+.dbadmin-grid { display: flex; flex-wrap: wrap; gap: 20px; }
+.dbadmin-card { box-sizing: border-box; flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; padding: 30px; color: #fff; text-decoration: none; background: rgba(10, 15, 40, 0.78); border: 1px solid rgba(0, 245, 255, 0.5); border-radius: 22px; box-shadow: 0 0 20px rgba(0, 245, 255, 0.1); backdrop-filter: blur(14px); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+.dbadmin-card:hover, .dbadmin-card:focus-visible { transform: translateY(-5px); border-color: #ff2e93; box-shadow: 0 10px 32px rgba(157, 78, 221, 0.28); outline-offset: 4px; }
+.dbadmin-card-icon { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 14px; background: rgba(0, 245, 255, 0.12); color: #00f5ff; font-size: 30px; }
+.dbadmin-card h2 { font-size: 23px; margin: 18px 0 8px; }
+.dbadmin-card p { color: #c9d1e8; line-height: 1.6; margin: 0 0 22px; }
+.dbadmin-card-link { margin-top: auto; font-weight: 700; color: #74ecff; }
+.dbadmin-footer { text-align: center; margin-top: 36px; color: #c9d1e8; font-size: 14px; }
+@media (max-width: 600px) { .dbadmin-page { padding: 28px 14px; } .dbadmin-card { flex-basis: 100%; padding: 24px; } }
+@media (prefers-reduced-motion: reduce) { .dbadmin-card { transition: none; } }
