@@ -98,6 +98,73 @@ button {
 
     cursor: pointer;
 }
+/*    Navigation for student/researcher   */
+.site-header {
+    padding: 18px 30px;
+}
+
+.main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.main-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+    color: #00f5ff;
+}
+
+/* Question form */
+
+.question-box {
+    box-sizing: border-box;
+}
+
+.question-box label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.question-box textarea {
+    box-sizing: border-box;
+    width: 100%;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.error-message {
+    color: #ffb4b4;
+    margin-top: 12px;
+}
+
+.loading-message {
+    color: #74ecff;
+    margin-top: 12px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
 
 /* Database Admin Dashboard*/
 .dbadmin-page { min-height: 100vh; padding: 48px 20px; box-sizing: border-box; }
