@@ -3,6 +3,7 @@ const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 const confirmPasswordInput = document.getElementById("confirm-password");
 const registerError = document.getElementById("register-error");
+const accountTypeInput = document.getElementById("account-type");
 
 function validateRegistration(event) {
     registerError.textContent = "";
@@ -46,3 +47,4 @@ function toggleRegistrationPasswords() {
 }
 
 togglePasswordsButton.addEventListener("click", toggleRegistrationPasswords);
+accountTypeInput.addEventListener("change", clearRegistrationError);

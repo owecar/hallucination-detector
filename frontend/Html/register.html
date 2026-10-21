@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +11,18 @@
     <main class="auth-container">
         <h1>Create an account</h1>
         <p>Save your questions and access your results.</p>
-
+        
         <form id="register-form" action="/register" method="post">
+            <div class="form-group">
+                <label for="account-type">Account type</label>
+                <select id="account-type" name="role" required>
+                    <option value="">Choose an account type</option>
+                    <option value="USER">User</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="DB_ADMIN">Database Admin</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username"
@@ -36,11 +46,11 @@
                 Show passwords
             </button>
 
-            <p id="register-error" role="alert"></p>
+            <p id="register-error" role="alert" th:text="${error}"></p>
 
             <button type="submit">Create account</button>
     </form>
-    <p>Already have an account? <a href="login.html">Log in</a></p>
+    <p>Already have an account? <a href="login.html" th:href="@{/login}">Log in</a></p>
     </main>
 </body>
 </html>

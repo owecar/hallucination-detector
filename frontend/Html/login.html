@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +30,7 @@
 
             <button type="submit">Log in</button>
         </form>
-        <p>Need an account? <a href="register.html">Create an account</a></p>
+        <p>Need an account? <a href="register.html" th:href="@{/register}">Create an account</a></p>
     </main>
 </body>
 </html>
