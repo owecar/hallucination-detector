@@ -1,4 +1,3 @@
-}
 function setupDeleteButtons() {
     const deleteForms = document.querySelectorAll(".delete-form");
 
