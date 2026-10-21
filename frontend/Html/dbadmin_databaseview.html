@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>View Database Data | Database Administration</title>
+
+    <link rel="stylesheet" href="../Css/style.css">
+    <script src="../JavaScript/dbadmin_data.js" defer></script>
+</head>
+
+<body class="dbadmin-page" data-dbadmin-page="view">
+
+    <main class="dbadmin-container">
+
+        <nav class="dbadmin-topnav"
+             aria-label="Database administration navigation">
+
+            <a class="dbadmin-link" href="dbadmin_mainview.html">
+                ← Database Admin Dashboard
+            </a>
+
+            <div class="dbadmin-actions">
+                <a class="dbadmin-link" href="dbadmin_databaseview.html">
+                    View Data
+                </a>
+
+                <a class="dbadmin-link" href="dbadmin_updateview.html">
+                    Edit Records
+                </a>
+
+                <a class="dbadmin-link" href="dbadmin_historyview.html">
+                    Question History
+                </a>
+            </div>
+        </nav>
+      
+        <header class="dbadmin-header">
+            <p class="dbadmin-eyebrow">
+                HALLUCINATION DETECTION SYSTEM
+            </p>
+
+            <h1>View Database Data</h1>
+
+            <p class="dbadmin-subtitle">
+                Explore tables and their stored records.
+            </p>
+        </header>
+
+        <p class="dbadmin-notice">
+            Frontend demonstration only — Not from database
+        </p>
+
+        <section class="dbadmin-stats"
+                 id="dbadmin-stats"
+                 aria-label="Sample record counts">
+        </section>
+
+        <section class="dbadmin-panel">
+
+            <h2>Browse Records</h2>
+
+            <div class="dbadmin-toolbar">
+
+                <label>
+                    <span class="dbadmin-label">
+                        Database table
+                    </span>
+
+                    <select class="dbadmin-select"
+                            id="dbadmin-table-select">
+
+                        <option value="app_user">app_user</option>
+                        <option value="saved_query">saved_query</option>
+                        <option value="ai_claim">ai_claim</option>
+                        <option value="result">result</option>
+
+                    </select>
+                </label>
+
+                <label>
+                    <span class="dbadmin-label">
+                        Search current table
+                    </span>
+
+                    <input class="dbadmin-input"
+                           id="dbadmin-search"
+                           type="search"
+                           placeholder="Search records...">
+                </label>
+
+                <button class="dbadmin-button dbadmin-button-secondary"
+                        id="dbadmin-clear-search"
+                        type="button">
+                    Clear Search
+                </button>
+
+            </div>
+
+            <p class="dbadmin-muted"
+               id="dbadmin-row-count"
+               aria-live="polite">
+            </p>
+
+            <div class="dbadmin-table-wrap"
+                 id="dbadmin-table-container">
+            </div>
+
+        </section>
+
+        <section class="dbadmin-panel">
+
+            <h2>About This Demo</h2>
+
+            <p class="dbadmin-muted">
+                Switch tables and search records.
+                Use the Update Records page to edit sample data.
+            </p>
+
+            <div class="dbadmin-actions">
+
+                <a class="dbadmin-link"
+                   href="dbadmin_updateview.html">
+                    Go to Record Editor →
+                </a>
+
+                <button class="dbadmin-button dbadmin-button-secondary"
+                        id="dbadmin-reset-data"
+                        type="button">
+                    Reset Sample Data
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
