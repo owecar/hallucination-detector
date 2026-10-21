@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="../Css/style.css">
+    <link rel="stylesheet" href="../Css/auth.css">
     <script src = "../JavaScript/auth.js" defer></script>
 </head>
-<body>
+<body class="auth-page">
     <main class="auth-container">
         <h1>Log in</h1>
         <p>Access your saved questions and results.</p>
 
-        <form id="login-form" action="/login"th:action="@{/login}" method="post">
+        <form id="login-form" action="/login" th:action="@{/login}" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" autocomplete="username" required>
