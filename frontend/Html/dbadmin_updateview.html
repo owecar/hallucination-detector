@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Update Database Records | Database Administration</title>
+
+    <link rel="stylesheet" href="../Css/style.css">
+    <script src="../JavaScript/dbadmin_data.js" defer></script>
+</head>
+
+<body class="dbadmin-page" data-dbadmin-page="update">
+
+    <main class="dbadmin-container">
+
+        <nav class="dbadmin-topnav"
+             aria-label="Database administration navigation">
+
+            <a class="dbadmin-link" href="dbadmin_mainview.html">
+                ← Database Admin Dashboard
+            </a>
+
+            <div class="dbadmin-actions">
+                <a class="dbadmin-link" href="dbadmin_databaseview.html">
+                    View Data
+                </a>
+
+                <a class="dbadmin-link" href="dbadmin_updateview.html">
+                    Edit Records
+                </a>
+            </div>
+        </nav>
+
+        <header class="dbadmin-header">
+
+            <p class="dbadmin-eyebrow">
+                HALLUCINATION DETECTION SYSTEM
+            </p>
+
+            <h1>Update Database Records</h1>
+
+            <p class="dbadmin-subtitle">
+                Choose a table to edit or delete sample records.
+            </p>
+
+        </header>
+
+        <p class="dbadmin-notice">
+            Frontend demonstration only — records shown here
+            are sample data stored in this browser, not in PostgreSQL.
+        </p>
+
+        <section class="dbadmin-panel">
+
+            <h2>Select a Record</h2>
+
+            <div class="dbadmin-toolbar">
+
+                <label>
+                    <span class="dbadmin-label">
+                        Table
+                    </span>
+
+                    <select class="dbadmin-select"
+                            id="dbadmin-table-select">
+
+                        <option value="app_user">app_user</option>
+                        <option value="saved_query">saved_query</option>
+                        <option value="ai_claim">ai_claim</option>
+                        <option value="result">result</option>
+
+                    </select>
+                </label>
+
+                <label>
+                    <span class="dbadmin-label">
+                        Record
+                    </span>
+
+                    <select class="dbadmin-select"
+                            id="dbadmin-record-select">
+                    </select>
+                </label>
+
+            </div>
+
+        </section>
+
+        <section class="dbadmin-panel">
+
+            <h2>Edit Sample Record</h2>
+
+            <form id="dbadmin-edit-form">
+
+                <div class="dbadmin-form-grid"
+                     id="dbadmin-form-fields">
+                </div>
+
+                <p class="dbadmin-muted">
+                    Primary keys and timestamps are read-only.
+                </p>
+
+                <div class="dbadmin-actions">
+
+                    <button class="dbadmin-button"
+                            type="submit"
+                            id="dbadmin-save">
+                        Save Changes
+                    </button>
+
+                    <button class="dbadmin-button dbadmin-button-danger"
+                            type="button"
+                            id="dbadmin-delete">
+                        Delete Record
+                    </button>
+
+                    <button class="dbadmin-button dbadmin-button-secondary"
+                            type="button"
+                            id="dbadmin-cancel">
+                        Discard Changes
+                    </button>
+
+                </div>
+
+                <p id="dbadmin-feedback"
+                   role="status"
+                   aria-live="polite">
+                </p>
+
+            </form>
+
+        </section>
+
+        <section class="dbadmin-panel">
+
+            <h2>Browse All Records</h2>
+
+            <div class="dbadmin-table-wrap"
+                 id="dbadmin-table-container">
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -28,7 +28,7 @@ public class QuestionController {
 
     @GetMapping("/")
     public String showForm() {
-        return "index";
+        return "Html/index";
     }
 
     @PostMapping("/submit")

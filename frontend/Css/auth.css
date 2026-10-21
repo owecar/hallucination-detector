@@ -1,0 +1,120 @@
+.auth-page {
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 16px;
+}
+
+.auth-page .auth-container {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 440px;
+    padding: 32px;
+    background: rgba(10, 15, 40, 0.9);
+    border: 1px solid rgba(0, 245, 255, 0.4);
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.auth-page h1 {
+    margin: 0 0 12px;
+    font-size: 36px;
+}
+
+.auth-page p {
+    color: #d1d7ef;
+    line-height: 1.5;
+}
+
+.auth-page button {
+    font: inherit;
+    font-weight: 600;
+    padding: 12px 18px;
+    border-radius: 10px;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.auth-page button[type="submit"] {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.auth-page button[type="button"] {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid #74ecff;
+    color: #74ecff;
+    font-size: 14px;
+}
+
+.auth-page button:hover {
+    filter: brightness(1.15);
+}
+
+.auth-page button:active {
+    transform: translateY(1px);
+}
+
+.auth-page button:focus-visible {
+    outline: 2px solid #74ecff;
+    outline-offset: 4px;
+}
+
+.auth-page .form-group {
+    margin-bottom: 18px;
+}
+
+.auth-page label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.auth-page input,
+.auth-page select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #626d91;
+    border-radius: 10px;
+    background: #111a30;
+    color: white;
+    font: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.auth-page input:focus,
+.auth-page select:focus {
+    border-color: #74ecff;
+    outline: 2px solid #74ecff;
+    outline-offset: 2px;
+}
+
+.auth-page #login-error,
+.auth-page #register-error {
+    color: #ffb4b4;
+    font-size: 14px;
+}
+
+.auth-page #login-error:empty,
+.auth-page #register-error:empty {
+    display: none;
+}
+
+.auth-page a {
+    color: #74ecff;
+    text-underline-offset: 3px;
+}
+
+.auth-page a:hover {
+    color: white;
+}
+
+.auth-page a:focus-visible {
+    outline: 2px solid #74ecff;
+    outline-offset: 3px;
+}
