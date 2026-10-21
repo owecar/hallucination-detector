@@ -3,28 +3,87 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Results - Hallucination Detector</title>
-        <link rel="stylesheet" th:href="@{/css/style.css}" href="css/style.css">
+        <title>Verification Results</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}" href="../Css/style.css">
+        <script th:src="@{/js/results.js}" src="../JavaScript/results.js" defer></script>
     </head>
-    <body>
-        <h1>Results</h1>
 
-        <h2>Your question</h2>
-        <p th:text="${question}"></p>
 
-        <h2>AI answer</h2>
-        <p th:text="${answer}" style="white-space: pre-wrap;"></p>
+   <body>
+    <header class="site-header">
+        <nav class="main-nav" aria-label="Main navigation">
+            <a th:href="@{/}" href="index.html">Home</a>
+            <a th:href="@{/history}" href="userhistory.html">Question History</a>
+            <a th:href="@{/login}" href="login.html">Login</a>
+        </nav>
+    </header>
 
-        <h2>Claims</h2>
-        <p th:if="${#lists.isEmpty(claims)}">No claims were detected.</p>
-        <ul>
-            <li th:each="claim : ${claims}">
-                <span th:text="${claim.text}"></span><br>
-                <strong>Label:</strong> <span th:text="${claim.label}"></span> |
-                <strong>Source:</strong> <span th:text="${claim.source}"></span>
-            </li>
-        </ul>
+    <main class="results-container">
+        <h1>Verification Results</h1>
 
-        <p><a th:href="@{/}">Ask another question</a></p>
+        <section class="result-card">
+            <h2>Your Question</h2>
+            <p th:text="${question}">What is TCP?</p>
+        </section>
+
+        <section class="result-card">
+            <h2>AI-Generated Answer</h2>
+            <p class="ai-answer" th:text="${answer}">
+                TCP is a connection-oriented transport protocol.
+            </p>
+        </section>
+
+        <section class="result-card">
+            <h2>Hallucination Score</h2>
+            <p th:if="${hallucinationScore != null}">
+                <strong th:text="${hallucinationScore}">0</strong>%
+            </p>
+            <p th:unless="${hallucinationScore != null}">
+                Score not available yet.
+            </p>
+        </section>
+
+        <section class="result-card">
+            <h2>Claim Verification</h2>
+
+            <p th:if="${claims == null or #lists.isEmpty(claims)}">
+                No claims were detected.
+            </p>
+
+            <div class="claim-card"
+                 th:each="claim : ${claims}">
+
+                <p class="claim-text" th:text="${claim.text}">
+                    TCP is connection-oriented.
+                </p>
+
+                <p>
+                    <strong>Classification:</strong>
+                    <span th:text="${claim.label}">Unchecked</span>
+                </p>
+
+                <button type="button"
+                        class="evidence-toggle"
+                        aria-expanded="false">
+                    Show Evidence
+                </button>
+
+                <div class="evidence-details" hidden>
+                    <h3>Supporting Evidence</h3>
+                    <p th:text="${claim.source}">
+                        Source not available.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="form-actions">
+            <a class="back-link"
+               th:href="@{/}"
+               href="index.html">
+                Ask Another Question
+            </a>
+        </div>
+    </main>
     </body>
 </html>
