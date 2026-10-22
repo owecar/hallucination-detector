@@ -1,7 +1,6 @@
 
 const HISTORY_KEY = "hallucination_demo_history";
 
-// Sample question history
 const sampleHistory = [
     {
         id: 1,
@@ -16,7 +15,6 @@ const sampleHistory = [
 
 let historyData = [];
 
-// Load saved questions
 function loadHistory() {
     try {
         const saved = JSON.parse(localStorage.getItem(HISTORY_KEY));
@@ -31,12 +29,10 @@ function loadHistory() {
     return sampleHistory;
 }
 
-// Save question history
 function saveHistory() {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(historyData));
 }
 
-// Display saved questions
 function showHistory() {
     const container = document.getElementById("userhistory-list");
 
@@ -127,7 +123,6 @@ function showHistory() {
     });
 }
 
-// Delete a saved question
 function deleteQuestion(id) {
     if (!confirm("Are you sure you want to delete this question?")) {
         return;
