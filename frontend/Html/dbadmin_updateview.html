@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <title>Update Database Records | Database Administration</title>
-    <link rel="stylesheet" href="../Css/style.css">
-    <link rel="stylesheet" href="../Css/dbadmin.css">
-    <script src="../JavaScript/dbadmin_data.js" defer></script>
+    <link rel="stylesheet" th:href="@{/Css/style.css}" >
+    <link rel="stylesheet" th:href="@{/Css/dbadmin.css}" >
+    <script th:src="@{/JavaScript/dbadmin_data.js}"  defer></script>
 </head>
 
 <body class="dbadmin-page" data-dbadmin-page="update">
@@ -18,16 +18,16 @@
         <nav class="dbadmin-topnav"
              aria-label="Database administration navigation">
 
-            <a class="dbadmin-link" href="dbadmin_mainview.html">
+            <a class="dbadmin-link" th:href="@{/dbadmin}" >
                 ← Database Admin Dashboard
             </a>
 
             <div class="dbadmin-actions">
-                <a class="dbadmin-link" href="dbadmin_databaseview.html">
+                <a class="dbadmin-link" th:href="@{/dbadmin/database}" >
                     View Data
                 </a>
 
-                <a class="dbadmin-link" href="dbadmin_updateview.html">
+                <a class="dbadmin-link" th:href="@{/dbadmin/update}" >
                     Edit Records
                 </a>
             </div>
