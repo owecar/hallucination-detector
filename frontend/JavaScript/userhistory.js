@@ -1,196 +1,155 @@
-"use strict";
-// Frontend-only account preview
-const HISTORY_ACCOUNT_KEY = "hallucination-demo-active-user";
-const HISTORY_DATA_PREFIX = "hallucination-demo-history:";
 
-function getCurrentDemoUser() {
-    return sessionStorage.getItem(HISTORY_ACCOUNT_KEY) || "demo-user";
-}
+const HISTORY_KEY = "hallucination_demo_history";
 
-function getHistoryStorageKey(username) {
-    return HISTORY_DATA_PREFIX + username.toLowerCase();
-}
+// Sample question history
+const sampleHistory = [
+    {
+        id: 1,
+        question: "What is the difference between TCP and UDP, and when would you use each protocol?",
+        answer: "TCP provides reliable, ordered delivery of data. UDP is connectionless and does not guarantee delivery or order.",
+        date: "2026-10-20",
+        verdict: "Supported",
+        confidence: 99,
+        explanation: "The answer correctly describes the main differences between TCP and UDP."
+    },
+];
 
-function getStarterHistory(username) {
-    return [
-        {
-            id: "sample-1",
-            question: "What is the capital of France?",
-            answer: "Paris is the capital of France.",
-            date: "2026-10-20T14:30:00",
-            verdict: "Supported",
-            confidence: 98,
-            explanation: "The answer agrees with widely established geographical information."
-        },
-        {
-            id: "sample-2",
-            question: "Can humans breathe on Mars without equipment?",
-            answer: "Humans cannot safely breathe the Martian atmosphere without life-support equipment.",
-            date: "2026-10-19T10:15:00",
-            verdict: "Supported",
-            confidence: 96,
-            explanation: "Mars has a very thin atmosphere made mostly of carbon dioxide."
+let historyData = [];
+
+// Load saved questions
+function loadHistory() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(HISTORY_KEY));
+
+        if (Array.isArray(saved)) {
+            return saved;
         }
-    ];
-}
-
-function loadHistory(username) {
-    const key = getHistoryStorageKey(username);
-    const saved = localStorage.getItem(key);
-
-    if (saved !== null) {
-        try {
-            const records = JSON.parse(saved);
-            return Array.isArray(records) ? records : [];
-        } catch (error) {
-            console.warn("Unable to read demonstration history", error);
-            return [];
-        }
+    } catch (error) {
+        console.log("Using sample question history.");
     }
 
-    const starter = getStarterHistory(username);
-    saveHistory(username, starter);
-    return starter;
+    return sampleHistory;
 }
 
-function saveHistory(username, records) {
-    localStorage.setItem(getHistoryStorageKey(username), JSON.stringify(records));
+// Save question history
+function saveHistory() {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(historyData));
 }
 
-function makeTextElement(tagName, className, value) {
-    const element = document.createElement(tagName);
-    element.className = className;
-    element.textContent = value;
-    return element;
-}
+// Display saved questions
+function showHistory() {
+    const container = document.getElementById("userhistory-list");
 
-function formatHistoryDate(value) {
-    const date = new Date(value);
-    return Number.isNaN(date.getTime()) ? "Date unavailable" : date.toLocaleDateString();
-}
+    container.innerHTML = "";
 
-function makeHistoryCard(record) {
-    const article = document.createElement("article");
-    article.className = "userhistory-card";
+    if (historyData.length === 0) {
+        container.textContent = "No saved questions found.";
+        return;
+    }
 
-    const heading = document.createElement("div");
-    heading.className = "userhistory-card-header";
-    heading.appendChild(makeTextElement("h2", "", record.question));
-    heading.appendChild(makeTextElement("span", "userhistory-date", formatHistoryDate(record.date)));
-    article.appendChild(heading);
+    historyData.forEach(function (record) {
+        const card = document.createElement("article");
+        card.className = "userhistory-card";
 
-    article.appendChild(makeTextElement("p", "userhistory-label", "AI ANSWER"));
-    article.appendChild(makeTextElement("p", "userhistory-answer", record.answer));
+        const header = document.createElement("div");
+        header.className = "userhistory-card-header";
 
-    const verification = document.createElement("section");
-    verification.className = "userhistory-verification";
-    verification.appendChild(makeTextElement("h3", "", "Verification Result"));
+        const question = document.createElement("h2");
+        question.textContent = record.question;
 
-    const verdict = String(record.verdict || "Uncertain");
-    const verdictClass = ["Supported", "Unsupported", "Uncertain"].includes(verdict)
-        ? verdict.toLowerCase() : "uncertain";
-    verification.appendChild(makeTextElement("span", "userhistory-verdict " + verdictClass, verdict));
-    verification.appendChild(makeTextElement("p", "userhistory-answer", record.explanation || "No verification details available."));
+        const date = document.createElement("span");
+        date.className = "userhistory-date";
+        date.textContent = record.date;
 
-    const score = Number(record.confidence);
-    if (Number.isFinite(score) && score >= 0 && score <= 100) {
+        header.append(question, date);
+
+        const answerLabel = document.createElement("p");
+        answerLabel.className = "userhistory-label";
+        answerLabel.textContent = "AI ANSWER";
+
+        const answer = document.createElement("p");
+        answer.className = "userhistory-answer";
+        answer.textContent = record.answer;
+
+        const verification = document.createElement("section");
+        verification.className = "userhistory-verification";
+
+        const title = document.createElement("h3");
+        title.textContent = "Verification Result";
+
+        const verdict = document.createElement("span");
+        verdict.className = "userhistory-verdict " +
+            record.verdict.toLowerCase();
+        verdict.textContent = record.verdict;
+
+        const explanation = document.createElement("p");
+        explanation.className = "userhistory-answer";
+        explanation.textContent = record.explanation;
+
         const scoreRow = document.createElement("div");
         scoreRow.className = "userhistory-score-row";
-        scoreRow.appendChild(makeTextElement("span", "userhistory-label", "Confidence Score"));
-        scoreRow.appendChild(makeTextElement("strong", "", score + "%"));
-        verification.appendChild(scoreRow);
 
-        const track = document.createElement("div");
-        track.className = "userhistory-score-track";
-        track.setAttribute("role", "progressbar");
-        track.setAttribute("aria-label", "Confidence Score");
-        track.setAttribute("aria-valuemin", "0");
-        track.setAttribute("aria-valuemax", "100");
-        track.setAttribute("aria-valuenow", String(score));
-        const fill = document.createElement("div");
-        fill.className = "userhistory-score-fill";
-        fill.style.width = score + "%";
-        track.appendChild(fill);
-        verification.appendChild(track);
-    }
+        const scoreLabel = document.createElement("span");
+        scoreLabel.className = "userhistory-label";
+        scoreLabel.textContent = "Confidence Score";
 
-    article.appendChild(verification);
-    const actions = document.createElement("div");
-    actions.className = "userhistory-card-actions";
-    const deleteButton = makeTextElement("button", "userhistory-delete", "Delete Question");
-    deleteButton.type = "button";
-    deleteButton.dataset.recordId = String(record.id);
-    deleteButton.addEventListener("click", deleteHistoryRecord);
-    actions.appendChild(deleteButton);
-    article.appendChild(actions);
-    return article;
-}
+        const scoreValue = document.createElement("strong");
+        scoreValue.textContent = record.confidence + "%";
 
-function renderHistory() {
-    const username = getCurrentDemoUser();
-    const records = loadHistory(username);
-    const list = document.getElementById("userhistory-list");
-    const current = document.getElementById("userhistory-current-account");
-    const input = document.getElementById("userhistory-account-name");
+        scoreRow.append(scoreLabel, scoreValue);
 
-    current.textContent = "Viewing demo history for: " + username;
-    input.value = username;
-    list.replaceChildren();
+        const scoreTrack = document.createElement("div");
+        scoreTrack.className = "userhistory-score-track";
 
-    if (records.length === 0) {
-        list.appendChild(makeTextElement("p", "userhistory-empty", "No saved questions for this demo account."));
-        return;
-    }
+        const scoreFill = document.createElement("div");
+        scoreFill.className = "userhistory-score-fill";
+        scoreFill.style.width = record.confidence + "%";
 
-    records.sort((a, b) => new Date(b.date) - new Date(a.date));
-    records.forEach(function(record) {
-        list.appendChild(makeHistoryCard(record));
+        scoreTrack.appendChild(scoreFill);
+
+        verification.append(title, verdict, explanation, scoreRow, scoreTrack);
+
+        const actions = document.createElement("div");
+        actions.className = "userhistory-card-actions";
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "userhistory-delete";
+        deleteButton.textContent = "Delete Question";
+
+        deleteButton.addEventListener("click", function () {
+            deleteQuestion(record.id);
+        });
+
+        actions.appendChild(deleteButton);
+
+        card.append(header, answerLabel, answer, verification, actions);
+        container.appendChild(card);
     });
 }
 
-function deleteHistoryRecord(event) {
-    const recordId = event.currentTarget.dataset.recordId;
-    const username = getCurrentDemoUser();
-    const records = loadHistory(username);
-    const record = records.find(function(item) {
-        return String(item.id) === recordId;
-    });
-
-    if (!record || !window.confirm("Delete this question and its verification result?")) {
+// Delete a saved question
+function deleteQuestion(id) {
+    if (!confirm("Are you sure you want to delete this question?")) {
         return;
     }
 
-    saveHistory(username, records.filter(function(item) {
-        return String(item.id) !== recordId;
-    }));
-    renderHistory();
-    document.getElementById("userhistory-feedback").textContent = "Question deleted from this demo account.";
-}
+    historyData = historyData.filter(function (record) {
+        return record.id !== id;
+    });
 
-function switchDemoAccount() {
-    const input = document.getElementById("userhistory-account-name");
-    const username = input.value.trim();
+    saveHistory();
+    showHistory();
+
     const feedback = document.getElementById("userhistory-feedback");
 
-    if (!/^[a-zA-Z0-9_-]{1,40}$/.test(username)) {
-        feedback.textContent = "Use 1–40 letters, numbers, underscores, or hyphens.";
-        return;
+    if (feedback) {
+        feedback.textContent = "Question deleted successfully.";
     }
-
-    sessionStorage.setItem(HISTORY_ACCOUNT_KEY, username);
-    feedback.textContent = "Switched demo account.";
-    renderHistory();
 }
 
-function initializeUserHistory() {
-    document.getElementById("userhistory-switch-account").addEventListener("click", switchDemoAccount);
-    document.getElementById("userhistory-account-name").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            switchDemoAccount();
-        }
-    });
-    renderHistory();
+function startHistory() {
+    historyData = loadHistory();
+    showHistory();
 }
 
-document.addEventListener("DOMContentLoaded", initializeUserHistory);
+document.addEventListener("DOMContentLoaded", startHistory);
