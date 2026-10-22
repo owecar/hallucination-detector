@@ -215,3 +215,19 @@ button:disabled {
     padding: 30px 20px;
     box-sizing: border-box;
 }
+
+.account-header a {
+    color: #74ecff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.account-header a:hover {
+    text-decoration: underline;
+}
+
+.account-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}

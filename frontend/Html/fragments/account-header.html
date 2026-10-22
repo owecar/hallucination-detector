@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <body>
-    <header th:fragment="accountHeader"
-            class="account-header"
-            th:if="${signedInUsername != null}">
+    <header th:fragment="accountHeader" class="account-header" th:if="${signedInUsername != null}">
 
         <p>
             Signed in as
@@ -12,9 +11,19 @@
             <span th:text="${signedInRole}">Account type</span>
         </p>
 
-        <form th:action="@{/logout}" method="post">
-            <button type="submit">Log out</button>
-        </form>
+        <div class="account-actions">
+            <a th:if="${signedInRole == 'Admin'}" th:href="@{/admin}">
+                Dashboard
+            </a>
+
+            <a th:if="${signedInRole == 'Database Admin'}" th:href="@{/dbadmin}">
+                Dashboard
+            </a>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit">Log out</button>
+            </form>
+        </div>
     </header>
 </body>
+
 </html>
