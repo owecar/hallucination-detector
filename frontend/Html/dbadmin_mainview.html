@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Administration | Hallucination Detector</title>
-    <link rel="stylesheet" href="../Css/style.css">
-    <link rel="stylesheet" th:href="@{/Css/style.css}" href="../Css/dbadmin.css">
-    <script th:src="@{/JavaScript/dbadmin.js}" src="../JavaScript/dbadmin.js" defer></script>
+    <link rel="stylesheet" th:href="@{/Css/style.css}" >
+    <link rel="stylesheet" th:href="@{/Css/dbadmin.css}" >
+    <script th:src="@{/JavaScript/dbadmin.js}"  defer></script>
 </head>
 <body class="dbadmin-page">
     <main class="dbadmin-container" id="dbadmin-main">
@@ -17,21 +17,21 @@
         </header>
 
         <nav class="dbadmin-grid" id="dbadmin-navigation" aria-label="Database administration pages">
-            <a class="dbadmin-card" id="dbadmin-view-data" th:href="@{/dbadmin/database}" href="dbadmin_databaseview.html">
+            <a class="dbadmin-card" id="dbadmin-view-data" th:href="@{/dbadmin/database}" >
                 <span class="dbadmin-card-icon" aria-hidden="true">▦</span>
                 <h2>View Database Data</h2>
                 <p>Browse database tables and inspect stored records.</p>
                 <span class="dbadmin-card-link">View tables <span aria-hidden="true">→</span></span>
             </a>
 
-            <a class="dbadmin-card" id="dbadmin-home" th:href="@{/}" href="index.html">
+            <a class="dbadmin-card" id="dbadmin-home" th:href="@{/}" >
                 <span class="dbadmin-card-icon" aria-hidden="true">⌂</span>
                 <h2>Return to Homepage</h2>
                 <p>Go back to the Hallucination Detection System.</p>
                 <span class="dbadmin-card-link">Go home <span aria-hidden="true">→</span></span>
             </a>
 
-            <a class="dbadmin-card" id="dbadmin-update-data" th:href="@{/dbadmin/update}" href="dbadmin_updateview.html">
+            <a class="dbadmin-card" id="dbadmin-update-data" th:href="@{/dbadmin/update}" >
                 <span class="dbadmin-card-icon" aria-hidden="true">✎</span>
                 <h2>Update Database Records</h2>
                 <p>Open the record editor to make permitted changes.</p>
