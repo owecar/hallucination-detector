@@ -70,7 +70,6 @@
     font-weight: bold;
 }
 
-/* Saved questions: answer, verification verdict, and confidence */
 .userhistory-list {
     display: flex;
     flex-direction: column;
