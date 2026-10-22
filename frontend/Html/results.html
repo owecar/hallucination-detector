@@ -23,20 +23,19 @@
 
         <section class="result-card">
             <h2>Your Question</h2>
-            <p th:text="${question}">What is TCP?</p>
+            <p th:text="${question}"></p>
         </section>
 
         <section class="result-card">
             <h2>AI-Generated Answer</h2>
             <p class="ai-answer" th:text="${answer}">
-                TCP is a connection-oriented transport protocol.
             </p>
         </section>
 
         <section class="result-card">
             <h2>Hallucination Score</h2>
             <p th:if="${hallucinationScore != null}">
-                <strong th:text="${hallucinationScore}">0</strong>%
+                <strong th:text="${hallucinationScore}"></strong>%
             </p>
             <p th:unless="${hallucinationScore != null}">
                 Score not available yet.
@@ -54,12 +53,11 @@
                  th:each="claim : ${claims}">
 
                 <p class="claim-text" th:text="${claim.text}">
-                    TCP is connection-oriented.
                 </p>
 
                 <p>
                     <strong>Classification:</strong>
-                    <span th:text="${claim.label}">Unchecked</span>
+                    <span th:text="${claim.label}"></span>
                 </p>
 
                 <button type="button"
