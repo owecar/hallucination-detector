@@ -1,75 +1,527 @@
+
 const DBADMIN_KEY = "hallucination_dbadmin_demo_v1";
+
+// Sample database for Code Version 2
 const DBADMIN_SCHEMA = {
-  app_user: {key:"id", columns:["id","username","email","role","created_at"], readonly:["id","created_at"]},
-  saved_query: {key:"id", columns:["id","question","answer","created_at"], readonly:["id","created_at"]},
-  ai_claim: {key:"ai_claim_id", columns:["ai_claim_id","ai_claim_text","created_at"], readonly:["ai_claim_id","created_at"]},
-  result: {key:"result_id", columns:["result_id","ai_claim_id","verdict","score","created_at"], readonly:["result_id","created_at"]}
+    app_user: {
+        key: "id",
+        columns: ["id", "username", "role", "created_at"],
+        readonly: ["id", "created_at"]
+    },
+
+    saved_query: {
+        key: "id",
+        columns: ["id", "question", "answer", "created_at"],
+        readonly: ["id", "created_at"]
+    },
+
+    ai_claim: {
+        key: "ai_claim_id",
+        columns: ["ai_claim_id", "ai_claim_text", "created_at"],
+        readonly: ["ai_claim_id", "created_at"]
+    },
+
+    result: {
+        key: "result_id",
+        columns: ["result_id", "ai_claim_id", "verdict", "score", "created_at"],
+        readonly: ["result_id", "created_at"]
+    }
 };
+
 const DBADMIN_SAMPLE = {
-  app_user:[{id:1,username:"demo_user",email:"user@example.com",role:"USER",created_at:"2026-10-18 14:25"},{id:2,username:"demo_admin",email:"admin@example.com",role:"ADMIN",created_at:"2026-10-19 09:10"},{id:3,username:"demo_dbadmin",email:"dbadmin@example.com",role:"DB_ADMIN",created_at:"2026-10-20 11:45"}],
-  saved_query:[{id:101,question:"What is the capital of France?",answer:"Paris is the capital of France.",created_at:"2026-10-20 13:15"},{id:102,question:"Who developed the theory of relativity?",answer:"Albert Einstein developed the theory of relativity.",created_at:"2026-10-20 16:40"},{id:103,question:"What is the largest planet?",answer:"Jupiter is the largest planet in our solar system.",created_at:"2026-10-21 08:30"}],
-  ai_claim:[{ai_claim_id:201,ai_claim_text:"Paris is the capital of France.",created_at:"2026-10-20 13:15"},{ai_claim_id:202,ai_claim_text:"Jupiter is the largest planet in our solar system.",created_at:"2026-10-21 08:30"}],
-  result:[{result_id:301,ai_claim_id:201,verdict:"SUPPORTED",score:0.99,created_at:"2026-10-20 13:16"},{result_id:302,ai_claim_id:202,verdict:"SUPPORTED",score:0.97,created_at:"2026-10-21 08:31"}]
+    app_user: [
+        {
+            id: 1,
+            username: "demo_user",
+            role: "USER",
+            created_at: "2026-10-18 14:25"
+        },
+        {
+            id: 2,
+            username: "demo_admin",
+            role: "ADMIN",
+            created_at: "2026-10-19 09:10"
+        },
+        {
+            id: 3,
+            username: "demo_dbadmin",
+            role: "DB_ADMIN",
+            created_at: "2026-10-20 11:45"
+        }
+    ],
+
+    saved_query: [
+        {
+            id: 101,
+            question: "What is the difference between TCP and UDP?",
+            answer: "TCP is a connection-oriented protocol that ensures reliable, ordered delivery. UDP is connectionless and does not guarantee delivery or order. TCP is commonly used for web browsing and file transfers, while UDP is used for gaming, streaming, and voice calls.",
+            created_at: "2026-10-20 13:15"
+        }
+    ],
+
+    ai_claim: [
+        {
+            ai_claim_id: 201,
+            ai_claim_text: "TCP is a connection-oriented protocol.",
+            created_at: "2026-10-20 13:15"
+        }
+    ],
+
+    result: [
+        {
+            result_id: 301,
+            ai_claim_id: 201,
+            verdict: "SUPPORTED",
+            score: 0.99,
+            created_at: "2026-10-20 13:16"
+        }
+    ]
 };
+
 let dbadminData = {};
-function dbadminClone(data) {return JSON.parse(JSON.stringify(data));}
-function dbadminLoad() {try {const saved=JSON.parse(localStorage.getItem(DBADMIN_KEY)); if(saved && Object.keys(DBADMIN_SCHEMA).every(t=>Array.isArray(saved[t])))return saved;}catch(error){console.warn("Demo storage unavailable",error);}return dbadminClone(DBADMIN_SAMPLE);}
-function dbadminPersist(){try{localStorage.setItem(DBADMIN_KEY,JSON.stringify(dbadminData));return true;}catch(error){console.warn("Could not save demo records",error);return false;}}
-function dbadminElement(id){return document.getElementById(id);}
-function dbadminMake(tag,content,cls){const node=document.createElement(tag);if(content!==undefined)node.textContent=String(content);if(cls)node.className=cls;return node;}
-function dbadminCurrentTable(){return dbadminElement("dbadmin-table-select")?.value||"saved_query";}
-function dbadminFilter(rows){const q=(dbadminElement("dbadmin-search")?.value||"").trim().toLowerCase();return rows.filter(row=>Object.values(row).some(value=>String(value).toLowerCase().includes(q)));}
-function dbadminRenderStats(){const target=dbadminElement("dbadmin-stats");if(!target)return;target.replaceChildren();Object.entries(dbadminData).forEach(([table,rows])=>{const box=dbadminMake("div",undefined,"dbadmin-stat");box.append(dbadminMake("span",table),dbadminMake("strong",rows.length));target.append(box);});}
-function dbadminRenderTable(table,rows){const target=dbadminElement("dbadmin-table-container");if(!target)return;target.replaceChildren();const columns=DBADMIN_SCHEMA[table].columns;if(!rows.length){target.append(dbadminMake("p","No matching records found.","dbadmin-empty"));return;}const tableNode=dbadminMake("table",undefined,"dbadmin-table");const thead=document.createElement("thead"),head=document.createElement("tr");columns.forEach(col=>head.append(dbadminMake("th",col)));thead.append(head);const tbody=document.createElement("tbody");rows.forEach(record=>{const tr=document.createElement("tr");columns.forEach(col=>{const td=document.createElement("td");if(col==="role"||col==="verdict")td.append(dbadminMake("span",record[col],"dbadmin-pill"));else td.textContent=String(record[col]??"");tr.append(td);});tbody.append(tr);});tableNode.append(thead,tbody);target.append(tableNode);}
-function dbadminRenderBrowse(){const table=dbadminCurrentTable();let rows=dbadminFilter(dbadminData[table]);if(document.body.dataset.dbadminPage==="history"){rows=[...rows].sort((a,b)=>(dbadminElement("dbadmin-history-sort")?.value==="oldest"?1:-1)*String(a.created_at).localeCompare(String(b.created_at)));}dbadminRenderTable(table,rows);const count=dbadminElement("dbadmin-row-count");if(count)count.textContent=`Showing ${rows.length} of ${dbadminData[table].length} records`;dbadminRenderStats();}
-function dbadminPopulateRecords(){const table=dbadminCurrentTable(),select=dbadminElement("dbadmin-record-select");if(!select)return;select.replaceChildren();dbadminData[table].forEach(row=>{const key=DBADMIN_SCHEMA[table].key;const opt=dbadminMake("option",`${row[key]} — ${row.username||row.question||row.ai_claim_text||row.verdict||"Record"}`);opt.value=String(row[key]);select.append(opt);});dbadminRenderForm();}
-function dbadminSelectedRecord(){const table=dbadminCurrentTable(),key=DBADMIN_SCHEMA[table].key,id=dbadminElement("dbadmin-record-select")?.value;return dbadminData[table].find(row=>String(row[key])===id);}
-function dbadminRenderForm(){const target=dbadminElement("dbadmin-form-fields");if(!target)return;target.replaceChildren();const table=dbadminCurrentTable(),record=dbadminSelectedRecord();if(!record){target.append(dbadminMake("p","No records available."));return;}DBADMIN_SCHEMA[table].columns.forEach(col=>{const label=dbadminMake("label",undefined,col==="question"||col==="answer"||col==="ai_claim_text"?"dbadmin-field-full":"");const caption=dbadminMake("span",col,"dbadmin-label");label.append(caption);let field;if(col==="answer"||col==="question"||col==="ai_claim_text"){field=dbadminMake("textarea",undefined,"dbadmin-textarea");field.rows=3;field.value=String(record[col]??"");}else if(col==="role"||col==="verdict"){field=dbadminMake("select",undefined,"dbadmin-select");(col==="role"?["USER","ADMIN","DB_ADMIN"]:["SUPPORTED","UNSUPPORTED","UNCERTAIN"]).forEach(value=>{const option=dbadminMake("option",value);option.value=value;field.append(option);});field.value=record[col];}else{field=dbadminMake("input",undefined,"dbadmin-input");field.type=col==="email"?"email":col==="score"?"number":"text";field.value=String(record[col]??"");if(col==="score"){field.min="0";field.max="1";field.step="0.01";}}field.name=col;field.disabled=DBADMIN_SCHEMA[table].readonly.includes(col);if(!field.disabled)field.required=true;label.append(field);target.append(label);});const feedback=dbadminElement("dbadmin-feedback");if(feedback)feedback.textContent="";dbadminRenderTable(table,dbadminData[table]);}
-function dbadminSave(event){event.preventDefault();const table=dbadminCurrentTable(),record=dbadminSelectedRecord(),form=dbadminElement("dbadmin-edit-form"),feedback=dbadminElement("dbadmin-feedback");if(!record||!form)return;if(!form.reportValidity())return;const data=new FormData(form);const changes={};for(const col of DBADMIN_SCHEMA[table].columns){if(DBADMIN_SCHEMA[table].readonly.includes(col))continue;const value=String(data.get(col)||"").trim();if(!value){feedback.textContent=`${col} cannot be empty.`;feedback.className="dbadmin-error";return;}if(col==="score"&&(Number(value)<0||Number(value)>1)){feedback.textContent="Score must be between 0 and 1.";feedback.className="dbadmin-error";return;}if(col==="ai_claim_id"&&table==="result"&&!dbadminData.ai_claim.some(row=>String(row.ai_claim_id)===value)){feedback.textContent="Claim ID must match an existing ai_claim record.";feedback.className="dbadmin-error";return;}changes[col]=(col==="score"?Number(value):col==="ai_claim_id"?Number(value):value);}Object.assign(record,changes);const saved=dbadminPersist();feedback.textContent=saved?"Sample record updated successfully.":"Updated in memory, but browser storage is unavailable.";feedback.className=saved?"dbadmin-success":"dbadmin-error";dbadminPopulateRecords();feedback.textContent=saved?"Sample record updated successfully.":"Updated in memory, but browser storage is unavailable.";feedback.className=saved?"dbadmin-success":"dbadmin-error";}
-function dbadminDeleteRecord() {
-  const table = dbadminCurrentTable();
-  const record = dbadminSelectedRecord();
-  const saveButton = dbadminElement("dbadmin-save");
-  const deleteButton = dbadminElement("dbadmin-delete");
 
-  if (saveButton) saveButton.disabled = !record;
-  if (deleteButton) deleteButton.disabled = !record;
-  const feedback = dbadminElement("dbadmin-feedback");
-  if (!record) return;
+// Load and save sample data
+function dbadminLoad() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(DBADMIN_KEY));
 
-  const key = DBADMIN_SCHEMA[table].key;
-  const id = record[key];
+        if (saved && Object.keys(DBADMIN_SCHEMA).every(function (table) {
+            return Array.isArray(saved[table]);
+        })) {
+            return saved;
+        }
+    } catch (error) {
+        console.log("Could not load sample data.");
+    }
 
-  // Prevent deleting a claim referenced by a result record.
-  if (table === "ai_claim" && dbadminData.result.some(
-    result => String(result.ai_claim_id) === String(id)
-  )) {
-    feedback.textContent = "Cannot delete this claim while a result references it.";
-    feedback.className = "dbadmin-error";
-    return;
-  }
-
-  if (!window.confirm(`Delete ${table} record ${id}? This cannot be undone in the demo unless you reset the sample data.`)) {
-    return;
-  }
-
-  dbadminData[table] = dbadminData[table].filter(
-    row => String(row[key]) !== String(id)
-  );
-
-  const saved = dbadminPersist();
-  dbadminPopulateRecords();
-  if (feedback) {
-    feedback.textContent = saved
-      ? `Record ${id} deleted from the browser demo data.`
-      : `Record ${id} deleted for this session, but browser storage is unavailable.`;
-    feedback.className = saved ? "dbadmin-success" : "dbadmin-error";
-  }
+    return JSON.parse(JSON.stringify(DBADMIN_SAMPLE));
 }
 
-function dbadminClearSearch(){const search=dbadminElement("dbadmin-search");if(search){search.value="";search.focus();}dbadminRenderBrowse();}
-function dbadminReset(){if(!window.confirm("Reset all sample records to their original demo values?"))return;dbadminData=dbadminClone(DBADMIN_SAMPLE);dbadminPersist();dbadminRenderBrowse();}
-function dbadminSetupBrowse(){dbadminElement("dbadmin-table-select")?.addEventListener("change",dbadminRenderBrowse);dbadminElement("dbadmin-search")?.addEventListener("input",dbadminRenderBrowse);dbadminElement("dbadmin-clear-search")?.addEventListener("click",dbadminClearSearch);dbadminElement("dbadmin-reset-data")?.addEventListener("click",dbadminReset);dbadminElement("dbadmin-history-sort")?.addEventListener("change",dbadminRenderBrowse);dbadminRenderBrowse();}
-function dbadminSetupEditor(){dbadminElement("dbadmin-table-select")?.addEventListener("change",dbadminPopulateRecords);dbadminElement("dbadmin-record-select")?.addEventListener("change",dbadminRenderForm);dbadminElement("dbadmin-edit-form")?.addEventListener("submit",dbadminSave);dbadminElement("dbadmin-cancel")?.addEventListener("click",dbadminRenderForm);dbadminElement("dbadmin-delete")?.addEventListener("click",dbadminDeleteRecord);dbadminPopulateRecords();}
-function dbadminInitialize(){dbadminData=dbadminLoad();const page=document.body.dataset.dbadminPage;if(page==="history"){const selector=dbadminElement("dbadmin-table-select");if(!selector){const hidden=dbadminMake("select");hidden.id="dbadmin-table-select";hidden.hidden=true;const option=dbadminMake("option","saved_query");option.value="saved_query";hidden.append(option);document.body.append(hidden);}dbadminSetupBrowse();}else if(page==="view")dbadminSetupBrowse();else if(page==="update")dbadminSetupEditor();}
-document.addEventListener("DOMContentLoaded",dbadminInitialize);
+function dbadminPersist() {
+    try {
+        localStorage.setItem(DBADMIN_KEY, JSON.stringify(dbadminData));
+        return true;
+    } catch (error) {
+        console.log("Could not save sample data.");
+        return false;
+    }
+}
+
+function dbadminElement(id) {
+    return document.getElementById(id);
+}
+
+function dbadminMake(tag, content, className) {
+    const element = document.createElement(tag);
+
+    if (content !== undefined) {
+        element.textContent = String(content);
+    }
+
+    if (className) {
+        element.className = className;
+    }
+
+    return element;
+}
+
+function dbadminCurrentTable() {
+    const select = dbadminElement("dbadmin-table-select");
+
+    return select ? select.value : "saved_query";
+}
+
+function dbadminSelectedRecord() {
+    const table = dbadminCurrentTable();
+    const select = dbadminElement("dbadmin-record-select");
+
+    if (!select) {
+        return null;
+    }
+
+    const key = DBADMIN_SCHEMA[table].key;
+
+    return dbadminData[table].find(function (record) {
+        return String(record[key]) === select.value;
+    });
+}
+
+// Display and search database records
+function dbadminRenderTable(table, records) {
+    const container = dbadminElement("dbadmin-table-container");
+
+    if (!container) {
+        return;
+    }
+
+    container.replaceChildren();
+
+    if (records.length === 0) {
+        container.appendChild(
+            dbadminMake("p", "No records found.", "dbadmin-empty")
+        );
+        return;
+    }
+
+    const tableElement = dbadminMake("table", undefined, "dbadmin-table");
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    DBADMIN_SCHEMA[table].columns.forEach(function (column) {
+        headerRow.appendChild(dbadminMake("th", column));
+    });
+
+    thead.appendChild(headerRow);
+
+    const tbody = document.createElement("tbody");
+
+    records.forEach(function (record) {
+        const row = document.createElement("tr");
+
+        DBADMIN_SCHEMA[table].columns.forEach(function (column) {
+            const cell = document.createElement("td");
+            const value = record[column] ?? "";
+
+            if (column === "role" || column === "verdict") {
+                cell.appendChild(
+                    dbadminMake("span", value, "dbadmin-pill")
+                );
+            } else {
+                cell.textContent = String(value);
+            }
+
+            row.appendChild(cell);
+        });
+
+        tbody.appendChild(row);
+    });
+
+    tableElement.appendChild(thead);
+    tableElement.appendChild(tbody);
+    container.appendChild(tableElement);
+}
+
+function dbadminRenderBrowse() {
+    const table = dbadminCurrentTable();
+    const search = dbadminElement("dbadmin-search");
+
+    const query = search
+        ? search.value.trim().toLowerCase()
+        : "";
+
+    const records = dbadminData[table].filter(function (record) {
+        return Object.values(record).some(function (value) {
+            return String(value).toLowerCase().includes(query);
+        });
+    });
+
+    dbadminRenderTable(table, records);
+
+    const count = dbadminElement("dbadmin-row-count");
+
+    if (count) {
+        count.textContent =
+            "Showing " + records.length + " of " +
+            dbadminData[table].length + " records";
+    }
+}
+
+// Select a record to update or delete
+function dbadminPopulateRecords() {
+    const table = dbadminCurrentTable();
+    const select = dbadminElement("dbadmin-record-select");
+
+    if (!select) {
+        return;
+    }
+
+    select.replaceChildren();
+
+    dbadminData[table].forEach(function (record) {
+        const key = DBADMIN_SCHEMA[table].key;
+
+        const description =
+            record.username ||
+            record.question ||
+            record.ai_claim_text ||
+            record.verdict ||
+            "Record";
+
+        const option = document.createElement("option");
+
+        option.value = String(record[key]);
+        option.textContent = record[key] + " - " + description;
+
+        select.appendChild(option);
+    });
+
+    dbadminRenderForm();
+}
+
+// Build the update form
+function dbadminRenderForm() {
+    const container = dbadminElement("dbadmin-form-fields");
+
+    if (!container) {
+        return;
+    }
+
+    container.replaceChildren();
+
+    const table = dbadminCurrentTable();
+    const record = dbadminSelectedRecord();
+
+    if (!record) {
+        container.appendChild(
+            dbadminMake("p", "No records available.")
+        );
+
+        dbadminRenderTable(table, []);
+        return;
+    }
+
+    DBADMIN_SCHEMA[table].columns.forEach(function (column) {
+        const largeField =
+            column === "question" ||
+            column === "answer" ||
+            column === "ai_claim_text";
+
+        const label = dbadminMake(
+            "label",
+            undefined,
+            largeField ? "dbadmin-field-full" : ""
+        );
+
+        label.appendChild(
+            dbadminMake("span", column, "dbadmin-label")
+        );
+
+        let field;
+
+        if (largeField) {
+            field = dbadminMake("textarea", undefined, "dbadmin-textarea");
+            field.rows = 3;
+        } else if (column === "role" || column === "verdict") {
+            field = dbadminMake("select", undefined, "dbadmin-select");
+
+            const options = column === "role"
+                ? ["USER", "ADMIN", "DB_ADMIN"]
+                : ["SUPPORTED", "UNSUPPORTED", "UNCERTAIN"];
+
+            options.forEach(function (value) {
+                const option = dbadminMake("option", value);
+                option.value = value;
+                field.appendChild(option);
+            });
+        } else {
+            field = dbadminMake("input", undefined, "dbadmin-input");
+
+            field.type = column === "score" ? "number" : "text";
+
+            if (column === "score") {
+                field.min = "0";
+                field.max = "1";
+                field.step = "0.01";
+            }
+        }
+
+        field.name = column;
+        field.value = String(record[column] ?? "");
+        field.disabled = DBADMIN_SCHEMA[table].readonly.includes(column);
+
+        if (!field.disabled) {
+            field.required = true;
+        }
+
+        label.appendChild(field);
+        container.appendChild(label);
+    });
+
+    dbadminRenderTable(table, dbadminData[table]);
+
+    const feedback = dbadminElement("dbadmin-feedback");
+
+    if (feedback) {
+        feedback.textContent = "";
+    }
+}
+
+// Save changes to a sample record
+function dbadminSave(event) {
+    event.preventDefault();
+
+    const table = dbadminCurrentTable();
+    const record = dbadminSelectedRecord();
+    const form = dbadminElement("dbadmin-edit-form");
+    const feedback = dbadminElement("dbadmin-feedback");
+
+    if (!record || !form) {
+        return;
+    }
+
+    if (!form.reportValidity()) {
+        return;
+    }
+
+    const formData = new FormData(form);
+
+    for (const column of DBADMIN_SCHEMA[table].columns) {
+        if (DBADMIN_SCHEMA[table].readonly.includes(column)) {
+            continue;
+        }
+
+        const value = String(formData.get(column) || "").trim();
+
+        if (!value) {
+            feedback.textContent = column + " cannot be empty.";
+            feedback.className = "dbadmin-error";
+            return;
+        }
+
+        if (column === "score") {
+            const score = Number(value);
+
+            if (!Number.isFinite(score) || score < 0 || score > 1) {
+                feedback.textContent = "Score must be between 0 and 1.";
+                feedback.className = "dbadmin-error";
+                return;
+            }
+
+            record[column] = score;
+        } else if (column === "ai_claim_id") {
+            const claimId = Number(value);
+
+            const exists = dbadminData.ai_claim.some(function (claim) {
+                return claim.ai_claim_id === claimId;
+            });
+
+            if (!Number.isInteger(claimId) || !exists) {
+                feedback.textContent = "Enter an existing Claim ID.";
+                feedback.className = "dbadmin-error";
+                return;
+            }
+
+            record[column] = claimId;
+        } else {
+            record[column] = value;
+        }
+    }
+
+    const saved = dbadminPersist();
+
+    dbadminPopulateRecords();
+
+    feedback.textContent = saved
+        ? "Sample record updated successfully."
+        : "Could not save changes to browser storage.";
+
+    feedback.className = saved ? "dbadmin-success" : "dbadmin-error";
+}
+
+// Delete a sample record
+function dbadminDeleteRecord() {
+    const table = dbadminCurrentTable();
+    const record = dbadminSelectedRecord();
+    const feedback = dbadminElement("dbadmin-feedback");
+
+    if (!record) {
+        return;
+    }
+
+    const key = DBADMIN_SCHEMA[table].key;
+    const id = record[key];
+
+    if (table === "ai_claim") {
+        const referenced = dbadminData.result.some(function (result) {
+            return String(result.ai_claim_id) === String(id);
+        });
+
+        if (referenced) {
+            feedback.textContent =
+                "Cannot delete a claim referenced by a result.";
+            feedback.className = "dbadmin-error";
+            return;
+        }
+    }
+
+    const confirmed = window.confirm(
+        "Are you sure you want to delete record " + id + "?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    dbadminData[table] = dbadminData[table].filter(function (item) {
+        return String(item[key]) !== String(id);
+    });
+
+    const saved = dbadminPersist();
+
+    dbadminPopulateRecords();
+
+    feedback.textContent = saved
+        ? "Sample record deleted successfully."
+        : "Record deleted in memory, but could not be saved.";
+
+    feedback.className = saved ? "dbadmin-success" : "dbadmin-error";
+}
+
+function dbadminSetupBrowse() {
+    const tableSelect = dbadminElement("dbadmin-table-select");
+    const search = dbadminElement("dbadmin-search");
+
+    if (tableSelect) {
+        tableSelect.addEventListener("change", dbadminRenderBrowse);
+    }
+
+    if (search) {
+        search.addEventListener("input", dbadminRenderBrowse);
+    }
+
+    dbadminRenderBrowse();
+}
+
+function dbadminSetupEditor() {
+    const tableSelect = dbadminElement("dbadmin-table-select");
+    const recordSelect = dbadminElement("dbadmin-record-select");
+    const form = dbadminElement("dbadmin-edit-form");
+    const cancelButton = dbadminElement("dbadmin-cancel");
+    const deleteButton = dbadminElement("dbadmin-delete");
+
+    if (tableSelect) {
+        tableSelect.addEventListener("change", dbadminPopulateRecords);
+    }
+
+    if (recordSelect) {
+        recordSelect.addEventListener("change", dbadminRenderForm);
+    }
+
+    if (form) {
+        form.addEventListener("submit", dbadminSave);
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener("click", dbadminRenderForm);
+    }
+
+    if (deleteButton) {
+        deleteButton.addEventListener("click", dbadminDeleteRecord);
+    }
+
+    dbadminPopulateRecords();
+}
+
+function dbadminInitialize() {
+    dbadminData = dbadminLoad();
+
+    const page = document.body.dataset.dbadminPage;
+
+    if (page === "view") {
+        dbadminSetupBrowse();
+    } else if (page === "update") {
+        dbadminSetupEditor();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", dbadminInitialize);
