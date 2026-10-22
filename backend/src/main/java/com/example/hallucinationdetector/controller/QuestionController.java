@@ -45,6 +45,6 @@ public class QuestionController {
         model.addAttribute("question", response.getQuestion());
         model.addAttribute("answer", response.getAnswer());
         model.addAttribute("claims", response.getClaims());
-        return "results";
+        return "Html/results";
     }
 }
