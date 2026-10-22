@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Admin | Hallucination Detector</title>
+    <link rel="stylesheet" href="../Css/style.css">
+    <link rel="stylesheet" href="../Css/admin.css">
+    <script src="../JavaScript/admin.js" defer></script>
+</head>
+
+<body class="admin-page">
+    <main class="admin-container">
+        <header class="admin-header">
+            <p>HALLUCINATION DETECTION SYSTEM</p>
+            <h1>System Administration</h1>
+            <p>Manage system configuration and evaluation.</p>
+        </header>
+
+        <nav class="admin-grid" aria-label="System administration">
+            <button class="admin-card" type="button"
+                    data-panel="gemini">
+                <span class="admin-icon">⚙</span>
+                <h2>Gemini API</h2>
+                <p>Configure AI model settings.</p>
+            </button>
+
+            <button class="admin-card" type="button"
+                    data-panel="wikipedia">
+                <span class="admin-icon">🌐</span>
+                <h2>Wikipedia API</h2>
+                <p>Configure evidence source settings.</p>
+            </button>
+
+            <button class="admin-card" type="button"
+                    data-panel="fever">
+                <span class="admin-icon">📚</span>
+                <h2>FEVER Dataset</h2>
+                <p>Manage benchmark configuration.</p>
+            </button>
+
+            <button class="admin-card" type="button"
+                    data-panel="evaluation">
+                <span class="admin-icon">📊</span>
+                <h2>Evaluation Metrics</h2>
+                <p>View demonstration evaluation results.</p>
+            </button>
+
+            <button class="admin-card" type="button"
+                    data-panel="users">
+                <span class="admin-icon">👥</span>
+                <h2>Manage Users</h2>
+                <p>View demonstration user accounts.</p>
+            </button>
+
+            <a class="admin-card" href="index.html">
+                <span class="admin-icon">⌂</span>
+                <h2>Return Home</h2>
+                <p>Back to the main application.</p>
+            </a>
+        </nav>
+
+        <section class="admin-panel" id="admin-panel"
+                 aria-live="polite" hidden>
+            <h2 id="admin-panel-title"></h2>
+            <p id="admin-panel-description"></p>
+
+            <div id="admin-panel-content"></div>
+
+            <button id="admin-close" type="button">
+                Close Panel
+            </button>
+        </section>
+
+        <p class="admin-notice">
+            Frontend demonstration only. Settings and results
+            are not connected to live APIs or the database.
+        </p>
+    </main>
+</body>
+</html>
