@@ -4,31 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Question History | Hallucination Detector</title>
-    <link rel="stylesheet" th:href="@{/Css/style.css}" >
-    <link rel="stylesheet" th:href="@{/Css/userhistory.css}" >
-    <script th:src="@{/JavaScript/userhistory.js}"  defer></script>
+    <link rel="stylesheet" th:href="@{/Css/style.css}">
+    <link rel="stylesheet" th:href="@{/Css/userhistory.css}">
+    <script th:src="@{/JavaScript/userhistory.js}" defer></script>
 </head>
 <body class="userhistory-page">
     <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
+
     <main class="userhistory-container" id="userhistory-main">
         <nav aria-label="Main navigation">
-            <a th:href="@{/}" >← Back to Homepage</a>
+            <a th:href="@{/}">← Back to Homepage</a>
         </nav>
+
         <header class="userhistory-header">
             <h1>My Question History</h1>
             <p>Review your previous questions, AI answers, and verification results.</p>
         </header>
-        <section class="userhistory-account" aria-label="Demo account selection">
-            <div>
-                <h2>Frontend Account Preview</h2>
-                <p>This is a browser-only demonstration, not your real signed-in account or PostgreSQL history.</p>
-                <p id="userhistory-current-account"></p>
-            </div>
-            <label for="userhistory-account-name">Demo username</label>
-            <input id="userhistory-account-name" type="text" maxlength="40" autocomplete="off">
-            <button id="userhistory-switch-account" type="button">Switch Demo Account</button>
-        </section>
+
         <p id="userhistory-feedback" role="status" aria-live="polite"></p>
+
         <section id="userhistory-list" aria-label="Saved question history"></section>
     </main>
 </body>
