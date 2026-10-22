@@ -65,7 +65,6 @@ function saveData() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(database));
 }
 
-// Get selected table
 function selectedTable() {
     return document.getElementById("dbadmin-table-select").value;
 }
