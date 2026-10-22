@@ -72,16 +72,9 @@ function selectedTable() {
 
 function showRecords() {
     const table = selectedTable();
-    const search = document.getElementById("dbadmin-search");
     const container = document.getElementById("dbadmin-table-container");
 
-    const query = search ? search.value.toLowerCase() : "";
-
-    const records = database[table].filter(record =>
-        Object.values(record).some(value =>
-            String(value).toLowerCase().includes(query)
-        )
-    );
+    const records = database[table];
 
     container.innerHTML = "";
 
@@ -291,14 +284,10 @@ function startDatabaseAdmin() {
     const page = document.body.dataset.dbadminPage;
     const tableSelect = document.getElementById("dbadmin-table-select");
 
-    if (page === "view") {
-        tableSelect.addEventListener("change", showRecords);
-
-        document.getElementById("dbadmin-search")
-            ?.addEventListener("input", showRecords);
-
-        showRecords();
-    }
+   if (page === "view") {
+    tableSelect.addEventListener("change", showRecords);
+    showRecords();
+}
 
     if (page === "update") {
         tableSelect.addEventListener("change", loadRecords);
