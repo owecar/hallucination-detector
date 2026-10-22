@@ -37,3 +37,4 @@ function clearLoginError() {
 }
 
 usernameInput.addEventListener("input", clearLoginError);
+loginForm.addEventListener("submit", validateLoginForm);
