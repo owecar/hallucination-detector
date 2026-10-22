@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="accountHeader"
+            class="account-header"
+            th:if="${signedInUsername != null}">
+
+        <p>
+            Signed in as
+            <strong th:text="${signedInUsername}">Username</strong>
+            <span aria-hidden="true"> · </span>
+            <span th:text="${signedInRole}">Account type</span>
+        </p>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Log out</button>
+        </form>
+    </header>
+</body>
+</html>

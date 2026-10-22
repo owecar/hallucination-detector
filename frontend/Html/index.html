@@ -12,7 +12,8 @@
         <script th:src="@{/js/home.js}" src="../JavaScript/home.js" defer></script>
     </head>
 
-    <body>
+    <body class="home-page">
+        <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
         <header class="site-header">
             <nav class="main-nav" aria-label="Main navigation">
                 <a th:href="@{/}" href="index.html">
@@ -21,14 +22,6 @@
 
                 <a th:href="@{/history}" href="userhistory.html">
                     Question History
-                </a>
-
-                <a th:href="@{/login}" href="login.html">
-                    Login
-                </a>
-
-                <a th:href="@{/register}" href="register.html">
-                    Register
                 </a>
             </nav>
         </header>

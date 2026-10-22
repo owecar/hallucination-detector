@@ -9,6 +9,7 @@
     <script th:src="@{/JavaScript/userhistory.js}"  defer></script>
 </head>
 <body class="userhistory-page">
+    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
     <main class="userhistory-container" id="userhistory-main">
         <nav aria-label="Main navigation">
             <a th:href="@{/}" >← Back to Homepage</a>

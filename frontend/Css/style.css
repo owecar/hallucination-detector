@@ -166,3 +166,52 @@ button:disabled {
     cursor: wait;
 }
 @media(max-width:640px){.dbadmin-form-grid{grid-template-columns:1fr}.dbadmin-panel{padding:15px}.dbadmin-topnav{align-items:flex-start}}
+
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 30px;
+    background: rgba(7, 11, 26, 0.85);
+    border-bottom: 1px solid rgba(116, 236, 255, 0.25);
+}
+
+.account-header p {
+    margin: 0;
+    color: #d1d7ef;
+    font-size: 14px;
+}
+
+.account-header strong {
+    color: white;
+}
+
+.account-header form {
+    margin: 0;
+}
+
+.account-header button {
+    margin: 0;
+    padding: 8px 14px;
+    background: transparent;
+    color: #74ecff;
+    border: 1px solid #74ecff;
+    border-radius: 8px;
+}
+
+.account-header button:hover {
+    background: rgba(116, 236, 255, 0.12);
+}
+
+.home-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-page > .hero {
+    flex: 1;
+    min-height: 0;
+    padding: 30px 20px;
+    box-sizing: border-box;
+}
