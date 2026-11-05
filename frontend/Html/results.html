@@ -4,17 +4,17 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Verification Results</title>
-        <link rel="stylesheet" th:href="@{/css/style.css}" href="../Css/style.css">
-        <script th:src="@{/js/results.js}" src="../JavaScript/results.js" defer></script>
+        <link rel="stylesheet" th:href="@{/Css/style.css}" href="../Css/style.css">
+        <script th:src="@{/JavaScript/results.js}" src="../JavaScript/results.js" defer></script>
     </head>
 
 
    <body>
+    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
     <header class="site-header">
         <nav class="main-nav" aria-label="Main navigation">
             <a th:href="@{/}" href="index.html">Home</a>
             <a th:href="@{/history}" href="userhistory.html">Question History</a>
-            <a th:href="@{/login}" href="login.html">Login</a>
         </nav>
     </header>
 
@@ -23,20 +23,19 @@
 
         <section class="result-card">
             <h2>Your Question</h2>
-            <p th:text="${question}">What is TCP?</p>
+            <p th:text="${question}"></p>
         </section>
 
         <section class="result-card">
             <h2>AI-Generated Answer</h2>
             <p class="ai-answer" th:text="${answer}">
-                TCP is a connection-oriented transport protocol.
             </p>
         </section>
 
         <section class="result-card">
             <h2>Hallucination Score</h2>
             <p th:if="${hallucinationScore != null}">
-                <strong th:text="${hallucinationScore}">0</strong>%
+                <strong th:text="${hallucinationScore}"></strong>%
             </p>
             <p th:unless="${hallucinationScore != null}">
                 Score not available yet.
@@ -54,12 +53,11 @@
                  th:each="claim : ${claims}">
 
                 <p class="claim-text" th:text="${claim.text}">
-                    TCP is connection-oriented.
                 </p>
 
                 <p>
                     <strong>Classification:</strong>
-                    <span th:text="${claim.label}">Unchecked</span>
+                    <span th:text="${claim.label}"></span>
                 </p>
 
                 <button type="button"

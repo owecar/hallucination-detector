@@ -8,43 +8,51 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http)
+                        throws Exception {
 
-        http.authorizeHttpRequests(access -> access
-                .requestMatchers(
-                        "/dbadmin", "/dbadmin/**", "/Html/dbadmin*"
-                ).hasRole("DB_ADMIN")
-                .requestMatchers(
-                        "/login", "/register",
-                        "/Css/**", "/JavaScript/**", "/Images/**"
-                ).permitAll()
-                .anyRequest().authenticated()
-        );
+                http.authorizeHttpRequests(access -> access
+                                .requestMatchers(
+                                                "/admin", "/admin/**", "/Html/admin*")
+                                .hasRole("ADMIN")
+                                .requestMatchers(
+                                                "/dbadmin", "/dbadmin/**", "/Html/dbadmin*")
+                                .hasRole("DB_ADMIN")
+                                .requestMatchers(
+                                                "/login", "/register",
+                                                "/Css/**", "/JavaScript/**", "/Images/**")
+                                .permitAll()
+                                .anyRequest().authenticated());
 
-        http.formLogin(login -> login
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .successHandler((request, response, authentication) -> {
-                        boolean databaseAdmin = authentication.getAuthorities().stream()
-                                .anyMatch(authority ->
-                                        authority.getAuthority().equals("ROLE_DB_ADMIN"));
+                http.formLogin(login -> login
+                                .loginPage("/login")
+                                .loginProcessingUrl("/login")
+                                .successHandler((request, response, authentication) -> {
+                                        boolean databaseAdmin = authentication.getAuthorities().stream()
+                                                        .anyMatch(authority -> authority.getAuthority()
+                                                                        .equals("ROLE_DB_ADMIN"));
 
-                        if (databaseAdmin) {
-                                response.sendRedirect(request.getContextPath() + "/dbadmin");
-                        } else {
-                                response.sendRedirect(request.getContextPath() + "/");
-                        }
-})
-                .failureUrl("/login?error")
-                .permitAll()
-        );
+                                        boolean admin = authentication.getAuthorities().stream()
+                                                        .anyMatch(authority -> authority.getAuthority()
+                                                                        .equals("ROLE_ADMIN"));
 
-        http.logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-        );
+                                        String destination = "/";
 
-        return http.build();
-    }
+                                        if (databaseAdmin) {
+                                                destination = "/dbadmin";
+                                        } else if (admin) {
+                                                destination = "/admin";
+                                        }
+
+                                        response.sendRedirect(request.getContextPath() + destination);
+                                })
+                                .failureUrl("/login?error")
+                                .permitAll());
+
+                http.logout(logout -> logout
+                                .logoutSuccessUrl("/login?logout"));
+
+                return http.build();
+        }
 }

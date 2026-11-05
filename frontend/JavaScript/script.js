@@ -13,3 +13,4 @@ function confirmDeletion(event) {
         event.preventDefault();
     }
 }
+document.addEventListener("DOMContentLoaded", setupDeleteButtons);

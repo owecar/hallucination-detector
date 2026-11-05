@@ -1,53 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question History - Hallucination Detector</title>
-    <link rel="stylesheet"
-      th:href="@{/css/style.css}"
-      href="../Css/style.css">
+    <title>My Question History | Hallucination Detector</title>
+    <link rel="stylesheet" href="../Css/style.css" th:href="@{/Css/style.css}">
+    <link rel="stylesheet" href="../Css/userhistory.css" th:href="@{/Css/userhistory.css}">
+    <script src="../JavaScript/userhistory.js" th:src="@{/JavaScript/userhistory.js}" defer></script>
 </head>
-<body>
+<body class="userhistory-page">
+    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
 
-    <h1>User Question History</h1>
-    <p>View and manage previously submitted questions.</p>
+    <main class="userhistory-container" id="userhistory-main">
+        <nav aria-label="Main navigation">
+            <a th:href="@{/}">← Back to Homepage</a>
+        </nav>
 
-    <p th:if="${message}" th:text="${message}"></p>
+        <header class="userhistory-header">
+            <h1>My Question History</h1>
+            <p>Review your previous questions, AI answers, and verification results.</p>
+        </header>
 
-    <div th:if="${#lists.isEmpty(history)}">
-        <p>No questions have been saved yet.</p>
-    </div>
+        <p id="userhistory-feedback" role="status" aria-live="polite"></p>
 
-    <div th:each="item : ${history}" class="history-item">
-
-        <h2 th:text="${item.question}">Question</h2>
-
-        <p th:text="${item.answer}">AI Answer</p>
-
-        <p>
-            Submitted:
-            <span th:text="${item.createdAt}">Date</span>
-        </p>
-
-        <form th:action="@{/history/delete/{id}(id=${item.id})}"
-              method="post"
-              class="delete-form">
-
-            <button type="submit" class="delete-button">
-                Delete Question
-            </button>
-
-        </form>
-
-    </div>
-
-    <p>
-        <a th:href="@{/}" href="index.html">Back to Homepage</a>
-    </p>
-
-    <script th:src="@{/js/script.js}"
-        src="../JavaScript/script.js"
-        defer></script>
+        <section id="userhistory-list" aria-label="Saved question history"></section>
+    </main>
 </body>
 </html>
