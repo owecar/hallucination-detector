@@ -1,83 +1,212 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Admin | Hallucination Detector</title>
-    <link rel="stylesheet" href="../Css/style.css">
-    <link rel="stylesheet" href="../Css/admin.css">
-    <script src="../JavaScript/admin.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Dashboard · Detector System</title>
+<style>
+:root{--navy:#0b2a5b;--blue:#1d6fe8;--ink:#12284a;--mute:#5b6f8f;--line:#d6e4f7;--ok:#16a34a;--okbg:#e3f6e9;--bad:#dc2626;--badbg:#fde8e8;--warn:#b45309;--warnbg:#fef3c7}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#eaf4ff,#cfe4ff 60%,#e6f1ff);min-height:100vh;display:flex}
+a{color:inherit;text-decoration:none}
+.side{width:236px;flex:none;background:linear-gradient(180deg,var(--navy),#08224b);color:#fff;padding:22px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{font-weight:700;font-size:18px;padding:0 10px 22px}
+.nav a{display:block;padding:11px 12px;border-radius:10px;margin-bottom:6px;font-size:15px;color:#cfe0ff}
+.nav a.on{background:#2f86f6;color:#fff;font-weight:600}
+.nav a:hover:not(.on){background:rgba(255,255,255,.1)}
+.me{margin-top:auto;padding:14px 10px;border-top:1px solid rgba(255,255,255,.2);font-size:13px;color:#cfe0ff}
+.me b{display:block;color:#fff;font-size:14px}
+.me a{display:inline-block;margin-top:10px;color:#fff;font-weight:600}
+main{flex:1;padding:28px 34px;min-width:0}
+h1{font-size:28px;color:var(--navy)}
+.sub{color:var(--mute);margin:4px 0 22px}
+.badge{display:none;background:var(--warnbg);color:var(--warn);font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;vertical-align:middle;margin-left:10px}
+h2{font-size:17px;margin:26px 0 12px;color:var(--navy)}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(30,90,180,.08)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{display:flex;align-items:center;gap:14px}
+.ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:21px;background:#e3efff}
+.stat.ok .ico{background:var(--okbg)}.stat.bad .ico{background:var(--badbg)}
+.stat small{display:block;color:var(--mute);font-size:13px}
+.stat strong{font-size:26px}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;counter-reset:s}
+.step{position:relative;padding:14px 12px 12px;background:#fff;border:1px solid var(--line);border-radius:14px;font-size:13px;color:var(--mute)}
+.step b{display:block;color:var(--ink);font-size:14px;margin-bottom:3px}
+.step:before{counter-increment:s;content:counter(s);display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:700;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--mute);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:12px 10px;border-bottom:1px solid #e8f0fb;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.wrap{overflow-x:auto}
+.svc{display:flex;gap:10px;align-items:center;font-weight:600;white-space:nowrap}
+.does{color:var(--mute);max-width:380px;line-height:1.4}
+.bar{height:8px;background:#e3efff;border-radius:9px;overflow:hidden;margin-top:6px;min-width:130px}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:9px}
+.chip{display:inline-block;padding:3px 11px;border-radius:99px;font-size:12.5px;font-weight:600}
+.chip.ok{background:var(--okbg);color:var(--ok)}.chip.bad{background:var(--badbg);color:var(--bad)}.chip.off{background:#eef2f7;color:var(--mute)}
+.two{display:grid;grid-template-columns:minmax(260px,1fr) 2fr;gap:14px}
+.donut{width:150px;height:150px;border-radius:50%;margin:6px auto 14px;display:grid;place-items:center}
+.donut div{width:98px;height:98px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center;font-size:12px;color:var(--mute);line-height:1.2}
+.donut b{display:block;font-size:20px;color:var(--ink)}
+.legend{display:flex;justify-content:center;gap:16px;font-size:13px;color:var(--mute)}
+.legend span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;background:var(--c)}
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.qa a{display:block;text-align:center;font-weight:600;transition:transform .15s}
+.qa a:hover{transform:translateY(-3px)}
+.qa .ico{margin:0 auto 10px;width:52px;height:52px;font-size:25px}
+.qa small{display:block;color:var(--mute);font-weight:400;margin-top:3px;font-size:12.5px}
+.note{margin-top:26px;color:var(--mute);font-size:12.5px;text-align:center}
+@media(max-width:1000px){.stats,.qa{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
+@media(max-width:720px){body{flex-direction:column}.side{width:100%;height:auto;position:static}.nav{display:flex;flex-wrap:wrap;gap:6px}.nav a{margin:0}main{padding:20px 16px}}
+</style>
 </head>
+<body>
 
-<body class="admin-page">
-    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
-    <main class="admin-container">
-        <header class="admin-header">
-            <p>HALLUCINATION DETECTION SYSTEM</p>
-            <h1>System Administration</h1>
-            <p>Manage system configuration and evaluation.</p>
-        </header>
+<aside class="side">
+  <div class="brand">🧠 Detector System</div>
+  <nav class="nav">
+    <a class="on" href="#">🛠️ Admin Dashboard</a>
+    <a href="#">👥 Manage Users</a>
+    <a href="#">🗂️ Manage Datasets</a>
+    <a href="#">⚙️ API &amp; Models</a>
+    <a href="#">🗄️ Database</a>
+    <a th:href="@{/}" href="/">🏠 Return Home</a>
+  </nav>
+  <div class="me">Signed in as <b id="uname">Admin</b><span id="urole"></span><a href="#">↪ Log Out</a></div>
+</aside>
 
-        <nav class="admin-grid" aria-label="System administration">
-            <button class="admin-card" type="button"
-                    data-panel="gemini">
-                <span class="admin-icon">⚙</span>
-                <h2>Gemini API</h2>
-                <p>Configure AI model settings.</p>
-            </button>
+<main>
+  <h1>Admin Dashboard <span class="badge" id="sample">Sample data</span></h1>
+  <p class="sub">An overview of who is using the system, how many answers were checked, and the services behind each check.</p>
 
-            <button class="admin-card" type="button"
-                    data-panel="wikipedia">
-                <span class="admin-icon"></span>
-                <h2>Wikipedia API</h2>
-                <p>Configure evidence source settings.</p>
-            </button>
+  <div class="stats" id="stats"></div>
 
-            <button class="admin-card" type="button"
-                    data-panel="fever">
-                <span class="admin-icon"></span>
-                <h2>FEVER Dataset</h2>
-                <p>Manage benchmark configuration.</p>
-            </button>
+  <h2>How a question is checked</h2>
+  <div class="flow">
+    <div class="step"><b>User asks</b>A question is submitted from the Ask page.</div>
+    <div class="step"><b>AI answers</b>Gemini writes an answer to the question.</div>
+    <div class="step"><b>Split into claims</b>The answer is broken into single statements.</div>
+    <div class="step"><b>Find evidence</b>Wikipedia passages are retrieved for each claim.</div>
+    <div class="step"><b>Judge &amp; score</b>Each claim is labeled and given a confidence.</div>
+  </div>
 
-            <button class="admin-card" type="button"
-                    data-panel="evaluation">
-                <span class="admin-icon"></span>
-                <h2>Evaluation Metrics</h2>
-                <p>View demonstration evaluation results.</p>
-            </button>
+  <h2>Services &amp; usage</h2>
+  <div class="card wrap">
+    <table>
+      <thead><tr><th>Service</th><th>What it does here</th><th>Usage</th><th>Status</th></tr></thead>
+      <tbody id="services"></tbody>
+    </table>
+  </div>
 
-            <button class="admin-card" type="button"
-                    data-panel="users">
-                <span class="admin-icon"></span>
-                <h2>Manage Users</h2>
-                <p>View demonstration user accounts.</p>
-            </button>
+  <h2>Results overview</h2>
+  <div class="two">
+    <div class="card">
+      <div class="donut" id="donut"><div><span><b id="rate">0%</b>hallucination rate</span></div></div>
+      <div class="legend"><span style="--c:var(--ok)">Factual</span><span style="--c:var(--bad)">Hallucination</span></div>
+    </div>
+    <div class="card wrap">
+      <table>
+        <thead><tr><th>Recent question</th><th>Result</th><th>Confidence</th><th>Date</th></tr></thead>
+        <tbody id="recent"></tbody>
+      </table>
+    </div>
+  </div>
 
-            <a class="admin-card" th:href="@{/}" href="/">
-                <span class="admin-icon"></span>
-                <h2>Return Home</h2>
-                <p>Back to the main application.</p>
-            </a>
-        </nav>
+  <h2>Quick actions</h2>
+  <div class="qa">
+    <a class="card" href="#"><div class="ico">👥</div>Manage Users<small>Accounts and roles</small></a>
+    <a class="card" href="#"><div class="ico">🗂️</div>Manage Datasets<small>Wikipedia / FEVER</small></a>
+    <a class="card" href="#"><div class="ico">⚙️</div>API Keys &amp; Models<small>Gemini settings</small></a>
+    <a class="card" href="#"><div class="ico">🗄️</div>Manage DB Tables<small>Users, questions, results</small></a>
+  </div>
 
-        <section class="admin-panel" id="admin-panel"
-                 aria-live="polite" hidden>
-            <h2 id="admin-panel-title"></h2>
-            <p id="admin-panel-description"></p>
+  <p class="note">Detector System · Admin</p>
+</main>
 
-            <div id="admin-panel-content"></div>
+<script>
+/* ------------------------------------------------------------------
+   DATA: replace this object with real numbers from your backend.
+   e.g.  const DATA = await (await fetch("/api/admin/stats")).json();
+   Set sample:false once real data is wired so the badge disappears.
+------------------------------------------------------------------- */
+const DATA = {
+  sample: true,
+  user: { name: "_rifahtasfia", role: "Admin" },
+  stats: { users: 128, queries: 1542, factual: 1230, hallucination: 312 },
+  services: [
+    { icon: "✨", name: "Gemini API", does: "Writes the AI answer to each question and judges every claim in it against the evidence.", used: 214, limit: 1500, unit: "calls today", status: "Connected" },
+    { icon: "📚", name: "Wikipedia API", does: "Supplies the evidence passages each claim is checked against. Free, no key needed.", used: 1312, limit: null, unit: "searches today", status: "Connected" },
+    { icon: "🧪", name: "FEVER dataset", does: "Benchmark of labeled claims used offline to measure how accurate the detector is.", used: 3, limit: null, unit: "evaluation runs", status: "Offline" }
+  ],
+  recent: [
+    { q: "Is the Eiffel Tower in Germany?", verdict: "Hallucination", conf: 97, date: "Nov 5, 2026" },
+    { q: "Who won the 2022 World Cup?", verdict: "Factual", conf: 99, date: "Nov 4, 2026" },
+    { q: "Is water a renewable resource?", verdict: "Factual", conf: 92, date: "Nov 3, 2026" },
+    { q: "Does the Sun orbit the Earth?", verdict: "Hallucination", conf: 98, date: "Nov 2, 2026" }
+  ]
+};
 
-            <button id="admin-close" type="button">
-                Close Panel
-            </button>
-        </section>
+const $ = s => document.querySelector(s);
+const fmt = n => Number(n).toLocaleString("en-US");
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function row(tbody, cells) {
+  const tr = el("tr");
+  cells.forEach(c => { const td = el("td"); td.append(c); tr.append(td); });
+  tbody.append(tr);
+}
 
-        <p class="admin-notice">
-            Frontend demonstration only. Settings and results
-            are not connected to live APIs or the database.
-        </p>
-    </main>
+// header / user
+$("#uname").textContent = DATA.user.name;
+$("#urole").textContent = " · " + DATA.user.role;
+if (DATA.sample) $("#sample").style.display = "inline-block";
+
+// stat cards
+const S = DATA.stats;
+[
+  ["👥", "Users", S.users, ""],
+  ["💬", "Total Queries", S.queries, ""],
+  ["✅", "Factual", S.factual, "ok"],
+  ["❌", "Hallucination", S.hallucination, "bad"]
+].forEach(([icon, label, value, cls]) => {
+  const card = el("div", "card stat " + cls);
+  const box = el("div");
+  box.append(el("small", "", label), el("strong", "", fmt(value)));
+  card.append(el("div", "ico", icon), box);
+  $("#stats").append(card);
+});
+
+// services & usage
+DATA.services.forEach(s => {
+  const name = el("div", "svc"); name.append(el("span", "", s.icon), el("span", "", s.name));
+  const usage = el("div");
+  if (s.limit) {
+    usage.append(el("div", "", fmt(s.used) + " / " + fmt(s.limit) + " " + s.unit));
+    const bar = el("div", "bar"), fill = el("i");
+    fill.style.width = Math.min(100, s.used / s.limit * 100) + "%";
+    bar.append(fill); usage.append(bar);
+  } else {
+    usage.append(el("div", "", fmt(s.used) + " " + s.unit));
+  }
+  row($("#services"), [name, el("div", "does", s.does), usage,
+    el("span", "chip " + (s.status === "Connected" ? "ok" : "off"), s.status)]);
+});
+
+// donut
+const total = S.factual + S.hallucination;
+const badPct = total ? S.hallucination / total * 100 : 0;
+$("#donut").style.background = "conic-gradient(var(--bad) 0 " + badPct + "%, var(--ok) 0)";
+$("#rate").textContent = badPct.toFixed(1) + "%";
+
+// recent questions
+DATA.recent.forEach(r => {
+  const bad = r.verdict === "Hallucination";
+  row($("#recent"), [r.q, el("span", "chip " + (bad ? "bad" : "ok"), r.verdict), r.conf + "%", r.date]);
+});
+</script>
 </body>
 </html>
