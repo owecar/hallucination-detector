@@ -1,87 +1,120 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Verification Results</title>
-        <link rel="stylesheet" th:href="@{/Css/style.css}" href="../Css/style.css">
-        <script th:src="@{/JavaScript/results.js}" src="../JavaScript/results.js" defer></script>
-    </head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verification Result · Detector System</title>
+<style>
+:root{--navy:#0b2a5b;--blue:#1d6fe8;--ink:#12284a;--mute:#5b6f8f;--line:#d6e4f7;--ok:#16a34a;--okbg:#e3f6e9;--bad:#dc2626;--badbg:#fde8e8;--mid:#b45309;--midbg:#fef3c7}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#eaf4ff,#cfe4ff 60%,#e6f1ff);min-height:100vh;display:flex}
+a{color:inherit;text-decoration:none}
+.side{width:236px;flex:none;background:linear-gradient(180deg,var(--navy),#08224b);color:#fff;padding:22px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{font-weight:700;font-size:18px;padding:0 10px 22px}
+.nav{display:flex;flex-direction:column;flex:1}
+.nav a,.nav button{display:block;width:100%;text-align:left;padding:11px 12px;border-radius:10px;margin-bottom:6px;font:inherit;font-size:15px;color:#cfe0ff;background:none;border:0;cursor:pointer}
+.nav a.on{background:#cfe6ff;color:var(--navy);font-weight:600}
+.nav a:hover:not(.on),.nav button:hover{background:rgba(255,255,255,.1)}
+.nav form{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,.2)}
+main{flex:1;min-width:0;max-width:900px;margin:0 auto;padding:30px 28px}
+h1{font-size:28px;color:var(--navy);margin-bottom:18px}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:16px;box-shadow:0 6px 18px rgba(30,90,180,.08)}
+.card h2{font-size:15px;color:var(--navy);margin-bottom:8px}
+.ai-answer{white-space:pre-line;line-height:1.55}
+.verdict{--c:var(--bad);display:flex;align-items:center;gap:22px}
+.verdict.mid{--c:#d97706}.verdict.ok{--c:var(--ok)}
+.banner{flex:1;border-radius:14px;padding:16px 20px;background:var(--badbg);color:#b91c1c}
+.verdict.mid .banner{background:var(--midbg);color:var(--mid)}
+.verdict.ok .banner{background:var(--okbg);color:#15803d}
+.banner b{display:block;font-size:22px;margin-bottom:4px}
+.banner span{font-size:14px;opacity:.9}
+.gauge{width:124px;height:124px;flex:none;border-radius:50%;background:conic-gradient(var(--c) calc(var(--pct)*1%),#e3efff 0);display:grid;place-items:center}
+.gauge div{width:90px;height:90px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center;font-size:12px;color:var(--mute);line-height:1.2}
+.gauge strong{display:block;font-size:24px;color:var(--ink)}
+.claim-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:12px}
+.claim-text{font-weight:600;margin-bottom:8px}
+.chip{display:inline-block;padding:3px 12px;border-radius:99px;font-size:13px;font-weight:600;background:#eef2f7;color:var(--mute);text-transform:capitalize}
+.chip.ok{background:var(--okbg);color:var(--ok)}.chip.bad{background:var(--badbg);color:var(--bad)}
+.evidence-toggle{display:block;margin-top:12px;background:none;border:1px solid #bcd6f6;color:#1a4d9c;border-radius:99px;padding:7px 16px;font:inherit;font-size:14px;cursor:pointer}
+.evidence-toggle:hover{background:#eef5ff}
+.evidence-details{margin-top:12px;padding:12px 14px;background:#f2f8ff;border-radius:12px;font-size:14px;line-height:1.5;word-break:break-word}
+.evidence-details h3{font-size:13px;color:var(--navy);margin-bottom:6px}
+.evidence-details a{color:var(--blue);text-decoration:underline}
+.back-link{display:inline-block;margin-top:6px;padding:13px 28px;border-radius:99px;background:linear-gradient(135deg,#2f86f6,#1457c9);color:#fff;font-weight:600;box-shadow:0 4px 12px rgba(29,111,232,.35)}
+@media(max-width:720px){body{flex-direction:column}.side{width:100%;height:auto;position:static}.nav{flex-direction:row;flex-wrap:wrap;gap:6px}.nav a,.nav button{width:auto;margin:0}.nav form{margin:0;padding:0;border:0}main{padding:20px 16px}.verdict{flex-direction:column-reverse;align-items:stretch}.gauge{align-self:center}}
+</style>
+<script th:src="@{/JavaScript/results.js}" src="../JavaScript/results.js" defer></script>
+</head>
+<body>
 
+<aside class="side">
+  <div class="brand">🧠 Detector System</div>
+  <nav class="nav">
+    <a th:href="@{/}" href="/">🏠 Home</a>
+    <a class="on" th:href="@{/}" href="/">🔍 Ask a Question</a>
+    <a th:href="@{/history}" href="/history">🕘 History</a>
+    <a href="#">👤 Profile</a>
+    <form th:action="@{/logout}" action="/logout" method="post">
+      <button type="submit">↪ Log Out</button>
+    </form>
+  </nav>
+</aside>
 
-   <body>
-    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
-    <header class="site-header">
-        <nav class="main-nav" aria-label="Main navigation">
-            <a th:href="@{/}" href="index.html">Home</a>
-            <a th:href="@{/history}" href="userhistory.html">Question History</a>
-        </nav>
-    </header>
+<main>
+  <h1>✅ Verification Result</h1>
 
-    <main class="results-container">
-        <h1>Verification Results</h1>
+  <section class="card">
+    <h2>💬 Your Question</h2>
+    <p th:text="${question}">Is the Eiffel Tower in Germany?</p>
+  </section>
 
-        <section class="result-card">
-            <h2>Your Question</h2>
-            <p th:text="${question}"></p>
-        </section>
+  <!-- Verdict: bands are score >= 50 (likely hallucination), 20-49 (possible), under 20 (likely factual). Adjust to taste. -->
+  <section class="card verdict" th:if="${hallucinationScore != null}"
+           th:classappend="${hallucinationScore >= 50} ? '' : (${hallucinationScore >= 20} ? 'mid' : 'ok')"
+           th:style="'--pct:' + ${hallucinationScore}" style="--pct:97">
+    <div class="banner">
+      <b th:text="${hallucinationScore >= 50} ? '❌ Likely Hallucination' : (${hallucinationScore >= 20} ? '⚠️ Possible Hallucination' : '✅ Likely Factual')">❌ Likely Hallucination</b>
+      <span>The score estimates how much of the answer is not backed by evidence.</span>
+    </div>
+    <div class="gauge"><div><span><strong th:text="${hallucinationScore} + '%'">97%</strong>Hallucination score</span></div></div>
+  </section>
+  <section class="card" th:unless="${hallucinationScore != null}">
+    <h2>Hallucination Score</h2>
+    <p>Score not available yet.</p>
+  </section>
 
-        <section class="result-card">
-            <h2>AI-Generated Answer</h2>
-            <p class="ai-answer" th:text="${answer}">
-            </p>
-        </section>
+  <section class="card">
+    <h2>🤖 AI-Generated Answer</h2>
+    <p class="ai-answer" th:text="${answer}">No, the Eiffel Tower is in Paris, France.</p>
+  </section>
 
-        <section class="result-card">
-            <h2>Hallucination Score</h2>
-            <p th:if="${hallucinationScore != null}">
-                <strong th:text="${hallucinationScore}"></strong>%
-            </p>
-            <p th:unless="${hallucinationScore != null}">
-                Score not available yet.
-            </p>
-        </section>
+  <section class="card">
+    <h2>📖 Claim Verification &amp; Sources</h2>
 
-        <section class="result-card">
-            <h2>Claim Verification</h2>
+    <p th:if="${claims == null or #lists.isEmpty(claims)}">No claims were detected.</p>
 
-            <p th:if="${claims == null or #lists.isEmpty(claims)}">
-                No claims were detected.
-            </p>
+    <!-- results.js needs: .evidence-toggle button directly followed by the .evidence-details div -->
+    <div class="claim-card" th:each="claim : ${claims}">
+      <p class="claim-text" th:text="${claim.text}">The Eiffel Tower is in Germany.</p>
+      <span class="chip bad"
+            th:classappend="${#strings.toUpperCase(claim.label) == 'SUPPORTED'} ? 'ok' : (${#strings.toUpperCase(claim.label) == 'CONTRADICTED'} ? 'bad' : '')"
+            th:text="${#strings.replace(claim.label, '_', ' ')}">contradicted</span>
 
-            <div class="claim-card"
-                 th:each="claim : ${claims}">
+      <button type="button" class="evidence-toggle" aria-expanded="false">Show Evidence</button>
 
-                <p class="claim-text" th:text="${claim.text}">
-                </p>
+      <div class="evidence-details" hidden>
+        <h3>Supporting Evidence</h3>
+        <a th:if="${claim.source != null and #strings.startsWith(claim.source, 'http')}"
+           th:href="${claim.source}" th:text="${claim.source}" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Eiffel_Tower</a>
+        <p th:unless="${claim.source != null and #strings.startsWith(claim.source, 'http')}"
+           th:text="${claim.source != null} ? ${claim.source} : 'Source not available.'">Eiffel Tower – Wikipedia</p>
+      </div>
+    </div>
+  </section>
 
-                <p>
-                    <strong>Classification:</strong>
-                    <span th:text="${claim.label}"></span>
-                </p>
+  <a class="back-link" th:href="@{/}" href="/">Ask Another Question</a>
+</main>
 
-                <button type="button"
-                        class="evidence-toggle"
-                        aria-expanded="false">
-                    Show Evidence
-                </button>
-
-                <div class="evidence-details" hidden>
-                    <h3>Supporting Evidence</h3>
-                    <p th:text="${claim.source}">
-                        Source not available.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <div class="form-actions">
-            <a class="back-link"
-               th:href="@{/}"
-               href="index.html">
-                Ask Another Question
-            </a>
-        </div>
-    </main>
-    </body>
+</body>
 </html>
