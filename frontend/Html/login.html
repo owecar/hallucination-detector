@@ -1,41 +1,123 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="../Css/style.css">
-    <link rel="stylesheet" href="../Css/auth.css">
-    <script src = "../JavaScript/auth.js" defer></script>
+    <title>Login | Detector System</title>
+
+    <link rel="stylesheet" th:href="@{/Css/style.css}" href="../Css/style.css">
+    <link rel="stylesheet" th:href="@{/Css/auth.css}" href="../Css/auth.css">
+    <link rel="stylesheet" th:href="@{/Css/login.css}" href="../Css/login.css">
+
+    <script th:src="@{/JavaScript/auth.js}" src="../JavaScript/auth.js" defer></script>
 </head>
-<body class="auth-page">
-    <main class="auth-container">
-        <h1>Log in</h1>
-        <p>Access your saved questions and results.</p>
 
-        <form id="login-form" action="/login" th:action="@{/login}" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" autocomplete="username" required>
+<body class="auth-page login-page">
+
+    <main class="login-shell">
+        <section class="robot-panel" aria-label="Detector System AI assistant">
+            <img class="robot-image"
+                 src="../Images/login-robot.png"
+                 th:src="@{/Images/login-robot.png}"
+                 alt="Friendly futuristic AI robot with glowing colorful eyes">
+        </section>
+
+        <section class="login-panel">
+            <div class="login-content">
+
+                <div class="brand-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" width="58" height="58"
+                        fill="none" stroke="currentColor"
+                        stroke-width="3.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M32 13 C26 5 14 9 14 19
+                                C5 20 5 33 12 37
+                                C7 46 14 55 23 52
+                                C27 58 32 53 32 48 Z"/>
+                        <path d="M32 13 C38 5 50 9 50 19
+                                C59 20 59 33 52 37
+                                C57 46 50 55 41 52
+                                C37 58 32 53 32 48 Z"/>
+                        <path d="M32 13 V48
+                                M22 19 C16 23 23 29 27 29
+                                M42 19 C48 23 41 29 37 29
+                                M16 38 C23 34 27 40 26 45
+                                 M48 38 C41 34 37 40 38 45"/>
+                    </svg>
+                </div>
+
+                <h1>Detector System</h1>
+                <h2>AI Hallucination Detector</h2>
+
+                <p class="login-description">
+                    Verify AI-generated answers with trusted,
+                    fact-checked sources.
+                </p>
+
+                <form id="login-form"
+                      action="/login"
+                      th:action="@{/login}"
+                      method="post">
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">✉️</span>
+                            <input type="text"
+                                   id="username"
+                                   name="username"
+                                   placeholder="Username or Email"
+                                   autocomplete="username"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">🔒</span>
+                            <input type="password"
+                                   id="password"
+                                   name="password"
+                                   placeholder="Password"
+                                   autocomplete="current-password"
+                                   required>
+
+                            <button type="button"
+                                    id="toggle-password"
+                                    aria-controls="password"
+                                    aria-pressed="false">
+                                Show password
+                            </button>
+                        </div>
+                    </div>
+
+                    <p id="login-error"
+                       role="alert"
+                       th:text="${param.error != null ? 'Incorrect username or password.' : ''}">
+                    </p>
+
+                    <p class="logout-message"
+                       th:if="${param.logout != null}">
+                        You have been logged out.
+                    </p>
+
+                    <button type="submit" class="login-submit">
+                        Log In
+                    </button>
+                </form>
+
+                <p class="register-link">
+                    New here?
+                    <a href="register.html" th:href="@{/register}">
+                        Create an Account
+                    </a>
+                </p>
+
             </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" autocomplete="current-password" required>
-                <button type="button" id="toggle-password" aria-controls="password" aria-pressed="false">
-                    Show password
-                </button>
-            </div>
-
-            <p id="login-error" role="alert" th:text="${param.error != null ? 'Incorrect username or password.' : ''}"></p>
-
-            <p th:if="${param.logout != null}">
-                You have been logged out.
-            </p>
-
-            <button type="submit">Log in</button>
-        </form>
-        <p>Need an account? <a href="register.html" th:href="@{/register}">Create an account</a></p>
+        </section>
     </main>
+
 </body>
 </html>
