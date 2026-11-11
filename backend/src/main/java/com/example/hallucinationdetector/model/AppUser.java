@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "app_user")
 public class AppUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,5 +42,13 @@ public class AppUser {
 
     public String getRole() {
         return role;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
