@@ -183,3 +183,153 @@
         padding: 17px;
     }
 }
+
+/* ==========================================
+   QUESTION HISTORY — SKY BLUE THEME
+   ========================================== */
+
+.userhistory-page {
+    margin: 0;
+    min-height: 100vh;
+    background: #eaf4ff;
+    color: #12284a;
+    font-family: Arial, sans-serif;
+}
+
+/* Layout */
+
+.history-layout {
+    display: flex;
+    min-height: calc(100vh - 65px);
+}
+
+/* Sidebar */
+
+.history-sidebar {
+    width: 236px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #0b2a5b, #08224b);
+    color: white;
+    padding: 22px 14px;
+    box-sizing: border-box;
+}
+
+.history-brand {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 0 10px 24px;
+}
+
+.history-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.history-nav-heading {
+    margin: 20px 12px 8px;
+    color: #91b7eb;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.history-nav a {
+    display: block;
+    padding: 12px;
+    color: #cfe0ff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.history-nav a:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+.history-nav a.active {
+    background: #2f86f6;
+    color: white;
+    font-weight: 700;
+}
+
+/* Main content */
+
+.userhistory-page .userhistory-container {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    padding: 42px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #eaf4ff, #d5e8ff);
+}
+
+.userhistory-page .userhistory-header {
+    text-align: left;
+    margin-bottom: 28px;
+}
+
+.userhistory-page .userhistory-header h1 {
+    color: #0b2a5b;
+    background: none;
+    -webkit-text-fill-color: #0b2a5b;
+    font-size: 34px;
+    margin: 0 0 10px;
+}
+
+.userhistory-page .userhistory-header p {
+    color: #5b6f8f;
+    font-size: 16px;
+}
+
+/* White history card */
+
+.history-content-card {
+    background: #ffffff;
+    border: 1px solid #d6e4f7;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 8px 25px rgba(30,90,180,0.08);
+}
+
+.history-content-card h2 {
+    color: #0b2a5b;
+    font-size: 20px;
+    margin: 0 0 20px;
+}
+
+/* Feedback */
+
+.userhistory-page #userhistory-feedback {
+    color: #5b6f8f;
+    font-size: 15px;
+}
+
+/* History results */
+
+.userhistory-page #userhistory-list {
+    width: 100%;
+    color: #12284a;
+}
+
+/* Responsive layout */
+
+@media (max-width: 720px) {
+    .history-layout {
+        flex-direction: column;
+    }
+
+    .history-sidebar {
+        width: 100%;
+    }
+
+    .userhistory-page .userhistory-container {
+        padding: 22px 16px;
+    }
+
+    .history-content-card {
+        padding: 20px;
+    }
+}

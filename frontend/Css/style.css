@@ -231,3 +231,205 @@ button:disabled {
     align-items: center;
     gap: 20px;
 }
+
+
+/* =========================================
+   HOME PAGE — SKY BLUE / WHITE DESIGN
+   ========================================= */
+
+.home-page {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #eaf5ff, #d4e7ff);
+    color: #102d58;
+    font-family: Arial, sans-serif;
+}
+
+/* Account header */
+
+.home-page .account-header {
+    background: #102d58;
+    border-bottom: 1px solid #284d80;
+    color: white;
+    padding: 16px 30px;
+}
+
+.home-page .account-header p,
+.home-page .account-header strong {
+    color: white;
+}
+
+.home-page .account-header a,
+.home-page .account-header button {
+    color: #d5ecff;
+}
+
+/* Navigation */
+
+.home-page .site-header {
+    padding: 18px 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #d4e4f7;
+}
+
+.home-page .main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.home-page .main-nav a {
+    color: #102d58;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.home-page .main-nav a:hover {
+    color: #2879df;
+}
+
+/* Main content */
+
+.home-page .hero {
+    flex: 1;
+    min-height: 0;
+    padding: 55px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.home-page .hero h1 {
+    margin: 0 0 20px;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    color: #102d58;
+    background: none;
+    -webkit-text-fill-color: #102d58;
+}
+
+.home-page .hero h2 {
+    color: #183c70;
+}
+
+.home-page .hero > p {
+    color: #536e94;
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+/* Question card */
+
+.home-page .question-box {
+    width: 650px;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 32px;
+    background: #ffffff;
+    border: 1px solid #d4e4f7;
+    border-radius: 22px;
+    box-shadow: 0 12px 35px rgba(29, 74, 132, 0.10);
+    backdrop-filter: none;
+}
+
+.home-page .question-box h2 {
+    margin-top: 0;
+    color: #102d58;
+}
+
+.home-page .question-box label {
+    color: #27466d;
+    font-weight: 600;
+}
+
+/* Textarea */
+
+.home-page .question-box textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 16px;
+    box-sizing: border-box;
+    background: #f7fbff;
+    color: #102d58;
+    border: 1px solid #c6daf4;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.home-page .question-box textarea:focus {
+    outline: none;
+    border-color: #2879df;
+    box-shadow: 0 0 0 3px rgba(40, 121, 223, 0.12);
+}
+
+.home-page .question-box textarea::placeholder {
+    color: #8395ac;
+}
+
+/* Buttons */
+
+.home-page .form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.home-page .form-actions button {
+    margin-top: 0;
+    padding: 13px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.home-page #resetButton {
+    background: #eaf2fc;
+    color: #23466f;
+    border: 1px solid #c8dcf4;
+}
+
+.home-page #submitButton {
+    background: #2879df;
+    color: #ffffff;
+    border: 1px solid #2879df;
+}
+
+.home-page #submitButton:hover {
+    background: #1766c8;
+}
+
+.home-page .error-message {
+    color: #b42318;
+}
+
+.home-page .loading-message {
+    color: #1766c8;
+}
+
+.home-page button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+@media (max-width: 640px) {
+    .home-page .question-box {
+        padding: 22px;
+    }
+
+    .home-page .hero {
+        padding: 30px 16px;
+    }
+
+    .home-page .account-header {
+        flex-wrap: wrap;
+    }
+}

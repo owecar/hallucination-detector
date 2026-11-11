@@ -1,29 +1,142 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>My Question History | Hallucination Detector</title>
-    <link rel="stylesheet" href="../Css/style.css" th:href="@{/Css/style.css}">
-    <link rel="stylesheet" href="../Css/userhistory.css" th:href="@{/Css/userhistory.css}">
-    <script src="../JavaScript/userhistory.js" th:src="@{/JavaScript/userhistory.js}" defer></script>
+
+    <link rel="stylesheet"
+          href="../Css/style.css"
+          th:href="@{/Css/style.css}">
+
+    <link rel="stylesheet"
+          href="../Css/userhistory.css"
+          th:href="@{/Css/userhistory.css}">
+
 </head>
+
 <body class="userhistory-page">
+
+    <!-- Existing account information -->
     <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
 
-    <main class="userhistory-container" id="userhistory-main">
-        <nav aria-label="Main navigation">
-            <a th:href="@{/}">← Back to Homepage</a>
-        </nav>
+    <div class="history-layout">
 
-        <header class="userhistory-header">
-            <h1>My Question History</h1>
-            <p>Review your previous questions, AI answers, and verification results.</p>
-        </header>
+        <!-- Sidebar -->
+        <aside class="history-sidebar">
 
-        <p id="userhistory-feedback" role="status" aria-live="polite"></p>
+            <div class="history-brand">
+                🧠 Detector System
+            </div>
 
-        <section id="userhistory-list" aria-label="Saved question history"></section>
-    </main>
+            <nav class="history-nav" aria-label="Main navigation">
+
+                <div class="history-nav-heading">MAIN MENU</div>
+
+                <a th:href="@{/}" href="/">
+                    🏠 Home / Ask a Question
+                </a>
+
+                <a class="active"
+                   th:href="@{/history}"
+                   href="/history"
+                   aria-current="page">
+                    🕒 Question History
+                </a>
+
+                <div class="history-nav-heading">ADMINISTRATION</div>
+
+                <a th:href="@{/admin}" href="/admin">
+                    🛠️ Admin Dashboard
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <!-- Main history content -->
+        <main class="userhistory-container" id="userhistory-main">
+
+            <header class="userhistory-header">
+
+                <h1>My Question History</h1>
+
+                <p>
+                    Review your previous questions,
+                    AI answers, and verification results.
+                </p>
+
+            </header>
+
+            <div class="history-content-card">
+
+                <h2>Previous Questions</h2>
+                <p th:if="${message}"
+                    th:text="${message}"
+                    role="status"
+                    class="history-message">
+                </p>
+                <p id="userhistory-feedback"
+                   role="status"
+                   aria-live="polite">
+                </p>
+
+                
+                    <section id="userhistory-list"
+                        aria-label="Saved question history">
+
+                        <p th:if="${#lists.isEmpty(history)}">
+                             No saved questions found.
+                        </p>
+
+                        <article class="userhistory-card"
+                                th:each="record : ${history}">
+
+                            <div class="userhistory-card-header">
+                                <h2 th:text="${record.question}">
+                                    Question
+                                </h2>
+
+                                <span class="userhistory-date"
+                                        th:text="${record.createdAt}">
+                                    Date
+                                </span>
+                            </div>
+
+                            <p class="userhistory-label">AI ANSWER</p>
+
+                            <p class="userhistory-answer"
+                                th:text="${record.answer}">
+                            Answer
+                            </p>
+
+                            <div class="userhistory-card-actions">
+
+                                <form th:action="@{/history/delete/{id}(id=${record.id})}"
+                                        method="post">
+
+                                    <button type="submit"
+                                            class="userhistory-delete"
+                                            onclick="return confirm('Delete this question?')">
+                                        Delete Question
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </article>
+
+                    </section>
+
+
+            </div>
+
+        </main>
+
+    </div>
+
 </body>
 </html>

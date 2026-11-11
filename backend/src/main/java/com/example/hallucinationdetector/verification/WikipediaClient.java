@@ -1,3 +1,4 @@
+
 package com.example.hallucinationdetector.verification;
 
 import java.net.URI;
@@ -8,157 +9,178 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class WikipediaClient {
-  public static class Passage {
-    private final String title, text, url;
-    private final int rank;
 
-    public Passage(String title, String text, String url, int rank) {
-      this.title = title;
-      this.text = text;
-      this.url = url;
-      this.rank = rank;
-    }
+    public static class Passage {
+        private final String title;
+        private final String text;
+        private final String url;
+        private final int rank;
 
-    public String getTitle() {
-      return title;
-    }
-
-    public String getText() {
-      return text;
-    }
-
-    public String getUrl() {
-      return url;
-    }
-
-    public int getRank() {
-      return rank;
-    }
-  }
-
-  private final HttpClient http = HttpClient.newBuilder()
-      .connectTimeout(Duration.ofSeconds(10))
-      .build();
-
-  public List<Passage> search(String query) {
-    if (query == null || query.isBlank()) {
-      return new ArrayList<>();
-    }
-    try {
-      String url = "https://en.wikipedia.org/w/api.php?action=query&format=json"
-          + "&generator=search&gsrnamespace=0&gsrlimit=3&gsrsearch=" + encode(query)
-          + "&prop=extracts&exintro=1&explaintext=1&exlimit=3";
-      HttpRequest request = HttpRequest.newBuilder(URI.create(url))
-          .timeout(Duration.ofSeconds(10))
-          .header("User-Agent", "HallucinationDetector/1.0 (project)")
-          .GET()
-          .build();
-      HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-      if (response.statusCode() != 200) {
-        return new ArrayList<>();
-      }
-      return parsePassages(response.body());
-    } catch (Exception e) {
-      return new ArrayList<>();
-    }
-  }
-
-  static List<Passage> parsePassages(String json) {
-    List<Passage> list = new ArrayList<>();
-    String[] pieces = json.split("\"pageid\":");
-    for (int i = 1; i < pieces.length; i++) {
-      String piece = pieces[i];
-      String title = readText(piece, "title");
-      String text = readText(piece, "extract");
-      int rank = readNumber(piece, "index");
-      if (title.isEmpty() || text.isBlank()) {
-        continue;
-      }
-      list.add(new Passage(title, text.trim(), makeUrl(title), rank));
-    }
-    list.sort((a, b) -> Integer.compare(a.getRank(), b.getRank()));
-    return list;
-  }
-
-  static String readText(String piece, String key) {
-    String marker = "\"" + key + "\":\"";
-    int start = piece.indexOf(marker);
-    if (start < 0) {
-      return "";
-    }
-    start += marker.length();
-    int end = start;
-    while (end < piece.length()) {
-      char c = piece.charAt(end);
-      if (c == '\\') {
-        end += 2;
-      } else if (c == '"') {
-        break;
-      } else {
-        end++;
-      }
-    }
-    if (end > piece.length()) {
-      end = piece.length();
-    }
-    return unescape(piece.substring(start, end));
-  }
-
-  static int readNumber(String piece, String key) {
-    String marker = "\"" + key + "\":";
-    int start = piece.indexOf(marker);
-    if (start < 0) {
-      return 999;
-    }
-    start += marker.length();
-    int end = start;
-    while (end < piece.length() && Character.isDigit(piece.charAt(end))) {
-      end++;
-    }
-    if (end == start) {
-      return 999;
-    }
-    return Integer.parseInt(piece.substring(start, end));
-  }
-
-  static String unescape(String s) {
-    StringBuilder result = new StringBuilder();
-
-    for (int i = 0; i < s.length(); i++) {
-      char current = s.charAt(i);
-      if (current != '\\' || i + 1 >= s.length()) {
-        result.append(current);
-        continue;
-      }
-
-      char next = s.charAt(++i);
-      if (next == 'n' || next == 't' || next == 'r') {
-        result.append(' ');
-      } else if (next == 'u' && i + 4 < s.length()) {
-        try {
-          result.append((char) Integer.parseInt(s.substring(i + 1, i + 5), 16));
-          i += 4;
-        } catch (NumberFormatException e) {
-          result.append("\\u");
+        public Passage(String title, String text, String url, int rank) {
+            this.title = title;
+            this.text = text;
+            this.url = url;
+            this.rank = rank;
         }
-      } else {
-        result.append(next);
-      }
+
+        public String getTitle() { return title; }
+        public String getText() { return text; }
+        public String getUrl() { return url; }
+        public int getRank() { return rank; }
     }
 
-    return result.toString();
-  }
+    private final HttpClient http = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
 
-  static String makeUrl(String title) {
-    return "https://en.wikipedia.org/wiki/" + encode(title.replace(' ', '_'));
-  }
+    private final ObjectMapper mapper = new ObjectMapper();
 
-  private static String encode(String s) {
-    return URLEncoder.encode(s, StandardCharsets.UTF_8);
-  }
+    public List<Passage> search(String query) {
+        List<Passage> passages = new ArrayList<>();
+
+        if (query == null || query.isBlank()) {
+            return passages;
+        }
+
+        try {
+            String searchQuery = simplifyQuery(query);
+
+            String url = "https://en.wikipedia.org/w/api.php"
+                    + "?action=query"
+                    + "&format=json"
+                    + "&generator=search"
+                    + "&gsrnamespace=0"
+                    + "&gsrlimit=5"
+                    + "&gsrsearch=" + encode(searchQuery)
+                    + "&prop=extracts"
+                    + "&explaintext=1"
+                    + "&exchars=2500"
+                    + "&exlimit=5";
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .timeout(Duration.ofSeconds(15))
+                    .header("User-Agent",
+                            "HallucinationDetector/1.0 (academic project)")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = http.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() != 200) {
+                System.err.println(
+                        "Wikipedia returned HTTP " + response.statusCode()
+                );
+                return passages;
+            }
+
+            JsonNode root = mapper.readTree(response.body());
+            JsonNode pages = root.path("query").path("pages");
+
+            if (!pages.isObject()) {
+                return passages;
+            }
+
+            var iterator = pages.properties().iterator();
+
+            while (iterator.hasNext()) {
+                JsonNode page = iterator.next().getValue();
+
+                String title = page.path("title").asText("");
+                String text = page.path("extract").asText("");
+                int rank = page.path("index").asInt(999);
+
+                if (title.isBlank() || text.isBlank()) {
+                    continue;
+                }
+
+                passages.add(new Passage(
+                        title,
+                        text.trim(),
+                        makeUrl(title),
+                        rank
+                ));
+            }
+
+            passages.sort(
+                    Comparator.comparingInt(Passage::getRank)
+            );
+
+        } catch (Exception e) {
+            System.err.println(
+                    "Wikipedia retrieval failed: " + e.getMessage()
+            );
+        }
+
+        return passages;
+    }
+
+    private String simplifyQuery(String query) {
+        String q = query.trim();
+
+        String lower = q.toLowerCase();
+
+        if (lower.contains("tcp") ||
+            lower.contains("transmission control protocol")) {
+            return "Transmission Control Protocol";
+        }
+
+        if (lower.contains("udp") ||
+            lower.contains("user datagram protocol")) {
+            return "User Datagram Protocol";
+        }
+
+        if (lower.contains("python")) {
+            return "Python programming language";
+        }
+
+        if (lower.contains("java")) {
+            return "Java programming language";
+        }
+
+        if (lower.contains("linux")) {
+            return "Linux operating system";
+        }
+
+        if (lower.contains("http")) {
+            return "Hypertext Transfer Protocol";
+        }
+
+        String[] words = q.replaceAll("[^a-zA-Z0-9 ]", " ")
+                .split("\\s+");
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < Math.min(words.length, 8); i++) {
+            result.append(words[i]).append(" ");
+        }
+
+        return result.toString().trim();
+    }
+
+    private static String makeUrl(String title) {
+        return "https://en.wikipedia.org/wiki/"
+                + encode(title.replace(' ', '_'))
+                    .replace("+", "%20");
+    }
+
+    private static String encode(String value) {
+        return URLEncoder.encode(
+                value,
+                StandardCharsets.UTF_8
+        );
+    }
 }

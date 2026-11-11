@@ -58,22 +58,79 @@ tr:last-child td{border-bottom:0}
 .note{margin-top:26px;color:var(--mute);font-size:12.5px;text-align:center}
 @media(max-width:1000px){.stats,.qa{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
 @media(max-width:720px){body{flex-direction:column}.side{width:100%;height:auto;position:static}.nav{display:flex;flex-wrap:wrap;gap:6px}.nav a{margin:0}main{padding:20px 16px}}
+
+/* Sidebar section headings */
+
+.nav-section {
+    margin: 22px 12px 10px;
+    color: #91b7eb;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+/* Sidebar spacing */
+
+.nav a {
+    transition: background 0.2s ease;
+}
+
+.nav a:hover {
+    background: rgba(255,255,255,0.12);
+}
 </style>
 </head>
 <body>
 
+
 <aside class="side">
   <div class="brand">🧠 Detector System</div>
-  <nav class="nav">
-    <a class="on" href="#">🛠️ Admin Dashboard</a>
-    <a href="#">👥 Manage Users</a>
-    <a href="#">🗂️ Manage Datasets</a>
-    <a href="#">⚙️ API &amp; Models</a>
-    <a href="#">🗄️ Database</a>
-    <a th:href="@{/}" href="/">🏠 Return Home</a>
+
+  <nav class="nav" aria-label="Admin navigation">
+
+    <div class="nav-section">MAIN MENU</div>
+
+    <a th:href="@{/}" href="/">
+      🏠 Home / Ask a Question
+    </a>
+
+    <a th:href="@{/history}" href="/history">
+      🕒 Question History
+    </a>
+
+    <div class="nav-section">ADMINISTRATION</div>
+
+    <a class="on" href="#" aria-current="page">
+      🛠️ Admin Dashboard
+    </a>
+
+    <a href="#">
+      👥 Manage Users
+    </a>
+
+    <a href="#">
+      🗂️ Manage Datasets
+    </a>
+
+    <a href="#">
+      ⚙️ API &amp; Models
+    </a>
+
+    <a href="#">
+      🗄️ Database
+    </a>
+
   </nav>
-  <div class="me">Signed in as <b id="uname">Admin</b><span id="urole"></span><a href="#">↪ Log Out</a></div>
+
+  <div class="me">
+    Signed in as
+    <b id="uname">Admin</b>
+    <span id="urole"></span>
+
+    <a href="#">↪ Log Out</a>
+  </div>
 </aside>
+
 
 <main>
   <h1>Admin Dashboard <span class="badge" id="sample">Sample data</span></h1>
