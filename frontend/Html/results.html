@@ -23,7 +23,8 @@ h1{font-size:28px;color:var(--navy);margin-bottom:18px}
 .card h2{font-size:15px;color:var(--navy);margin-bottom:8px}
 .ai-answer{white-space:pre-line;line-height:1.55}
 .verdict{--c:var(--bad);display:flex;align-items:center;gap:22px}
-.verdict.mid{--c:#d97706}.verdict.ok{--c:var(--ok)}
+.verdict.mid{--c:#d97706}
+.verdict.ok{--c:var(--ok)}
 .banner{flex:1;border-radius:14px;padding:16px 20px;background:var(--badbg);color:#b91c1c}
 .verdict.mid .banner{background:var(--midbg);color:var(--mid)}
 .verdict.ok .banner{background:var(--okbg);color:#15803d}
@@ -35,14 +36,29 @@ h1{font-size:28px;color:var(--navy);margin-bottom:18px}
 .claim-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:12px}
 .claim-text{font-weight:600;margin-bottom:8px}
 .chip{display:inline-block;padding:3px 12px;border-radius:99px;font-size:13px;font-weight:600;background:#eef2f7;color:var(--mute);text-transform:capitalize}
-.chip.ok{background:var(--okbg);color:var(--ok)}.chip.bad{background:var(--badbg);color:var(--bad)}
+.chip.ok{background:var(--okbg);color:var(--ok)}
+.chip.bad{background:var(--badbg);color:var(--bad)}
 .evidence-toggle{display:block;margin-top:12px;background:none;border:1px solid #bcd6f6;color:#1a4d9c;border-radius:99px;padding:7px 16px;font:inherit;font-size:14px;cursor:pointer}
 .evidence-toggle:hover{background:#eef5ff}
 .evidence-details{margin-top:12px;padding:12px 14px;background:#f2f8ff;border-radius:12px;font-size:14px;line-height:1.5;word-break:break-word}
 .evidence-details h3{font-size:13px;color:var(--navy);margin-bottom:6px}
 .evidence-details a{color:var(--blue);text-decoration:underline}
 .back-link{display:inline-block;margin-top:6px;padding:13px 28px;border-radius:99px;background:linear-gradient(135deg,#2f86f6,#1457c9);color:#fff;font-weight:600;box-shadow:0 4px 12px rgba(29,111,232,.35)}
+.breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.stat{border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;background:#f7fbff}
+.stat strong{display:block;font-size:26px;color:var(--navy);margin-bottom:4px}
+.stat span{font-size:13px;color:var(--mute)}
+.stat.supported strong{color:var(--ok)}
+.stat.contradicted strong{color:var(--bad)}
+.stat.unresolved strong{color:var(--mid)}
+.coverage{margin-top:16px}
+.coverage-header{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:14px}
+.coverage-header strong{color:var(--navy)}
+.coverage-bar{height:12px;background:#e3efff;border-radius:99px;overflow:hidden}
+.coverage-fill{height:100%;background:var(--blue);border-radius:99px}
+.score-note{font-size:13px;color:var(--mute);margin-top:12px;line-height:1.5}
 @media(max-width:720px){body{flex-direction:column}.side{width:100%;height:auto;position:static}.nav{flex-direction:row;flex-wrap:wrap;gap:6px}.nav a,.nav button{width:auto;margin:0}.nav form{margin:0;padding:0;border:0}main{padding:20px 16px}.verdict{flex-direction:column-reverse;align-items:stretch}.gauge{align-self:center}}
+@media(max-width:440px){.breakdown{grid-template-columns:1fr}}
 </style>
 <script th:src="@{/JavaScript/results.js}" src="../JavaScript/results.js" defer></script>
 </head>
@@ -56,6 +72,9 @@ h1{font-size:28px;color:var(--navy);margin-bottom:18px}
     <a th:href="@{/history}" href="/history">🕘 History</a>
     <a href="#">👤 Profile</a>
     <form th:action="@{/logout}" action="/logout" method="post">
+      <input type="hidden"
+             th:name="${_csrf.parameterName}"
+             th:value="${_csrf.token}">
       <button type="submit">↪ Log Out</button>
     </form>
   </nav>
@@ -73,55 +92,133 @@ h1{font-size:28px;color:var(--navy);margin-bottom:18px}
            th:if="${summary != null and summary.hallucinationScore != null}"
            th:with="score=${summary.hallucinationScore}"
            th:classappend="${score >= 50} ? '' : (${score >= 20} ? 'mid' : 'ok')"
-           th:style="'--pct:' + ${score}">
+           th:style="'--pct:' + ${score}"
+           style="--pct:25">
+
     <div class="banner">
-      <b th:text="${score >= 50} ? '❌ High Contradiction Rate' : (${score >= 20} ? '⚠️ Moderate Contradiction Rate' : '✅ Low Contradiction Rate')">Verification Result</b>
-      <span>Percentage of evidence-checked claims contradicted by retrieved sources.</span>
+      <b th:text="${score >= 50} ? '❌ High Contradiction Rate' : (${score >= 20} ? '⚠️ Moderate Contradiction Rate' : '✅ Low Contradiction Rate')">
+        Verification Result
+      </b>
+      <span>
+        Percentage of claims with a definitive verdict
+        that contradict the retrieved evidence.
+      </span>
     </div>
-    <div class="gauge"><div><span><strong th:text="${#numbers.formatDecimal(score, 1, 1) + '%'}">25.0%</strong>Hallucination score</span></div></div>
+
+    <div class="gauge">
+      <div>
+        <span>
+          <strong th:text="${#numbers.formatDecimal(score, 1, 1) + '%'}">25.0%</strong>
+          Hallucination score
+        </span>
+      </div>
+    </div>
   </section>
-  <section class="card" th:if="${summary == null or summary.hallucinationScore == null}">
+
+  <section class="card"
+           th:if="${summary == null or summary.hallucinationScore == null}">
     <h2>Hallucination Score</h2>
-    <p>N/A — No claims had enough evidence for a supported or contradicted verdict.</p>
+    <p>N/A — No claims received a definitive verification verdict.</p>
   </section>
+
   <section class="card" th:if="${summary != null}">
     <h2>📊 Verification Breakdown</h2>
-    <p><strong>Supported claims:</strong> <span th:text="${summary.supported}">6</span></p>
-    <p><strong>Contradicted claims:</strong> <span th:text="${summary.contradicted}">2</span></p>
-    <p><strong>Unresolved claims:</strong> <span th:text="${summary.unresolved}">2</span></p>
-    <p><strong>Verification coverage:</strong> <span th:text="${#numbers.formatDecimal(summary.verificationCoverage, 1, 1) + '%'}">80.0%</span></p>
+
+    <div class="breakdown">
+      <div class="stat supported">
+        <strong th:text="${summary.supported}">6</strong>
+        <span>Supported Claims</span>
+      </div>
+
+      <div class="stat contradicted">
+        <strong th:text="${summary.contradicted}">2</strong>
+        <span>Contradicted Claims</span>
+      </div>
+
+      <div class="stat unresolved">
+        <strong th:text="${summary.unresolved}">2</strong>
+        <span>Unresolved Claims</span>
+      </div>
+    </div>
+
+    <div class="coverage">
+      <div class="coverage-header">
+        <span>Verification Coverage</span>
+        <strong th:text="${#numbers.formatDecimal(summary.verificationCoverage, 1, 1) + '%'}">
+          80.0%
+        </strong>
+      </div>
+
+      <div class="coverage-bar">
+        <div class="coverage-fill"
+             th:style="'width:' + ${summary.verificationCoverage} + '%'"
+             style="width:80%">
+        </div>
+      </div>
+    </div>
+
+    <p class="score-note">
+      The hallucination score measures the percentage of contradicted
+      claims among claims receiving a definitive verdict.
+      Verification coverage measures the percentage of all extracted
+      claims that received a definitive verdict.
+      Unresolved claims are excluded from the hallucination score.
+    </p>
   </section>
 
   <section class="card">
     <h2>🤖 AI-Generated Answer</h2>
-    <p class="ai-answer" th:text="${answer}">No, the Eiffel Tower is in Paris, France.</p>
+    <p class="ai-answer" th:text="${answer}">
+      No, the Eiffel Tower is in Paris, France.
+    </p>
   </section>
 
   <section class="card">
     <h2>📖 Claim Verification &amp; Sources</h2>
 
-    <p th:if="${claims == null or #lists.isEmpty(claims)}">No claims were detected.</p>
+    <p th:if="${claims == null or #lists.isEmpty(claims)}">
+      No claims were detected.
+    </p>
 
-    <!-- results.js needs: .evidence-toggle button directly followed by the .evidence-details div -->
     <div class="claim-card" th:each="claim : ${claims}">
-      <p class="claim-text" th:text="${claim.text}">The Eiffel Tower is in Germany.</p>
-      <span class="chip bad"
-            th:classappend="${#strings.toUpperCase(claim.label) == 'SUPPORTED'} ? 'ok' : (${#strings.toUpperCase(claim.label) == 'CONTRADICTED'} ? 'bad' : '')"
-            th:text="${#strings.replace(claim.label, '_', ' ')}">contradicted</span>
+      <p class="claim-text" th:text="${claim.text}">
+        The Eiffel Tower is in Germany.
+      </p>
 
-      <button type="button" class="evidence-toggle" aria-expanded="false">Show Evidence</button>
+      <span class="chip"
+            th:classappend="${#strings.toUpperCase(claim.label) == 'SUPPORTED'} ? 'ok' : (${#strings.toUpperCase(claim.label) == 'CONTRADICTED'} ? 'bad' : '')"
+            th:text="${#strings.replace(claim.label, '_', ' ')}">
+        contradicted
+      </span>
+
+      <button type="button"
+              class="evidence-toggle"
+              aria-expanded="false">
+        Show Evidence
+      </button>
 
       <div class="evidence-details" hidden>
         <h3>Supporting Evidence</h3>
+
         <a th:if="${claim.source != null and #strings.startsWith(claim.source, 'http')}"
-           th:href="${claim.source}" th:text="${claim.source}" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Eiffel_Tower</a>
+           th:href="${claim.source}"
+           th:text="${claim.source}"
+           target="_blank"
+           rel="noopener noreferrer">
+          https://en.wikipedia.org/wiki/Eiffel_Tower
+        </a>
+
         <p th:unless="${claim.source != null and #strings.startsWith(claim.source, 'http')}"
-           th:text="${claim.source != null} ? ${claim.source} : 'Source not available.'">Eiffel Tower – Wikipedia</p>
+           th:text="${claim.source != null} ? ${claim.source} : 'Source not available.'">
+          Eiffel Tower – Wikipedia
+        </p>
       </div>
     </div>
   </section>
 
-  <a class="back-link" th:href="@{/}" href="/">Ask Another Question</a>
+  <a class="back-link" th:href="@{/}" href="/">
+    Ask Another Question
+  </a>
 </main>
 
 </body>
