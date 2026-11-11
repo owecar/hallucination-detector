@@ -19,12 +19,6 @@ public class HistoryController {
         this.repository = repository;
     }
 
-    // View All Database Records
-    @GetMapping("/dbadmin/database")
-    public String viewDatabase() {
-        return "Html/dbadmin_databaseview";
-    }
-
     // Update/Delete Database Records
     @GetMapping("/dbadmin/update")
     public String updateDatabase() {
