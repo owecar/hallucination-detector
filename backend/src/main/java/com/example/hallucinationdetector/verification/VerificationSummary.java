@@ -1,51 +1,35 @@
 package com.example.hallucinationdetector.verification;
+
 import java.util.List;
 
-public class VerificationSummary{
-  private final int checked;
-  private final int supported;
-  private final int unsupported;
-  private final int contradicted;
-  private final int hallucinationPercent;
-  private final int confidencePercent;
-  private final String riskLevel = "not verified";
+public class VerificationSummary {
+    private final int supported;
+    private final int contradicted;
+    private final int unresolved;
 
-  public static VerificationSummary from(List<VerifiedClaim> claims){
-    VerificationSummary s = new VerificationSummary();
-    double confidence = 0;
-    for(VerifiedClaim c : claims){
-      if(c.getLabel().equals("Supported")){
-        s.supported++;
-    }else if(c.getLabel().equals("Unsupported"){
-      s.unsupported++;
-    }else if(c.getLabel().equals("Contradicted")){
-      s.contracted++;
-    }else{
-      continue;
+    private VerificationSummary(int supported, int contradicted, int unresolved) {
+        this.supported = supported;
+        this.contradicted = contradicted;
+        this.unresolved = unresolved;
     }
-      confidenceTotal += c.getConfidence();
-  }
-    int checked = s.supported + s.unsupported + s.contradicted;
-    if(checked > 0){
-      double score = (s.contradicted + 0.5 * s.unsupported) / checked;
-      s.hallucinationPercent = (int) Math.round(score * 100);
-      s.confidencePercent = (int) Math.round(confidenceTotal / checked * 100);
-      if(s.hallucinationPercent < 20){
-        s.riskLevel = "low";
-      }else if(s.hallucinationPercent < 50){
-        s.riskLevel = "medium";
-      }else{
-        s.riskLevel = "high";
-      }
+
+    public static VerificationSummary from(List<VerifiedClaim> claims) {
+        int supported = 0;
+        int contradicted = 0;
+        int unresolved = 0;
+
+        for (VerifiedClaim claim : claims) {
+            switch (claim.getLabel()) {
+                case "Supported" -> supported++;
+                case "Contradicted" -> contradicted++;
+                default -> unresolved++;
+            }
+        }
+
+        return new VerificationSummary(supported, contradicted, unresolved);
     }
-    return s;
-  }
-  public int getSupported(){return supported;}
-  public int getUnsupported(){return unsupported;}
-  public int getContradicted(){return hallucinationPercent;}
-  public int getConfidencePercent(){return confidencePercent;}
-  public String getRiskLevel(){return riskLevel;}
-  public boolean isVerified(){
-    return supported + unsupported + contradicted > 0;
-  }
+
+    public int getSupported() { return supported; }
+    public int getContradicted() { return contradicted; }
+    public int getUnresolved() { return unresolved; }
 }

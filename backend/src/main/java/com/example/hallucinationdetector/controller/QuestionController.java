@@ -1,5 +1,5 @@
 package com.example.hallucinationdetector.controller;
-import java.util.ArrayList;
+
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.hallucinationdetector.claim.ClaimExtractor;
 import com.example.hallucinationdetector.llm.LLMClient;
-import com.example.hallucinationdetector.model.CheckResponse;
-import com.example.hallucinationdetector.model.Claim;
 import com.example.hallucinationdetector.model.SavedQuery;
 import com.example.hallucinationdetector.repository.SavedQueryRepository;
+import com.example.hallucinationdetector.verification.ClaimVerifier;
+import com.example.hallucinationdetector.verification.VerifiedClaim;
 
 @Controller
 public class QuestionController {
@@ -19,11 +19,14 @@ public class QuestionController {
     private final LLMClient llm;
     private final ClaimExtractor extractor;
     private final SavedQueryRepository repository;
+    private final ClaimVerifier verifier;
+
     public QuestionController(LLMClient llm, ClaimExtractor extractor,
-                              SavedQueryRepository repository) {
+            SavedQueryRepository repository, ClaimVerifier verifier) {
         this.llm = llm;
         this.extractor = extractor;
         this.repository = repository;
+        this.verifier = verifier;
     }
 
     @GetMapping("/")
@@ -33,18 +36,28 @@ public class QuestionController {
 
     @PostMapping("/submit")
     public String submit(@RequestParam("question") String question, Model model) {
-        String answer = llm.askLLM(question);
-        List<Claim> claims = new ArrayList<>();
-        for (String text : extractor.extractClaims(answer)) {
-            claims.add(new Claim(text, "Unchecked", "N/A"));
-        }
-        CheckResponse response = new CheckResponse(question, answer, claims);
+        model.addAttribute("question", question);
 
+        if (question.isBlank()) {
+            model.addAttribute("answer", "Please enter a question.");
+            return "Html/results";
+        }
+
+
+        String answer = llm.askLLM(question);
+
+        model.addAttribute("answer", answer);
+
+        if (answer == null || answer.isBlank() || answer.startsWith("Error:")) {
+            return "Html/results";
+        }
+
+
+        List<VerifiedClaim> claims = verifier.verify(extractor.extractClaims(answer));
+
+        model.addAttribute("claims", claims);
         repository.save(new SavedQuery(question, answer));
 
-        model.addAttribute("question", response.getQuestion());
-        model.addAttribute("answer", response.getAnswer());
-        model.addAttribute("claims", response.getClaims());
         return "Html/results";
     }
 }
