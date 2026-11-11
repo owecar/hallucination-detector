@@ -8,7 +8,7 @@
     <title>Update Database Records | Database Administration</title>
     <link rel="stylesheet" href="../Css/style.css" th:href="@{/Css/style.css}">
     <link rel="stylesheet" href="../Css/dbadmin.css" th:href="@{/Css/dbadmin.css}">
-    <script src="../JavaScript/dbadmin_data.js" th:src="@{/JavaScript/dbadmin_data.js}" defer></script>
+    <script src="../JavaScript/dbadmin_update.js" th:src="@{/JavaScript/dbadmin_update.js}" defer></script>
 </head>
 
 <body class="dbadmin-page" data-dbadmin-page="update">
@@ -43,14 +43,13 @@
             <h1>Update Database Records</h1>
 
             <p class="dbadmin-subtitle">
-                Choose a table to edit or delete sample records.
+                Choose a PostgreSQL record to edit or delete.
             </p>
 
         </header>
 
         <p class="dbadmin-notice">
-            Frontend demonstration only — records shown here
-            are sample data stored in this browser, not in PostgreSQL.
+            Changes made here affect actual PostgreSQL records.
         </p>
 
         <section class="dbadmin-panel">
@@ -67,10 +66,8 @@
                     <select class="dbadmin-select"
                             id="dbadmin-table-select">
 
-                        <option value="app_user">app_user</option>
                         <option value="saved_query">saved_query</option>
-                        <option value="ai_claim">ai_claim</option>
-                        <option value="result">result</option>
+                        <option value="app_user">app_user</option>
 
                     </select>
                 </label>
@@ -91,9 +88,24 @@
 
         <section class="dbadmin-panel">
 
-            <h2>Edit Sample Record</h2>
+            <h2>Edit Record</h2>
 
-            <form id="dbadmin-edit-form">
+            <p th:if="${success}" th:text="${success}" role="status"></p>
+            <p th:if="${error}" th:text="${error}" role="alert"></p>
+
+            <select id="dbadmin-source-queries" hidden aria-hidden="true">
+                <option th:each="q : ${queries}" th:value="${q.id}"
+                        th:attr="data-question=${q.question},data-answer=${q.answer}"
+                        th:text="${q.id + ' — ' + q.question}"></option>
+            </select>
+            <select id="dbadmin-source-users" hidden aria-hidden="true">
+                <option th:each="u : ${users}" th:value="${u.id}"
+                        th:attr="data-username=${u.username},data-role=${u.role}"
+                        th:text="${u.id + ' — ' + u.username}"></option>
+            </select>
+
+            <form id="dbadmin-edit-form" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
                 <div class="dbadmin-form-grid"
                      id="dbadmin-form-fields">
@@ -130,6 +142,9 @@
                    aria-live="polite">
                 </p>
 
+            </form>
+            <form id="dbadmin-delete-form" method="post" hidden>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             </form>
 
         </section>
