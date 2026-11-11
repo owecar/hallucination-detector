@@ -1,4 +1,3 @@
-
 package com.example.hallucinationdetector.verification;
 
 import java.util.List;
