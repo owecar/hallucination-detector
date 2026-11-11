@@ -19,12 +19,6 @@ public class HistoryController {
         this.repository = repository;
     }
 
-    // Update/Delete Database Records
-    @GetMapping("/dbadmin/update")
-    public String updateDatabase() {
-        return "Html/dbadmin_updateview";
-    }
-
     // View Question History
     @GetMapping("/history")
     public String viewHistory(Model model) {
