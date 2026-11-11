@@ -69,19 +69,27 @@ h1{font-size:28px;color:var(--navy);margin-bottom:18px}
     <p th:text="${question}">Is the Eiffel Tower in Germany?</p>
   </section>
 
-  <!-- Verdict: bands are score >= 50 (likely hallucination), 20-49 (possible), under 20 (likely factual). Adjust to taste. -->
-  <section class="card verdict" th:if="${hallucinationScore != null}"
-           th:classappend="${hallucinationScore >= 50} ? '' : (${hallucinationScore >= 20} ? 'mid' : 'ok')"
-           th:style="'--pct:' + ${hallucinationScore}" style="--pct:97">
+  <section class="card verdict"
+           th:if="${summary != null and summary.hallucinationScore != null}"
+           th:with="score=${summary.hallucinationScore}"
+           th:classappend="${score >= 50} ? '' : (${score >= 20} ? 'mid' : 'ok')"
+           th:style="'--pct:' + ${score}">
     <div class="banner">
-      <b th:text="${hallucinationScore >= 50} ? '❌ Likely Hallucination' : (${hallucinationScore >= 20} ? '⚠️ Possible Hallucination' : '✅ Likely Factual')">❌ Likely Hallucination</b>
-      <span>The score estimates how much of the answer is not backed by evidence.</span>
+      <b th:text="${score >= 50} ? '❌ High Contradiction Rate' : (${score >= 20} ? '⚠️ Moderate Contradiction Rate' : '✅ Low Contradiction Rate')">Verification Result</b>
+      <span>Percentage of evidence-checked claims contradicted by retrieved sources.</span>
     </div>
-    <div class="gauge"><div><span><strong th:text="${hallucinationScore} + '%'">97%</strong>Hallucination score</span></div></div>
+    <div class="gauge"><div><span><strong th:text="${#numbers.formatDecimal(score, 1, 1) + '%'}">25.0%</strong>Hallucination score</span></div></div>
   </section>
-  <section class="card" th:unless="${hallucinationScore != null}">
+  <section class="card" th:if="${summary == null or summary.hallucinationScore == null}">
     <h2>Hallucination Score</h2>
-    <p>Score not available yet.</p>
+    <p>N/A — No claims had enough evidence for a supported or contradicted verdict.</p>
+  </section>
+  <section class="card" th:if="${summary != null}">
+    <h2>📊 Verification Breakdown</h2>
+    <p><strong>Supported claims:</strong> <span th:text="${summary.supported}">6</span></p>
+    <p><strong>Contradicted claims:</strong> <span th:text="${summary.contradicted}">2</span></p>
+    <p><strong>Unresolved claims:</strong> <span th:text="${summary.unresolved}">2</span></p>
+    <p><strong>Verification coverage:</strong> <span th:text="${#numbers.formatDecimal(summary.verificationCoverage, 1, 1) + '%'}">80.0%</span></p>
   </section>
 
   <section class="card">
