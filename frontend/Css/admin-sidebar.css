@@ -33,8 +33,7 @@ body.admin-workspace {
     letter-spacing: 1.2px;
     text-transform: uppercase;
 }
-.admin-sidebar nav a,
-.admin-sidebar-disabled {
+.admin-sidebar nav a {
     display: block;
     margin-bottom: 6px;
     padding: 11px 12px;
@@ -45,8 +44,6 @@ body.admin-workspace {
     text-decoration: none;
     transition: background 0.2s ease;
 }
-.admin-sidebar-disabled { color: #a4b9d7; }
-
 .admin-sidebar nav a:hover, .admin-sidebar button:hover { background: rgba(255, 255, 255, 0.12); }
 .admin-sidebar nav a[aria-current="page"] { background: #2f86f6; color: white; font-weight: 600; }
 .admin-sidebar-account {

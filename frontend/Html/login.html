@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Detector System</title>
+    <title>Log In</title>
+    <link rel="icon" type="image/svg+xml" href="../Images/brain.svg" th:href="@{/Images/brain.svg}">
 
     <link rel="stylesheet" th:href="@{/Css/style.css}" href="../Css/style.css">
     <link rel="stylesheet" th:href="@{/Css/auth.css}" href="../Css/auth.css">
@@ -16,7 +17,7 @@
 <body class="auth-page login-page">
 
     <main class="login-shell">
-        <section class="robot-panel" aria-label="Detector System AI assistant">
+        <section class="robot-panel" aria-label="Hallucination Detector AI assistant">
             <img class="robot-image"
                  src="../Images/login-robot.png"
                  th:src="@{/Images/login-robot.png}"
@@ -27,28 +28,10 @@
             <div class="login-content">
 
                 <div class="brand-icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" width="58" height="58"
-                        fill="none" stroke="currentColor"
-                        stroke-width="3.5" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M32 13 C26 5 14 9 14 19
-                                C5 20 5 33 12 37
-                                C7 46 14 55 23 52
-                                C27 58 32 53 32 48 Z"/>
-                        <path d="M32 13 C38 5 50 9 50 19
-                                C59 20 59 33 52 37
-                                C57 46 50 55 41 52
-                                C37 58 32 53 32 48 Z"/>
-                        <path d="M32 13 V48
-                                M22 19 C16 23 23 29 27 29
-                                M42 19 C48 23 41 29 37 29
-                                M16 38 C23 34 27 40 26 45
-                                 M48 38 C41 34 37 40 38 45"/>
-                    </svg>
+                    <img src="../Images/brain.svg" th:src="@{/Images/brain.svg}" width="58" height="58" alt="">
                 </div>
 
-                <h1>Detector System</h1>
-                <h2>AI Hallucination Detector</h2>
+                <h1>Hallucination Detector</h1>
 
                 <p class="login-description">
                     Verify AI-generated answers with trusted,

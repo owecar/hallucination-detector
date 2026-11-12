@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>Hallucination Detector</title>
+        <link rel="icon" type="image/svg+xml" href="../Images/brain.svg" th:href="@{/Images/brain.svg}">
 
 
         <link rel="stylesheet" th:href="@{/Css/style.css}" href="../Css/style.css">
@@ -19,18 +20,11 @@
         <main class="hero">
             <h1>Hallucination Detector</h1>
 
-            <h2>Welcome, Student / Researcher!</h2>
-
             <p> Ask a question and explore the reliability of AI-generated answers.</p>
 
             <section class="question-box">
-                <h2>Submit a Question</h2>
-
                 <form id="questionForm" th:action="@{/submit}" action="/submit" method="post" novalidate>
-                    <label for="question">
-                        Enter your question:
-                    </label>
-                    <textarea id="question" name="question" placeholder="Type your question here.." required></textarea>
+                    <textarea id="question" name="question" aria-label="Your question" placeholder="Ask a question…" required></textarea>
                     <p id="errorMessage" class="error-message" role="alert" hidden></p>
                     <p id="loadingMessage" class="loading-message" role="status" hidden>
                         Processing your question now. Please wait...
