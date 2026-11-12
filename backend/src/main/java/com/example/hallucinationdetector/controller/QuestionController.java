@@ -73,7 +73,13 @@ public QuestionController(
             return "Html/results";
         }
 
-        String answer = llm.askLLM(question);
+        String answer = llm.askLLM("""
+        Answer in one to five short, standalone factual sentences.
+        Put one claim in each sentence. Name the subject explicitly.
+        Use plain text without headings, lists, examples, or code blocks.
+
+        Question: %s
+        """.formatted(question));
 
         model.addAttribute("answer", answer);
 

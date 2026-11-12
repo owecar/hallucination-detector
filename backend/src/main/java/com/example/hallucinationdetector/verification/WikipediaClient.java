@@ -11,6 +11,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,10 @@ import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class WikipediaClient {
+
+    private static final Set<String> COMMON_WORDS = Set.of(
+            "a", "an", "the", "of", "to", "in", "on", "for",
+            "is", "are", "was", "were", "be", "and", "or");
 
     public static class Passage {
         private final String title;
@@ -33,10 +39,21 @@ public class WikipediaClient {
             this.rank = rank;
         }
 
-        public String getTitle() { return title; }
-        public String getText() { return text; }
-        public String getUrl() { return url; }
-        public int getRank() { return rank; }
+        public String getTitle() {
+            return title;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public int getRank() {
+            return rank;
+        }
     }
 
     private final HttpClient http = HttpClient.newBuilder()
@@ -63,8 +80,9 @@ public class WikipediaClient {
                     + "&gsrlimit=5"
                     + "&gsrsearch=" + encode(searchQuery)
                     + "&prop=extracts"
+                    + "&exintro=1"
                     + "&explaintext=1"
-                    + "&exchars=2500"
+                    + "&exchars=1200"
                     + "&exlimit=5";
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -77,13 +95,11 @@ public class WikipediaClient {
 
             HttpResponse<String> response = http.send(
                     request,
-                    HttpResponse.BodyHandlers.ofString()
-            );
+                    HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
                 System.err.println(
-                        "Wikipedia returned HTTP " + response.statusCode()
-                );
+                        "Wikipedia returned HTTP " + response.statusCode());
                 return passages;
             }
 
@@ -111,18 +127,19 @@ public class WikipediaClient {
                         title,
                         text.trim(),
                         makeUrl(title),
-                        rank
-                ));
+                        rank));
             }
 
             passages.sort(
-                    Comparator.comparingInt(Passage::getRank)
-            );
+                    Comparator.comparingInt(Passage::getRank));
+            System.out.println("Wikipedia search: " + searchQuery);
+            for (Passage passage : passages) {
+                System.out.println("  " + passage.getRank() + ": " + passage.getTitle());
+            }
 
         } catch (Exception e) {
             System.err.println(
-                    "Wikipedia retrieval failed: " + e.getMessage()
-            );
+                    "Wikipedia retrieval failed: " + e.getMessage());
         }
 
         return passages;
@@ -134,12 +151,12 @@ public class WikipediaClient {
         String lower = q.toLowerCase();
 
         if (lower.contains("tcp") ||
-            lower.contains("transmission control protocol")) {
+                lower.contains("transmission control protocol")) {
             return "Transmission Control Protocol";
         }
 
         if (lower.contains("udp") ||
-            lower.contains("user datagram protocol")) {
+                lower.contains("user datagram protocol")) {
             return "User Datagram Protocol";
         }
 
@@ -159,28 +176,32 @@ public class WikipediaClient {
             return "Hypertext Transfer Protocol";
         }
 
-        String[] words = q.replaceAll("[^a-zA-Z0-9 ]", " ")
-                .split("\\s+");
+        String[] words = q.replaceAll("[^a-zA-Z0-9]+", " ").trim().split("\\s+");
+        List<String> searchWords = new ArrayList<>();
 
-        StringBuilder result = new StringBuilder();
+        for (String word : words) {
+            if (word.isEmpty() || COMMON_WORDS.contains(word.toLowerCase(Locale.ROOT))) {
+                continue;
+            }
 
-        for (int i = 0; i < Math.min(words.length, 8); i++) {
-            result.append(words[i]).append(" ");
+            searchWords.add(word);
+            if (searchWords.size() == 8) {
+                break;
+            }
         }
 
-        return result.toString().trim();
+        return searchWords.isEmpty() ? q : String.join(" ", searchWords);
     }
 
     private static String makeUrl(String title) {
         return "https://en.wikipedia.org/wiki/"
                 + encode(title.replace(' ', '_'))
-                    .replace("+", "%20");
+                        .replace("+", "%20");
     }
 
     private static String encode(String value) {
         return URLEncoder.encode(
                 value,
-                StandardCharsets.UTF_8
-        );
+                StandardCharsets.UTF_8);
     }
 }
