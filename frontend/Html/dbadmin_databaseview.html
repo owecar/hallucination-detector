@@ -1,39 +1,57 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <title>View Database Data | Database Administration</title>
-    <link rel="stylesheet" href="../Css/style.css" th:href="@{/Css/style.css}">
-    <link rel="stylesheet" href="../Css/dbadmin.css" th:href="@{/Css/dbadmin.css}">
+
+    <link rel="stylesheet"
+          href="../Css/style.css"
+          th:href="@{/Css/style.css}">
+
+    <link rel="stylesheet"
+          href="../Css/dbadmin.css?v=7"
+          th:href="@{/Css/dbadmin.css(v=7)}">
 </head>
 
 <body class="dbadmin-page" data-dbadmin-page="view">
-    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
+
+    <div th:replace="~{Html/fragments/account-header :: accountHeader}">
+    </div>
 
     <main class="dbadmin-container">
 
         <nav class="dbadmin-topnav"
              aria-label="Database administration navigation">
 
-            <a class="dbadmin-link" th:href="@{/dbadmin}" >
+            <a class="dbadmin-link"
+               href="/dbadmin"
+               th:href="@{/dbadmin}">
                 ← Database Admin Dashboard
             </a>
 
             <div class="dbadmin-actions">
-                <a class="dbadmin-link" th:href="@{/dbadmin/database}" >
+
+                <a class="dbadmin-link"
+                   href="/dbadmin/database"
+                   th:href="@{/dbadmin/database}">
                     View Data
                 </a>
 
-                <a class="dbadmin-link" th:href="@{/dbadmin/update}" >
+                <a class="dbadmin-link"
+                   href="/dbadmin/update"
+                   th:href="@{/dbadmin/update}">
                     Edit Records
                 </a>
+
             </div>
         </nav>
-      
+
         <header class="dbadmin-header">
+
             <p class="dbadmin-eyebrow">
                 HALLUCINATION DETECTION SYSTEM
             </p>
@@ -41,76 +59,158 @@
             <h1>View Database Data</h1>
 
             <p class="dbadmin-subtitle">
-                Explore tables and their stored records.
+                Browse PostgreSQL tables and inspect stored records.
             </p>
-        </header>
 
-        <p class="dbadmin-notice">
-            Browse records stored in PostgreSQL. Use Record Editor to update or delete records.
-        </p>
+        </header>
 
         <section class="dbadmin-stats"
                  id="dbadmin-stats"
                  aria-label="Database record counts">
-            <div class="dbadmin-panel">
-                <strong>saved_query</strong>
-                <p th:text="${savedQueryCount}">0</p>
+
+            <div class="dbadmin-stat">
+                <span>Saved Questions</span>
+                <strong th:text="${savedQueryCount}">0</strong>
+                <span class="dbadmin-muted">saved_query</span>
             </div>
-            <div class="dbadmin-panel">
-                <strong>app_user</strong>
-                <p th:text="${appUserCount}">0</p>
+
+            <div class="dbadmin-stat">
+                <span>User Accounts</span>
+                <strong th:text="${appUserCount}">0</strong>
+                <span class="dbadmin-muted">app_user</span>
             </div>
+
         </section>
 
         <section class="dbadmin-panel">
 
-            <h2>Browse Records</h2>
+            <h2>Browse Database Records</h2>
 
-            <form class="dbadmin-toolbar" th:action="@{/dbadmin/database}" method="get">
+            <form class="dbadmin-toolbar"
+                  method="get"
+                  th:action="@{/dbadmin/database}">
+
                 <label for="dbadmin-table-select">
-                    <span class="dbadmin-label">Database table</span>
+                    <span class="dbadmin-label">
+                        Database Table
+                    </span>
+
+                    <select class="dbadmin-select"
+                            id="dbadmin-table-select"
+                            name="table"
+                            onchange="this.form.submit()">
+
+                        <option value="saved_query"
+                                th:selected="${selectedTable == 'saved_query'}">
+                            saved_query
+                        </option>
+
+                        <option value="app_user"
+                                th:selected="${selectedTable == 'app_user'}">
+                            app_user
+                        </option>
+
+                    </select>
                 </label>
-                <select class="dbadmin-select" id="dbadmin-table-select" name="table"
-                        onchange="this.form.submit()">
-                    <option value="saved_query" th:selected="${selectedTable == 'saved_query'}">saved_query</option>
-                    <option value="app_user" th:selected="${selectedTable == 'app_user'}">app_user</option>
-                </select>
-                <button class="dbadmin-button" type="submit">View Table</button>
+
+                <button class="dbadmin-button"
+                        type="submit">
+                    View Table
+                </button>
+
             </form>
 
-            <p class="dbadmin-muted" th:if="${notice}" th:text="${notice}"></p>
-            <p class="dbadmin-muted" id="dbadmin-row-count" aria-live="polite"
+            <p class="dbadmin-muted"
+               th:if="${notice}"
+               th:text="${notice}">
+            </p>
+
+            <p class="dbadmin-muted"
+               id="dbadmin-row-count"
+               aria-live="polite"
                th:text="${selectedTable == 'saved_query' ? 'Showing ' + #lists.size(queries) + ' saved_query records' : 'Showing ' + #lists.size(users) + ' app_user records'}">
             </p>
 
-            <div class="dbadmin-table-wrap" id="dbadmin-table-container">
+            <div class="dbadmin-table-wrap"
+                 id="dbadmin-table-container">
+
+                <!-- Saved Questions Table -->
                 <div th:if="${selectedTable == 'saved_query'}">
-                    <p th:if="${#lists.isEmpty(queries)}">No saved questions found in PostgreSQL.</p>
-                    <table class="dbadmin-table" th:unless="${#lists.isEmpty(queries)}">
-                        <thead><tr><th>ID</th><th>Question</th><th>Answer</th><th>Created At</th></tr></thead>
+
+                    <p class="dbadmin-empty"
+                       th:if="${#lists.isEmpty(queries)}">
+                        No saved questions found in PostgreSQL.
+                    </p>
+
+                    <table class="dbadmin-table"
+                           th:unless="${#lists.isEmpty(queries)}">
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Question</th>
+                                <th>Answer</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+
                         <tbody>
+
                             <tr th:each="record : ${queries}">
+
                                 <td th:text="${record.id}"></td>
+
                                 <td th:text="${record.question}"></td>
+
                                 <td th:text="${record.answer}"></td>
+
                                 <td th:text="${record.createdAt != null ? #temporals.format(record.createdAt, 'MM/dd/yyyy HH:mm') : '—'}"></td>
+
                             </tr>
+
                         </tbody>
+
                     </table>
+
                 </div>
+
+                <!-- User Accounts Table -->
                 <div th:if="${selectedTable == 'app_user'}">
-                    <p th:if="${#lists.isEmpty(users)}">No user accounts found in PostgreSQL.</p>
-                    <table class="dbadmin-table" th:unless="${#lists.isEmpty(users)}">
-                        <thead><tr><th>ID</th><th>Username</th><th>Role</th></tr></thead>
-                        <tbody>
-                            <tr th:each="user : ${users}">
-                                <td th:text="${user.id}"></td>
-                                <td th:text="${user.username}"></td>
-                                <td th:text="${user.role}"></td>
+
+                    <p class="dbadmin-empty"
+                       th:if="${#lists.isEmpty(users)}">
+                        No user accounts found in PostgreSQL.
+                    </p>
+
+                    <table class="dbadmin-table"
+                           th:unless="${#lists.isEmpty(users)}">
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Role</th>
                             </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr th:each="user : ${users}">
+
+                                <td th:text="${user.id}"></td>
+
+                                <td th:text="${user.username}"></td>
+
+                                <td th:text="${user.role}"></td>
+
+                            </tr>
+
                         </tbody>
+
                     </table>
+
                 </div>
+
             </div>
 
         </section>
@@ -120,7 +220,8 @@
             <div class="dbadmin-actions">
 
                 <a class="dbadmin-link"
-                   th:href="@{/dbadmin/update}" >
+                   href="/dbadmin/update"
+                   th:href="@{/dbadmin/update}">
                     Go to Record Editor →
                 </a>
 
