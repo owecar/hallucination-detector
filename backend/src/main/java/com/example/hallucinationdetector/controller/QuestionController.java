@@ -1,5 +1,8 @@
 package com.example.hallucinationdetector.controller;
 
+import com.example.hallucinationdetector.model.ClaimResult;
+import com.example.hallucinationdetector.repository.ClaimResultRepository;
+
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -28,20 +31,25 @@ public class QuestionController {
     private final SavedQueryRepository repository;
     private final ClaimVerifier verifier;
     private final AppUserRepository userRepository;
+    private final ClaimResultRepository claimResultRepository;
 
-    public QuestionController(
-            LLMClient llm,
-            ClaimExtractor extractor,
-            SavedQueryRepository repository,
-            ClaimVerifier verifier,
-            AppUserRepository userRepository) {
+   
+public QuestionController(
+        LLMClient llm,
+        ClaimExtractor extractor,
+        SavedQueryRepository repository,
+        ClaimVerifier verifier,
+        AppUserRepository userRepository,
+        ClaimResultRepository claimResultRepository) {
 
-        this.llm = llm;
-        this.extractor = extractor;
-        this.repository = repository;
-        this.verifier = verifier;
-        this.userRepository = userRepository;
-    }
+    this.llm = llm;
+    this.extractor = extractor;
+    this.repository = repository;
+    this.verifier = verifier;
+    this.userRepository = userRepository;
+    this.claimResultRepository = claimResultRepository;
+}
+
 
     @GetMapping("/")
     public String showForm() {
@@ -96,7 +104,23 @@ public class QuestionController {
                 .orElseThrow(() ->
                         new AccessDeniedException("User not found"));
 
+        
+SavedQuery savedQuery =
         repository.save(new SavedQuery(question, answer, user));
+
+for (VerifiedClaim claim : claims) {
+
+    ClaimResult result = new ClaimResult(
+            savedQuery,
+            claim.getText(),
+            claim.getLabel(),
+            claim.getSource(),
+            claim.getExplanation()
+    );
+
+    claimResultRepository.save(result);
+}
+
 
         return "Html/results";
     }

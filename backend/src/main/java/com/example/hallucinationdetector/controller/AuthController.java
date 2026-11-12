@@ -2,7 +2,7 @@ package com.example.hallucinationdetector.controller;
 import com.example.hallucinationdetector.repository.SavedQueryRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-
+import com.example.hallucinationdetector.repository.ClaimResultRepository;
 import com.example.hallucinationdetector.repository.AppUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,38 +18,27 @@ public class AuthController {
     private final AppUserRepository repository;
     private final SavedQueryRepository savedQueryRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final ClaimResultRepository claimResultRepository;
     public AuthController(
         AppUserRepository repository,
         SavedQueryRepository savedQueryRepository,
+        ClaimResultRepository claimResultRepository,
         PasswordEncoder passwordEncoder) {
 
-    this.repository = repository;
-    this.savedQueryRepository = savedQueryRepository;
-    this.passwordEncoder = passwordEncoder;
-    }
-    @GetMapping("/login")
-    public String showLogin() {
-        return "Html/login";
-    }
+        this.repository = repository;
+        this.savedQueryRepository = savedQueryRepository;
+        this.claimResultRepository = claimResultRepository;
+        this.passwordEncoder = passwordEncoder;
+}
+    
+@GetMapping("/admin")
+public String showAdmin(Model model) {
 
-    @GetMapping("/register")
-    public String showRegistration() {
-        return "Html/register";
-    }
-
-    @GetMapping("/dbadmin")
-    public String showDatabaseAdmin() {
-        return "Html/dbadmin_mainview";
-    }    
-
-    @GetMapping("/admin")
-    public String showAdmin(Model model) {
-
+    // Real database statistics
     model.addAttribute("totalUsers", repository.count());
-
     model.addAttribute("totalQueries", savedQueryRepository.count());
 
+    // Five most recent questions
     model.addAttribute(
         "recentQuestions",
         savedQueryRepository.findAll(
@@ -61,8 +50,27 @@ public class AuthController {
         ).getContent()
     );
 
+    // Real verification counts
+    long supported =
+            claimResultRepository.countByVerdict("Supported");
+
+    long contradicted =
+            claimResultRepository.countByVerdict("Contradicted");
+
+    long totalVerified = supported + contradicted;
+
+    double hallucinationRate = totalVerified > 0
+            ? (contradicted * 100.0) / totalVerified
+            : 0.0;
+
+    model.addAttribute("supportedClaims", supported);
+    model.addAttribute("contradictedClaims", contradicted);
+    model.addAttribute("hallucinationRate", hallucinationRate);
+    model.addAttribute("hasVerificationData", totalVerified > 0);
+
     return "Html/admin_mainview";
 }
+
 
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String role, Model model) {

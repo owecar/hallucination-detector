@@ -232,17 +232,23 @@ tr:last-child td{border-bottom:0}
 
 <h2>Hallucination Overview</h2>
 
+
 <div class="card" style="max-width:350px; text-align:center;">
 
-    <div class="donut" id="donut"
-         style="background:conic-gradient(
-             #dc2626 0% 0%,
-             #16a34a 0% 100%
-         );">
+    <div class="donut"
+         th:style="${hasVerificationData}
+           ? 'background:conic-gradient(#dc2626 0% ' 
+             + ${hallucinationRate} 
+             + '%, #16a34a ' 
+             + ${hallucinationRate} 
+             + '% 100%)'
+           : 'background:#d6e4f7'">
 
         <div>
             <span>
-                <b id="rate">—</b>
+                <b th:text="${hasVerificationData}
+                    ? ${#numbers.formatDecimal(hallucinationRate, 1, 1)} + '%'
+                    : '—'">—</b>
                 Hallucination Rate
             </span>
         </div>
@@ -254,74 +260,16 @@ tr:last-child td{border-bottom:0}
         <span style="--c:var(--bad)">Contradicted</span>
     </div>
 
-    <p style="font-size:12px;color:#5b6f8f;margin-top:12px;">
-        Awaiting saved verification statistics
+    <p style="font-size:13px;color:#5b6f8f;margin-top:12px;"
+       th:if="${!hasVerificationData}">
+        No saved verification results yet.
+    </p>
+
+    <p style="font-size:13px;color:#5b6f8f;margin-top:12px;"
+       th:if="${hasVerificationData}">
+        Based on
+        <strong th:text="${supportedClaims + contradictedClaims}">0</strong>
+        classified claims.
     </p>
 
 </div>
-
-<h2>Recent Questions</h2>
-
-<div class="card wrap">
-
-    <table>
-        <thead>
-            <tr>
-                <th>Question</th>
-                <th>Submitted Date</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            <tr th:if="${#lists.isEmpty(recentQuestions)}">
-                <td colspan="2">
-                    No questions have been submitted yet.
-                </td>
-            </tr>
-
-            <tr th:each="record : ${recentQuestions}">
-
-                <td th:text="${record.question}">
-                    Example question
-                </td>
-
-                <td th:text="${record.createdAt}">
-                    Submission date
-                </td>
-
-            </tr>
-
-        </tbody>
-    </table>
-
-    <p style="margin-top:16px;">
-        <a th:href="@{/history}"
-           href="/history"
-           style="color:#1d6fe8;font-weight:600;">
-            View Full Question History
-        </a>
-    </p>
-
-</div>
-
-
-  <h2>Quick actions</h2>
-  <div class="qa">
-    <a class="card" href="#"><div class="ico">👥</div>Manage Users<small>Accounts and roles</small></a>
-    <a class="card" th:href="@{/admin/datasets}" href="/admin/datasets">
-    <div class="ico">🗂️</div>
-        Manage Datasets
-    <small>Wikipedia / FEVER</small>
-    </a>
-    <a class="card" th:href="@{/admin/api-models}" href="/admin/api-models">
-    <div class="ico">⚙️</div>
-        API Keys &amp; Models
-    <small>View Gemini configuration</small>
-    </a> 
-  </div>
-
-  <p class="note">Detector System · Admin</p>
-</main>
-</body>
-</html>
