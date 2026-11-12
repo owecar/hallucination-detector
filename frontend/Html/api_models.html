@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API & Models | Detector System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #dcecff;
+            color: #102c58;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #0c2854;
+            color: white;
+            padding: 28px 20px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 45px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 14px;
+            color: #dce9ff;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2d83f4;
+            color: white;
+        }
+
+        .content {
+            flex: 1;
+            padding: 45px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #5b7193;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 32px;
+            max-width: 900px;
+            box-shadow: 0 8px 24px rgba(15, 54, 105, 0.06);
+        }
+
+        .setting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 22px 0;
+            border-bottom: 1px solid #e2ebf7;
+        }
+
+        .setting:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-weight: bold;
+        }
+
+        .setting-value {
+            color: #49658b;
+            text-align: right;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .configured {
+            background: #e3f7ea;
+            color: #16803b;
+        }
+
+        .missing {
+            background: #ffe9e9;
+            color: #b42318;
+        }
+
+        .neutral {
+            background: #edf2fa;
+            color: #516788;
+        }
+
+        .notice {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 12px;
+            background: #eef6ff;
+            color: #365b8b;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 700px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .content {
+                padding: 22px;
+            }
+
+            .setting {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .setting-value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">🧠 Detector System</div>
+
+        <a th:href="@{/}" href="/">🏠 Home</a>
+        <a th:href="@{/history}" href="/history">🕒 Question History</a>
+        <a th:href="@{/admin}" href="/admin">🛠️ Admin Dashboard</a>
+        <a class="active"
+           th:href="@{/admin/api-models}"
+           href="/admin/api-models">⚙️ API & Models</a>
+    </aside>
+
+    <main class="content">
+        <h1>⚙️ API Keys & Models</h1>
+        <p class="subtitle">
+            View the AI service configuration used by the
+            Hallucination Detector.
+        </p>
+
+        <section class="card">
+
+            <div class="setting">
+                <span class="setting-label">AI Provider</span>
+                <span class="setting-value"
+                      th:text="${provider}">Google Gemini</span>
+            </div>
+
+            <div class="setting">
+                <span class="setting-label">Active Model</span>
+                <span class="setting-value"
+                      th:text="${activeModel}">Model name</span>
+            </div>
+
+            <div class="setting">
+                <span class="setting-label">API Key</span>
+
+                <span class="status configured"
+                      th:if="${keyConfigured}">
+                    Configured
+                </span>
+
+                <span class="status missing"
+                      th:unless="${keyConfigured}">
+                    Not Configured
+                </span>
+            </div>
+
+            <div class="setting">
+                <span class="setting-label">Connection Status</span>
+                <span class="status neutral"
+                      th:text="${connectionStatus}">
+                    Not tested
+                </span>
+            </div>
+
+            <div class="notice">
+                🔒 Your API key is stored on the server
+                and is never displayed on this page.
+                <br>
+                Connection status is marked "Not tested"
+                until a real connectivity check is implemented.
+            </div>
+
+        </section>
+    </main>
+
+</div>
+</body>
+</html>
