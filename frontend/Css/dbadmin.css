@@ -324,3 +324,61 @@
     }
 
 }
+
+/* Database Admin — visual alignment with the main Admin Dashboard */
+.dbadmin-page {
+    --db-navy: #0b2a5b;
+    --db-blue: #1d6fe8;
+    --db-ink: #12284a;
+    --db-muted: #5b6f8f;
+    --db-line: #d6e4f7;
+    background: linear-gradient(135deg, #eaf4ff, #cfe4ff 60%, #e6f1ff);
+    color: var(--db-ink);
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    min-height: 100vh;
+}
+.dbadmin-page .dbadmin-container { max-width: 1200px; padding: 34px 26px 70px; }
+.dbadmin-page .dbadmin-header { text-align: left; margin-bottom: 24px; }
+.dbadmin-page .dbadmin-eyebrow { color: var(--db-blue); letter-spacing: .12em; }
+.dbadmin-page .dbadmin-header h1 { color: var(--db-navy); font-size: clamp(27px, 4vw, 36px); margin: 10px 0; }
+.dbadmin-page .dbadmin-subtitle, .dbadmin-page .dbadmin-muted, .dbadmin-page .dbadmin-footer { color: var(--db-muted); }
+.dbadmin-page .dbadmin-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.dbadmin-page .dbadmin-card, .dbadmin-page .dbadmin-panel {
+    color: var(--db-ink); background: rgba(255,255,255,.94);
+    border: 1px solid var(--db-line); border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(30,90,180,.08); backdrop-filter: none;
+}
+.dbadmin-page .dbadmin-card { padding: 24px; min-height: 230px; }
+.dbadmin-page .dbadmin-card:hover, .dbadmin-page .dbadmin-card:focus-visible {
+    border-color: #80b5ff; box-shadow: 0 12px 26px rgba(30,90,180,.16); transform: translateY(-3px);
+}
+.dbadmin-page .dbadmin-card-icon { background: #e3efff; color: var(--db-blue); font-size: 27px; }
+.dbadmin-page .dbadmin-card h2, .dbadmin-page .dbadmin-panel h2 { color: var(--db-navy); }
+.dbadmin-page .dbadmin-card h2 { font-size: 20px; }
+.dbadmin-page .dbadmin-card p { color: var(--db-muted); }
+.dbadmin-page .dbadmin-card-link, .dbadmin-page .dbadmin-link { color: var(--db-blue); }
+.dbadmin-page .dbadmin-topnav { padding: 13px 17px; background: #fff; border: 1px solid var(--db-line); border-radius: 12px; }
+.dbadmin-page .dbadmin-panel { padding: 23px; margin: 16px 0; }
+.dbadmin-page .dbadmin-stats > .dbadmin-panel { flex: 1 1 190px; }
+.dbadmin-page .dbadmin-stats > .dbadmin-panel strong { display: block; color: var(--db-muted); font-size: 14px; }
+.dbadmin-page .dbadmin-stats > .dbadmin-panel p { font-size: 28px; font-weight: 700; color: var(--db-navy); margin: 8px 0 0; }
+.dbadmin-page .dbadmin-label { color: var(--db-ink); }
+.dbadmin-page .dbadmin-input, .dbadmin-page .dbadmin-select, .dbadmin-page .dbadmin-textarea {
+    background: #fff; color: var(--db-ink); border: 1px solid #b8cbe4; border-radius: 9px;
+}
+.dbadmin-page .dbadmin-input:focus, .dbadmin-page .dbadmin-select:focus, .dbadmin-page .dbadmin-textarea:focus { outline: 2px solid var(--db-blue); }
+.dbadmin-page .dbadmin-button { background: var(--db-blue); color: #fff; box-shadow: none; }
+.dbadmin-page .dbadmin-button:hover { filter: brightness(.95); }
+.dbadmin-page .dbadmin-button-secondary { background: #e8f0fb; color: var(--db-navy); border: 1px solid #bfd3ec; }
+.dbadmin-page .dbadmin-button-danger { background: #dc2626; color: #fff; border: 1px solid #dc2626; }
+.dbadmin-page .dbadmin-table th, .dbadmin-page .dbadmin-table td { border-bottom: 1px solid var(--db-line); color: var(--db-ink); }
+.dbadmin-page .dbadmin-table th { color: var(--db-navy); background: #edf5ff; font-weight: 700; }
+.dbadmin-page .dbadmin-table tbody tr:hover { background: #f2f7ff; }
+.dbadmin-page .dbadmin-notice { background: #eaf3ff; border-left-color: var(--db-blue); color: var(--db-navy); }
+.dbadmin-page .dbadmin-pill { background: #e3efff; color: var(--db-navy); }
+.dbadmin-page .dbadmin-empty { color: var(--db-muted); }
+.dbadmin-page .dbadmin-error { color: #b91c1c; }
+.dbadmin-page .dbadmin-success { color: #15803d; }
+.dbadmin-page #dbadmin-feedback { color: var(--db-ink); }
+@media (max-width: 850px) { .dbadmin-page .dbadmin-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .dbadmin-page { padding: 0; } .dbadmin-page .dbadmin-container { padding: 24px 14px 50px; } .dbadmin-page .dbadmin-card { min-height: auto; } }

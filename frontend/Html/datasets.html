@@ -188,7 +188,8 @@
             <div class="info">
                 <strong>Purpose:</strong>
                 Evaluate hallucination detection performance.
-                <p><strong>Dataset status:</strong> Not checked</p>
+                <p><strong>Dataset status:</strong> <span th:text="${feverStatus}">Not checked</span></p>
+                <p th:if="${feverLabels != null}" th:text="${feverLabels}"></p>
             </div>
         </section>
 
