@@ -1,1 +1,16 @@
 src/main/resources/application.properties
+# Original FEVER datasets
+database/FEVER/train.jsonl
+database/FEVER/shared_task_dev.jsonl
+
+# Outdated FEVER filter output
+database/FEVER/fever_cs_candidates.jsonl
+
+# Python temporary files
+__pycache__/
+*.pyc
+
+# Secrets and environment variables
+.env
+.env.*
+!.env.example
