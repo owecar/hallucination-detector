@@ -2,6 +2,8 @@ package com.example.hallucinationdetector.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.hallucinationdetector.claim.ClaimExtractor;
 import com.example.hallucinationdetector.llm.LLMClient;
+import com.example.hallucinationdetector.model.AppUser;
 import com.example.hallucinationdetector.model.SavedQuery;
+import com.example.hallucinationdetector.repository.AppUserRepository;
 import com.example.hallucinationdetector.repository.SavedQueryRepository;
 import com.example.hallucinationdetector.verification.ClaimVerifier;
 import com.example.hallucinationdetector.verification.VerificationSummary;
@@ -23,17 +27,20 @@ public class QuestionController {
     private final ClaimExtractor extractor;
     private final SavedQueryRepository repository;
     private final ClaimVerifier verifier;
+    private final AppUserRepository userRepository;
 
     public QuestionController(
             LLMClient llm,
             ClaimExtractor extractor,
             SavedQueryRepository repository,
-            ClaimVerifier verifier) {
+            ClaimVerifier verifier,
+            AppUserRepository userRepository) {
 
         this.llm = llm;
         this.extractor = extractor;
         this.repository = repository;
         this.verifier = verifier;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/")
@@ -44,7 +51,8 @@ public class QuestionController {
     @PostMapping("/submit")
     public String submit(
             @RequestParam("question") String question,
-            Model model) {
+            Model model,
+            Authentication authentication) {
 
         model.addAttribute("question", question);
 
@@ -53,6 +61,7 @@ public class QuestionController {
             model.addAttribute("claims", List.of());
             model.addAttribute("summary",
                     VerificationSummary.from(List.of()));
+
             return "Html/results";
         }
 
@@ -66,6 +75,7 @@ public class QuestionController {
             model.addAttribute("claims", List.of());
             model.addAttribute("summary",
                     VerificationSummary.from(List.of()));
+
             return "Html/results";
         }
 
@@ -73,11 +83,20 @@ public class QuestionController {
                 verifier.verify(extractor.extractClaims(answer));
 
         model.addAttribute("claims", claims);
-        model.addAttribute("summary", VerificationSummary.from(claims));
         model.addAttribute("summary",
                 VerificationSummary.from(claims));
 
-        repository.save(new SavedQuery(question, answer));
+        if (authentication == null
+                || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("Login required");
+        }
+
+        AppUser user = userRepository
+                .findByUsername(authentication.getName())
+                .orElseThrow(() ->
+                        new AccessDeniedException("User not found"));
+
+        repository.save(new SavedQuery(question, answer, user));
 
         return "Html/results";
     }
