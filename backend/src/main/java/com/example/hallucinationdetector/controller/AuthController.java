@@ -14,15 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller 
 public class AuthController {
-    @GetMapping("/login")
-    public String showLogin() {
-    return "Html/login";
-}
-
-    @GetMapping("/register")
-    public String showRegister() {
-    return "Html/register";
-}
     
     private final AppUserRepository repository;
     private final SavedQueryRepository savedQueryRepository;
@@ -39,7 +30,22 @@ public class AuthController {
         this.claimResultRepository = claimResultRepository;
         this.passwordEncoder = passwordEncoder;
 }
-    
+
+@GetMapping("/login")
+public String showLogin() {
+    return "Html/login";
+}
+
+@GetMapping("/register")
+public String showRegister() {
+    return "Html/register";
+}
+
+@GetMapping("/dbadmin")
+public String showDatabaseAdmin() {
+    return "Html/dbadmin_mainview";
+}
+
 @GetMapping("/admin")
 public String showAdmin(Model model) {
 
