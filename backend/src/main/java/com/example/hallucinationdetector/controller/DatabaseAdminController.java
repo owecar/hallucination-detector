@@ -4,12 +4,14 @@ package com.example.hallucinationdetector.controller;
 import com.example.hallucinationdetector.model.AppUser;
 import com.example.hallucinationdetector.model.SavedQuery;
 import com.example.hallucinationdetector.repository.AppUserRepository;
+import com.example.hallucinationdetector.repository.ClaimResultRepository;
 import com.example.hallucinationdetector.repository.SavedQueryRepository;
 import java.security.Principal;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +24,15 @@ public class DatabaseAdminController {
 
     private final SavedQueryRepository savedQueryRepository;
     private final AppUserRepository appUserRepository;
+    private final ClaimResultRepository claimResultRepository;
 
     public DatabaseAdminController(
             SavedQueryRepository savedQueryRepository,
-            AppUserRepository appUserRepository) {
+            AppUserRepository appUserRepository,
+            ClaimResultRepository claimResultRepository) {
         this.savedQueryRepository = savedQueryRepository;
         this.appUserRepository = appUserRepository;
+        this.claimResultRepository = claimResultRepository;
     }
 
     @GetMapping("/dbadmin/database")
@@ -100,6 +105,7 @@ public class DatabaseAdminController {
                 redirectAttributes, "Saved query updated successfully.");
     }
 
+    @Transactional
     @PostMapping("/dbadmin/delete/saved_query/{id}")
     public String deleteSavedQuery(
             @PathVariable Long id,
@@ -110,6 +116,7 @@ public class DatabaseAdminController {
                     redirectAttributes, "Saved query not found.");
         }
 
+        claimResultRepository.deleteForQuestion(id);
         savedQueryRepository.deleteById(id);
 
         return redirectWithSuccess(
