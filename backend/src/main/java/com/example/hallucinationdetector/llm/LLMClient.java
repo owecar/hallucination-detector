@@ -17,6 +17,12 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 public class LLMClient {
 
+    private final ApiKeyService apiKeyService;
+
+    public LLMClient(ApiKeyService apiKeyService) {
+        this.apiKeyService = apiKeyService;
+    }
+
     @Value("${gemini.api.key:}")
     private String configuredKey;
 
@@ -33,6 +39,9 @@ public class LLMClient {
             "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
 
     private String resolveKey() {
+        if (apiKeyService.hasTemporaryKey()) {
+            return apiKeyService.getKey();
+        }
         if (configuredKey != null && !configuredKey.isBlank()) {
             return configuredKey.trim();
         }
@@ -45,7 +54,7 @@ public class LLMClient {
         String apiKey = resolveKey();
 
         if (apiKey.isEmpty()) {
-            return "Error: no API key found. Set GEMINI_API_KEY and restart the app.";
+            return "Error: no API key found. Ask an administrator to configure the Gemini API key under API & Models.";
         }
 
         try {
