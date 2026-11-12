@@ -1,227 +1,67 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Update Database Records | Database Administration</title>
+    <title>Database Administration | Hallucination Detector</title>
 
-    <link rel="stylesheet"
-          href="../Css/style.css"
+    <link rel="stylesheet" href="../Css/style.css"
           th:href="@{/Css/style.css}">
 
-    <link rel="stylesheet"
-          href="../Css/dbadmin.css?v=7"
-          th:href="@{/Css/dbadmin.css(v=7)}">
+    <link rel="stylesheet" href="../Css/dbadmin.css?v=10"
+          th:href="@{/Css/dbadmin.css(v=10)}">
 
-    <script src="../JavaScript/dbadmin_data.js"
-            th:src="@{/JavaScript/dbadmin_data.js}"
-            defer>
-    </script>
+    <script src="../JavaScript/dbadmin.js"
+            th:src="@{/JavaScript/dbadmin.js}" defer></script>
 </head>
 
-<body class="dbadmin-page" data-dbadmin-page="update">
+<body class="dbadmin-page" data-dbadmin-page="main">
 
-    <div th:replace="~{Html/fragments/account-header :: accountHeader}">
-    </div>
+    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
 
-    <main class="dbadmin-container">
+    <main class="dbadmin-container" id="dbadmin-main">
 
-        <nav class="dbadmin-topnav"
-             aria-label="Database administration navigation">
+        <header class="dbadmin-header">
+            <p class="dbadmin-eyebrow">HALLUCINATION DETECTION SYSTEM</p>
+            <h1>Database Administration</h1>
+            <p class="dbadmin-subtitle">
+                Manage and monitor your PostgreSQL database.
+            </p>
+        </header>
 
-            <a class="dbadmin-link"
-               href="/dbadmin"
-               th:href="@{/dbadmin}">
-                ← Database Admin Dashboard
+        <nav class="dbadmin-grid" id="dbadmin-navigation">
+
+            <a class="dbadmin-card" href="/dbadmin/database"
+               th:href="@{/dbadmin/database}">
+                <span class="dbadmin-card-icon">▦</span>
+                <h2>View Database Data</h2>
+                <p>Browse PostgreSQL tables and inspect stored database records.</p>
+                <span class="dbadmin-card-link">View tables →</span>
             </a>
 
-            <div class="dbadmin-actions">
+            <a class="dbadmin-card" href="/dbadmin/update"
+               th:href="@{/dbadmin/update}">
+                <span class="dbadmin-card-icon">✎</span>
+                <h2>Update Database Records</h2>
+                <p>Edit and manage existing records stored in PostgreSQL.</p>
+                <span class="dbadmin-card-link">Manage records →</span>
+            </a>
 
-                <a class="dbadmin-link"
-                   href="/dbadmin/database"
-                   th:href="@{/dbadmin/database}">
-                    View Data
-                </a>
-
-                <a class="dbadmin-link"
-                   href="/dbadmin/update"
-                   th:href="@{/dbadmin/update}">
-                    Edit Records
-                </a>
-
-            </div>
+            <a class="dbadmin-card" href="/" th:href="@{/}">
+                <span class="dbadmin-card-icon">⌂</span>
+                <h2>Return to Homepage</h2>
+                <p>Return to the main Hallucination Detection System dashboard.</p>
+                <span class="dbadmin-card-link">Go home →</span>
+            </a>
 
         </nav>
 
-        <header class="dbadmin-header">
-
-            <p class="dbadmin-eyebrow">
-                HALLUCINATION DETECTION SYSTEM
-            </p>
-
-            <h1>Update Database Records</h1>
-
-            <p class="dbadmin-subtitle">
-                Select, edit, and manage records stored in PostgreSQL.
-            </p>
-
-        </header>
-
-        <!-- Record Selection -->
-        <section class="dbadmin-panel">
-
-            <h2>Select a Record</h2>
-
-            <p class="dbadmin-muted">
-                Choose a database table and select the record
-                you want to manage.
-            </p>
-
-            <div class="dbadmin-toolbar">
-
-                <label>
-                    <span class="dbadmin-label">
-                        Database Table
-                    </span>
-
-                    <select class="dbadmin-select"
-                            id="dbadmin-table-select">
-
-                        <option value="saved_query">
-                            saved_query
-                        </option>
-
-                        <option value="app_user">
-                            app_user
-                        </option>
-
-                    </select>
-                </label>
-
-                <label>
-                    <span class="dbadmin-label">
-                        Select Record
-                    </span>
-
-                    <select class="dbadmin-select"
-                            id="dbadmin-record-select">
-                    </select>
-                </label>
-
-            </div>
-
-        </section>
-
-        <!-- Record Editor -->
-        <section class="dbadmin-panel">
-
-            <h2>Edit Database Record</h2>
-
-            <p class="dbadmin-muted">
-                Update the selected record using the fields below.
-            </p>
-
-            <!-- Backend Status Messages -->
-            <p class="dbadmin-success"
-               th:if="${success}"
-               th:text="${success}"
-               role="status">
-            </p>
-
-            <p class="dbadmin-error"
-               th:if="${error}"
-               th:text="${error}"
-               role="alert">
-            </p>
-
-            <!-- Saved Query Data -->
-            <select id="dbadmin-source-queries"
-                    hidden
-                    aria-hidden="true">
-
-                <option th:each="q : ${queries}"
-                        th:value="${q.id}"
-                        th:attr="data-question=${q.question},data-answer=${q.answer}"
-                        th:text="${q.id + ' — ' + q.question}">
-                </option>
-
-            </select>
-
-            <!-- User Account Data -->
-            <select id="dbadmin-source-users"
-                    hidden
-                    aria-hidden="true">
-
-                <option th:each="u : ${users}"
-                        th:value="${u.id}"
-                        th:attr="data-username=${u.username},data-role=${u.role}"
-                        th:text="${u.id + ' — ' + u.username}">
-                </option>
-
-            </select>
-
-            <!-- Edit Form -->
-            <form id="dbadmin-edit-form"
-                  method="post">
-
-                <input type="hidden"
-                       th:name="${_csrf.parameterName}"
-                       th:value="${_csrf.token}">
-
-                <div class="dbadmin-form-grid"
-                     id="dbadmin-form-fields">
-                </div>
-
-                <p class="dbadmin-muted">
-                    Primary keys and timestamps are read-only.
-                </p>
-
-                <div class="dbadmin-actions">
-
-                    <button class="dbadmin-button"
-                            type="submit"
-                            id="dbadmin-save">
-                        Save Changes
-                    </button>
-
-                    <button class="dbadmin-button dbadmin-button-danger"
-                            type="button"
-                            id="dbadmin-delete">
-                        Delete Record
-                    </button>
-
-                    <button class="dbadmin-button dbadmin-button-secondary"
-                            type="button"
-                            id="dbadmin-cancel">
-                        Discard Changes
-                    </button>
-
-                </div>
-
-                <p id="dbadmin-feedback"
-                   role="status"
-                   aria-live="polite">
-                </p>
-
-            </form>
-
-            <!-- Delete Form -->
-            <form id="dbadmin-delete-form"
-                  method="post"
-                  hidden>
-
-                <input type="hidden"
-                       th:name="${_csrf.parameterName}"
-                       th:value="${_csrf.token}">
-
-            </form>
-
-        </section>
+        <footer class="dbadmin-footer" id="dbadmin-status">
+            Database Administration Dashboard
+        </footer>
 
     </main>
-
 </body>
 </html>
