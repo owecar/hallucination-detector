@@ -1,384 +1,554 @@
-.dbadmin-page {
+html:has(body.dbadmin-page) {
+    background: #f1f6fd;
+}
+
+body.dbadmin-page {
     min-height: 100vh;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    background: #f1f6fd !important;
+    background-image: none !important;
+
+    color: #183153 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
 }
 
-.dbadmin-container {
-    max-width: 1050px;
-    margin: 0 auto;
-    padding: 48px 20px;
+body.dbadmin-page *,
+body.dbadmin-page *::before,
+body.dbadmin-page *::after {
     box-sizing: border-box;
 }
 
-.dbadmin-header {
-    text-align: center;
-    margin-bottom: 36px;
+body.dbadmin-page .dbadmin-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 55px 25px;
+
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none;
 }
 
-.dbadmin-eyebrow {
-    color: #74ecff;
-    letter-spacing: 0.18em;
+body.dbadmin-page .dbadmin-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+body.dbadmin-page .dbadmin-eyebrow {
+    color: #2563eb !important;
+    letter-spacing: 0.14em;
     font-size: 12px;
     font-weight: 700;
 }
 
-.dbadmin-header h1 {
-    font-size: clamp(32px, 5vw, 55px);
+body.dbadmin-page .dbadmin-header h1 {
+    color: #16345c !important;
+
+    background: none !important;
+    background-image: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: #16345c !important;
+
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 750;
+    line-height: 1.2;
+
     margin: 12px 0;
+    text-shadow: none !important;
 }
 
-.dbadmin-subtitle {
-    color: #d1d7ef;
-    font-size: 17px;
+body.dbadmin-page .dbadmin-subtitle {
+    color: #64748b !important;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
-.dbadmin-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+body.dbadmin-page .dbadmin-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    width: 100%;
 }
 
-.dbadmin-card {
-    box-sizing: border-box;
-    flex: 1 1 420px;
-    min-width: 0;
+body.dbadmin-page .dbadmin-card {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 220px;
+
     padding: 30px;
-    color: #fff;
-    text-decoration: none;
-    background: rgba(10, 15, 40, 0.78);
-    border: 1px solid rgba(0, 245, 255, 0.5);
-    border-radius: 22px;
-    box-shadow: 0 0 20px rgba(0, 245, 255, 0.1);
-    backdrop-filter: blur(14px);
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+    background: #ffffff !important;
+    background-image: none !important;
+
+    color: #183153 !important;
+    text-decoration: none !important;
+
+    border: 1px solid #dce6f3 !important;
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 20px rgba(30, 64, 110, 0.06) !important;
+
+    backdrop-filter: none !important;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
 }
 
-.dbadmin-card:hover, .dbadmin-card:focus-visible {
-    transform: translateY(-5px);
-    border-color: #ff2e93;
-    box-shadow: 0 10px 32px rgba(157, 78, 221, 0.28);
-    outline-offset: 4px;
+body.dbadmin-page .dbadmin-card:hover,
+body.dbadmin-page .dbadmin-card:focus-visible {
+    transform: translateY(-4px);
+
+    background: #ffffff !important;
+
+    border-color: #3b82f6 !important;
+
+    box-shadow:
+        0 12px 28px rgba(37, 99, 235, 0.12) !important;
 }
 
-.dbadmin-card-icon {
+body.dbadmin-page .dbadmin-card:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 3px;
+}
+
+body.dbadmin-page .dbadmin-card-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 14px;
-    background: rgba(0, 245, 255, 0.12);
-    color: #00f5ff;
-    font-size: 30px;
-}
 
-.dbadmin-card h2 {
-    font-size: 23px;
-    margin: 18px 0 8px;
-}
+    width: 52px;
+    height: 52px;
 
-.dbadmin-card p {
-    color: #c9d1e8;
-    line-height: 1.6;
-    margin: 0 0 22px;
-}
+    border-radius: 12px;
 
-.dbadmin-card-link {
-    margin-top: auto;
+    background: #e8f0ff !important;
+    color: #2563eb !important;
+
+    font-size: 28px;
     font-weight: 700;
-    color: #74ecff;
 }
 
-.dbadmin-footer {
-    text-align: center;
-    margin-top: 36px;
-    color: #c9d1e8;
+body.dbadmin-page .dbadmin-card h2 {
+    color: #183153 !important;
+
+    background: none !important;
+    background-image: none !important;
+    -webkit-text-fill-color: #183153 !important;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    margin: 20px 0 10px;
+}
+
+body.dbadmin-page .dbadmin-card p {
+    color: #64748b !important;
+
     font-size: 14px;
+    line-height: 1.7;
+
+    margin: 0 0 24px;
 }
 
-@media (max-width: 600px) {
-    .dbadmin-page {
-        padding: 28px 14px;
-    }
+body.dbadmin-page .dbadmin-card-link {
+    display: inline-block;
 
-    .dbadmin-card {
-        flex-basis: 100%;
-        padding: 24px;
-    }
+    margin-top: auto;
 
+    color: #2563eb !important;
+
+    font-size: 14px;
+    font-weight: 700;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .dbadmin-card {
-        transition: none;
-    }
-
+body.dbadmin-page .dbadmin-card:hover .dbadmin-card-link {
+    color: #1d4ed8 !important;
 }
 
-.dbadmin-toolbar,.dbadmin-actions,.dbadmin-topnav,.dbadmin-stats {
+body.dbadmin-page .dbadmin-toolbar,
+body.dbadmin-page .dbadmin-actions,
+body.dbadmin-page .dbadmin-topnav,
+body.dbadmin-page .dbadmin-stats {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
 }
 
-.dbadmin-topnav {
+body.dbadmin-page .dbadmin-topnav {
     justify-content: space-between;
     margin-bottom: 25px;
 }
 
-.dbadmin-link {
-    color: #76e9ff;
+body.dbadmin-page .dbadmin-link {
+    color: #2563eb !important;
     text-decoration: none;
     font-weight: 700;
 }
 
-.dbadmin-link:hover {
+body.dbadmin-page .dbadmin-link:hover {
+    color: #1d4ed8 !important;
     text-decoration: underline;
 }
 
-.dbadmin-panel {
-    background: rgba(10,15,40,.86);
-    border: 1px solid rgba(0,245,255,.4);
-    border-radius: 20px;
-    padding: 22px;
-    margin: 18px 0;
-    box-shadow: 0 0 22px rgba(0,245,255,.08);
+body.dbadmin-page .dbadmin-panel {
+    background: #ffffff !important;
+    background-image: none !important;
+
+    color: #183153 !important;
+
+    border: 1px solid #dce6f3 !important;
+    border-radius: 16px;
+
+    padding: 25px;
+    margin: 20px 0;
+
+    box-shadow:
+        0 5px 20px rgba(30, 64, 110, 0.05) !important;
+
+    backdrop-filter: none !important;
 }
 
-.dbadmin-panel h2 {
-    margin: 0 0 16px;
-    font-size: 22px;
-}
+body.dbadmin-page .dbadmin-panel h2 {
+    color: #183153 !important;
 
-.dbadmin-label {
-    display: block;
+    background: none !important;
+    background-image: none !important;
+    -webkit-text-fill-color: #183153 !important;
+
+    font-size: 21px;
     font-weight: 700;
+
+    margin: 0 0 18px;
+}
+
+body.dbadmin-page .dbadmin-label {
+    display: block;
+
+    color: #334155 !important;
+
     font-size: 14px;
-    color: #d5dff6;
-    margin-bottom: 6px;
+    font-weight: 700;
+
+    margin-bottom: 7px;
 }
 
-.dbadmin-input,.dbadmin-select,.dbadmin-textarea {
-    box-sizing: border-box;
+body.dbadmin-page .dbadmin-input,
+body.dbadmin-page .dbadmin-select,
+body.dbadmin-page .dbadmin-textarea {
+    display: block;
+
     width: 100%;
-    background: #111c3a;
-    color: #fff;
-    border: 1px solid #64749b;
-    border-radius: 10px;
+    max-width: 100%;
+
     padding: 12px;
+
+    background: #ffffff !important;
+    background-image: none !important;
+
+    color: #183153 !important;
+
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 9px;
+
     font: inherit;
+    font-size: 14px;
 }
 
-.dbadmin-input:focus,.dbadmin-select:focus,.dbadmin-textarea:focus {
-    outline: 2px solid #00f5ff;
+body.dbadmin-page .dbadmin-input:focus,
+body.dbadmin-page .dbadmin-select:focus,
+body.dbadmin-page .dbadmin-textarea:focus {
+    outline: 2px solid #3b82f6;
     outline-offset: 1px;
+
+    border-color: #3b82f6 !important;
 }
 
-.dbadmin-toolbar > label {
+body.dbadmin-page .dbadmin-input::placeholder,
+body.dbadmin-page .dbadmin-textarea::placeholder {
+    color: #94a3b8;
+}
+
+body.dbadmin-page .dbadmin-toolbar > label {
     flex: 1 1 180px;
 }
 
-.dbadmin-button {
-    cursor: pointer;
-    background: linear-gradient(90deg,#00b9df,#6555e8);
-    color: white;
-    font: inherit;
-    font-weight: 700;
-    padding: 11px 17px;
-    border: 0;
-    border-radius: 10px;
-    transition: filter .2s,transform .2s;
+body.dbadmin-page .dbadmin-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
 }
 
-.dbadmin-button:hover {
-    filter: brightness(1.18);
+body.dbadmin-page .dbadmin-field-full {
+    grid-column: 1 / -1;
+}
+
+body.dbadmin-page .dbadmin-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    padding: 11px 18px;
+
+    background: #2563eb !important;
+    background-image: none !important;
+
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+
+    font: inherit;
+    font-weight: 700;
+
+    border: 1px solid #2563eb !important;
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+body.dbadmin-page .dbadmin-button:hover {
+    background: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+
     transform: translateY(-2px);
 }
 
-.dbadmin-button-secondary {
-    background: #29365b;
-    border: 1px solid #6c7ca4;
+body.dbadmin-page .dbadmin-button-secondary {
+    background: #e8f0ff !important;
+
+    color: #1d4ed8 !important;
+    -webkit-text-fill-color: #1d4ed8 !important;
+
+    border: 1px solid #bfdbfe !important;
 }
 
-.dbadmin-button-danger {
-    background: #7e224a;
-    border: 1px solid #ff70a6;
+body.dbadmin-page .dbadmin-button-secondary:hover {
+    background: #dbeafe !important;
+    border-color: #93c5fd !important;
 }
 
-.dbadmin-button:disabled {
-    opacity: .45;
+body.dbadmin-page .dbadmin-button-danger {
+    background: #dc2626 !important;
+
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+
+    border: 1px solid #dc2626 !important;
+}
+
+body.dbadmin-page .dbadmin-button-danger:hover {
+    background: #b91c1c !important;
+    border-color: #b91c1c !important;
+}
+
+body.dbadmin-page .dbadmin-button:disabled {
+    opacity: 0.45;
     cursor: not-allowed;
+    transform: none;
 }
 
-.dbadmin-table-wrap {
-    overflow-x: auto;
-}
-
-.dbadmin-table {
+body.dbadmin-page .dbadmin-table-wrap {
     width: 100%;
-    border-collapse: collapse;
-    min-width: 640px;
+
+    overflow-x: auto;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
 }
 
-.dbadmin-table th,.dbadmin-table td {
-    padding: 12px;
+body.dbadmin-page .dbadmin-table {
+    width: 100%;
+    min-width: 640px;
+
+    border-collapse: collapse;
+
+    background: #ffffff !important;
+    color: #334155 !important;
+}
+
+body.dbadmin-page .dbadmin-table th,
+body.dbadmin-page .dbadmin-table td {
+    padding: 14px;
+
     text-align: left;
-    border-bottom: 1px solid #344261;
     vertical-align: top;
+
+    border-bottom: 1px solid #e2e8f0;
+
     overflow-wrap: anywhere;
 }
 
-.dbadmin-table th {
-    color: #8defff;
+body.dbadmin-page .dbadmin-table th {
+    background: #eff6ff !important;
+
+    color: #1e40af !important;
+    -webkit-text-fill-color: #1e40af !important;
+
     font-size: 13px;
-    letter-spacing: .04em;
+    font-weight: 700;
+
+    letter-spacing: 0.03em;
 }
 
-.dbadmin-table tbody tr:hover {
-    background: rgba(255,255,255,.055);
+body.dbadmin-page .dbadmin-table td {
+    background: transparent !important;
+    color: #334155 !important;
+    -webkit-text-fill-color: #334155 !important;
 }
 
-.dbadmin-pill {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 100px;
-    background: #243d60;
-    color: #9feaff;
-    font-size: 12px;
+body.dbadmin-page .dbadmin-table tbody tr:hover {
+    background: #f8fbff !important;
 }
 
-.dbadmin-stat {
+body.dbadmin-page .dbadmin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+body.dbadmin-page .dbadmin-stat {
     flex: 1 1 160px;
-    background: rgba(0,245,255,.08);
-    border: 1px solid rgba(0,245,255,.18);
-    border-radius: 14px;
-    padding: 16px;
+
+    padding: 18px;
+
+    background: #eff6ff !important;
+    background-image: none !important;
+
+    color: #334155 !important;
+
+    border: 1px solid #dbeafe !important;
+    border-radius: 12px;
 }
 
-.dbadmin-stat strong {
+body.dbadmin-page .dbadmin-stat strong {
     display: block;
+
+    color: #1d4ed8 !important;
+    -webkit-text-fill-color: #1d4ed8 !important;
+
     font-size: 26px;
+    font-weight: 700;
+
     margin-top: 8px;
 }
 
-.dbadmin-muted {
-    color: #becae5;
-    line-height: 1.55;
+body.dbadmin-page .dbadmin-pill {
+    display: inline-block;
+
+    padding: 5px 11px;
+
+    border-radius: 100px;
+
+    background: #dbeafe !important;
+    color: #1d4ed8 !important;
+
+    font-size: 12px;
+    font-weight: 700;
 }
 
-.dbadmin-form-grid {
-    display: grid;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 15px;
+body.dbadmin-page .dbadmin-muted {
+    color: #64748b !important;
+    line-height: 1.6;
 }
 
-.dbadmin-field-full {
-    grid-column: 1/-1;
-}
+body.dbadmin-page .dbadmin-notice {
+    padding: 13px 16px;
 
-.dbadmin-notice {
-    border-left: 4px solid #00f5ff;
-    padding: 12px 15px;
-    background: rgba(0,245,255,.08);
+    background: #eff6ff !important;
+    color: #1e40af !important;
+
+    border-left: 4px solid #2563eb;
     border-radius: 8px;
 }
 
-.dbadmin-empty {
-    padding: 24px;
+body.dbadmin-page .dbadmin-empty {
+    padding: 25px;
+
     text-align: center;
-    color: #cbd6eb;
+
+    color: #64748b !important;
 }
 
-.dbadmin-error {
-    color: #ff9abb;
+body.dbadmin-page .dbadmin-error {
+    color: #dc2626 !important;
 }
 
-.dbadmin-success {
-    color: #a3f5d1;
+body.dbadmin-page .dbadmin-success {
+    color: #15803d !important;
 }
 
-.dbadmin-page .dbadmin-header {
-    margin-bottom: 20px;
+body.dbadmin-page #dbadmin-feedback {
+    color: #475569;
+    line-height: 1.5;
 }
 
-.dbadmin-page .dbadmin-header h1 {
-    font-size: clamp(30px,4vw,44px);
+body.dbadmin-page .dbadmin-footer {
+    text-align: center;
+
+    margin-top: 35px;
+
+    color: #64748b !important;
+
+    font-size: 13px;
 }
 
-@media (max-width:640px) {
-    .dbadmin-form-grid {
+@media (max-width: 700px) {
+
+    body.dbadmin-page .dbadmin-container {
+        padding: 30px 16px;
+    }
+
+    body.dbadmin-page .dbadmin-grid {
         grid-template-columns: 1fr;
     }
 
-    .dbadmin-panel {
-        padding: 15px;
+    body.dbadmin-page .dbadmin-card {
+        min-height: 0;
+        padding: 24px;
     }
 
-    .dbadmin-topnav {
+    body.dbadmin-page .dbadmin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.dbadmin-page .dbadmin-panel {
+        padding: 16px;
+    }
+
+    body.dbadmin-page .dbadmin-topnav {
         align-items: flex-start;
     }
 
+    body.dbadmin-page .dbadmin-header h1 {
+        font-size: 30px;
+    }
+
 }
 
-/* Database Admin — visual alignment with the main Admin Dashboard */
-.dbadmin-page {
-    --db-navy: #0b2a5b;
-    --db-blue: #1d6fe8;
-    --db-ink: #12284a;
-    --db-muted: #5b6f8f;
-    --db-line: #d6e4f7;
-    background: linear-gradient(135deg, #eaf4ff, #cfe4ff 60%, #e6f1ff);
-    color: var(--db-ink);
-    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
-    min-height: 100vh;
+@media (prefers-reduced-motion: reduce) {
+
+    body.dbadmin-page .dbadmin-card,
+    body.dbadmin-page .dbadmin-button {
+        transition: none;
+    }
+
+    body.dbadmin-page .dbadmin-card:hover,
+    body.dbadmin-page .dbadmin-button:hover {
+        transform: none;
+    }
+
 }
-.dbadmin-page .dbadmin-container { max-width: 1200px; padding: 34px 26px 70px; }
-.dbadmin-page .dbadmin-header { text-align: left; margin-bottom: 24px; }
-.dbadmin-page .dbadmin-eyebrow { color: var(--db-blue); letter-spacing: .12em; }
-.dbadmin-page .dbadmin-header h1 { color: var(--db-navy); font-size: clamp(27px, 4vw, 36px); margin: 10px 0; }
-.dbadmin-page .dbadmin-subtitle, .dbadmin-page .dbadmin-muted, .dbadmin-page .dbadmin-footer { color: var(--db-muted); }
-.dbadmin-page .dbadmin-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.dbadmin-page .dbadmin-card, .dbadmin-page .dbadmin-panel {
-    color: var(--db-ink); background: rgba(255,255,255,.94);
-    border: 1px solid var(--db-line); border-radius: 16px;
-    box-shadow: 0 6px 18px rgba(30,90,180,.08); backdrop-filter: none;
-}
-.dbadmin-page .dbadmin-card { padding: 24px; min-height: 230px; }
-.dbadmin-page .dbadmin-card:hover, .dbadmin-page .dbadmin-card:focus-visible {
-    border-color: #80b5ff; box-shadow: 0 12px 26px rgba(30,90,180,.16); transform: translateY(-3px);
-}
-.dbadmin-page .dbadmin-card-icon { background: #e3efff; color: var(--db-blue); font-size: 27px; }
-.dbadmin-page .dbadmin-card h2, .dbadmin-page .dbadmin-panel h2 { color: var(--db-navy); }
-.dbadmin-page .dbadmin-card h2 { font-size: 20px; }
-.dbadmin-page .dbadmin-card p { color: var(--db-muted); }
-.dbadmin-page .dbadmin-card-link, .dbadmin-page .dbadmin-link { color: var(--db-blue); }
-.dbadmin-page .dbadmin-topnav { padding: 13px 17px; background: #fff; border: 1px solid var(--db-line); border-radius: 12px; }
-.dbadmin-page .dbadmin-panel { padding: 23px; margin: 16px 0; }
-.dbadmin-page .dbadmin-stats > .dbadmin-panel { flex: 1 1 190px; }
-.dbadmin-page .dbadmin-stats > .dbadmin-panel strong { display: block; color: var(--db-muted); font-size: 14px; }
-.dbadmin-page .dbadmin-stats > .dbadmin-panel p { font-size: 28px; font-weight: 700; color: var(--db-navy); margin: 8px 0 0; }
-.dbadmin-page .dbadmin-label { color: var(--db-ink); }
-.dbadmin-page .dbadmin-input, .dbadmin-page .dbadmin-select, .dbadmin-page .dbadmin-textarea {
-    background: #fff; color: var(--db-ink); border: 1px solid #b8cbe4; border-radius: 9px;
-}
-.dbadmin-page .dbadmin-input:focus, .dbadmin-page .dbadmin-select:focus, .dbadmin-page .dbadmin-textarea:focus { outline: 2px solid var(--db-blue); }
-.dbadmin-page .dbadmin-button { background: var(--db-blue); color: #fff; box-shadow: none; }
-.dbadmin-page .dbadmin-button:hover { filter: brightness(.95); }
-.dbadmin-page .dbadmin-button-secondary { background: #e8f0fb; color: var(--db-navy); border: 1px solid #bfd3ec; }
-.dbadmin-page .dbadmin-button-danger { background: #dc2626; color: #fff; border: 1px solid #dc2626; }
-.dbadmin-page .dbadmin-table th, .dbadmin-page .dbadmin-table td { border-bottom: 1px solid var(--db-line); color: var(--db-ink); }
-.dbadmin-page .dbadmin-table th { color: var(--db-navy); background: #edf5ff; font-weight: 700; }
-.dbadmin-page .dbadmin-table tbody tr:hover { background: #f2f7ff; }
-.dbadmin-page .dbadmin-notice { background: #eaf3ff; border-left-color: var(--db-blue); color: var(--db-navy); }
-.dbadmin-page .dbadmin-pill { background: #e3efff; color: var(--db-navy); }
-.dbadmin-page .dbadmin-empty { color: var(--db-muted); }
-.dbadmin-page .dbadmin-error { color: #b91c1c; }
-.dbadmin-page .dbadmin-success { color: #15803d; }
-.dbadmin-page #dbadmin-feedback { color: var(--db-ink); }
-@media (max-width: 850px) { .dbadmin-page .dbadmin-grid { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .dbadmin-page { padding: 0; } .dbadmin-page .dbadmin-container { padding: 24px 14px 50px; } .dbadmin-page .dbadmin-card { min-height: auto; } }
