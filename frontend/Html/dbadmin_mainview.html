@@ -1,48 +1,144 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Database Administration | Hallucination Detector</title>
-    <link rel="stylesheet" href="../Css/style.css" th:href="@{/Css/style.css}">
-    <link rel="stylesheet" href="../Css/dbadmin.css" th:href="@{/Css/dbadmin.css}">
-    <script src="../JavaScript/dbadmin.js" th:src="@{/JavaScript/dbadmin.js}" defer></script>
+
+    <!-- Main website styling -->
+    <link rel="stylesheet"
+          href="../Css/style.css"
+          th:href="@{/Css/style.css}">
+
+    <!-- Database Admin styling -->
+    <link rel="stylesheet"
+          href="../Css/dbadmin.css?v=8"
+          th:href="@{/Css/dbadmin.css(v=8)}">
+
+    <!-- Database Admin JavaScript -->
+    <script src="../JavaScript/dbadmin.js"
+            th:src="@{/JavaScript/dbadmin.js}"
+            defer></script>
 </head>
-<body class="dbadmin-page">
-    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
+
+<body class="dbadmin-page" data-dbadmin-page="main">
+
+    <!-- Shared Account Header -->
+    <div th:replace="~{Html/fragments/account-header :: accountHeader}">
+    </div>
+
+    <!-- Main Database Administration Container -->
     <main class="dbadmin-container" id="dbadmin-main">
+
+        <!-- Page Header -->
         <header class="dbadmin-header">
-            <p class="dbadmin-eyebrow">HALLUCINATION DETECTION SYSTEM</p>
+
+            <p class="dbadmin-eyebrow">
+                HALLUCINATION DETECTION SYSTEM
+            </p>
+
             <h1>Database Administration</h1>
-            <p class="dbadmin-subtitle">Choose a database management area below.</p>
+
+            <p class="dbadmin-subtitle">
+                Manage and monitor your PostgreSQL database.
+            </p>
+
         </header>
 
-        <nav class="dbadmin-grid" id="dbadmin-navigation" aria-label="Database administration pages">
-            <a class="dbadmin-card" id="dbadmin-view-data" th:href="@{/dbadmin/database}" >
-                <span class="dbadmin-card-icon" aria-hidden="true">▦</span>
+        <!-- Database Administration Navigation -->
+        <nav class="dbadmin-grid"
+             id="dbadmin-navigation"
+             aria-label="Database administration pages">
+
+            <!-- View Database Data -->
+            <a class="dbadmin-card"
+               id="dbadmin-view-data"
+               href="/dbadmin/database"
+               th:href="@{/dbadmin/database}">
+
+                <span class="dbadmin-card-icon"
+                      aria-hidden="true">
+                    ▦
+                </span>
+
                 <h2>View Database Data</h2>
-                <p>Browse database tables and inspect stored records.</p>
-                <span class="dbadmin-card-link">View tables <span aria-hidden="true">→</span></span>
+
+                <p>
+                    Browse PostgreSQL tables and inspect
+                    stored database records.
+                </p>
+
+                <span class="dbadmin-card-link">
+                    View tables
+                    <span aria-hidden="true">→</span>
+                </span>
+
             </a>
 
-            <a class="dbadmin-card" id="dbadmin-home" th:href="@{/}" >
-                <span class="dbadmin-card-icon" aria-hidden="true">⌂</span>
-                <h2>Return to Homepage</h2>
-                <p>Go back to the Hallucination Detection System.</p>
-                <span class="dbadmin-card-link">Go home <span aria-hidden="true">→</span></span>
-            </a>
+            <!-- Update Database Records -->
+            <a class="dbadmin-card"
+               id="dbadmin-update-data"
+               href="/dbadmin/update"
+               th:href="@{/dbadmin/update}">
 
-            <a class="dbadmin-card" id="dbadmin-update-data" th:href="@{/dbadmin/update}" >
-                <span class="dbadmin-card-icon" aria-hidden="true">✎</span>
+                <span class="dbadmin-card-icon"
+                      aria-hidden="true">
+                    ✎
+                </span>
+
                 <h2>Update Database Records</h2>
-                <p>Open the record editor to make permitted changes.</p>
-                <span class="dbadmin-card-link">Manage records <span aria-hidden="true">→</span></span>
+
+                <p>
+                    Edit and manage existing records
+                    stored in your PostgreSQL database.
+                </p>
+
+                <span class="dbadmin-card-link">
+                    Manage records
+                    <span aria-hidden="true">→</span>
+                </span>
+
             </a>
+
+            <!-- Return to Homepage -->
+            <a class="dbadmin-card"
+               id="dbadmin-home"
+               href="/"
+               th:href="@{/}">
+
+                <span class="dbadmin-card-icon"
+                      aria-hidden="true">
+                    ⌂
+                </span>
+
+                <h2>Return to Homepage</h2>
+
+                <p>
+                    Return to the main Hallucination
+                    Detection System dashboard.
+                </p>
+
+                <span class="dbadmin-card-link">
+                    Go home
+                    <span aria-hidden="true">→</span>
+                </span>
+
+            </a>
+
         </nav>
 
-        <footer class="dbadmin-footer" id="dbadmin-status" aria-live="polite">
-            Database administration navigation
+        <!-- Dashboard Footer -->
+        <footer class="dbadmin-footer"
+                id="dbadmin-status"
+                aria-live="polite">
+
+            Database Administration Dashboard
+
         </footer>
+
     </main>
+
 </body>
 </html>
