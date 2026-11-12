@@ -333,3 +333,63 @@
         padding: 20px;
     }
 }
+
+/* =====================================
+   FIX HISTORY CARD READABILITY
+   ===================================== */
+
+.userhistory-page .userhistory-card {
+    background: #ffffff !important;
+    color: #12284a !important;
+    border: 1px solid #d6e4f7;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 18px rgba(30, 90, 180, 0.07);
+}
+
+.userhistory-page .userhistory-card h2 {
+    color: #0b2a5b !important;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.userhistory-page .userhistory-answer {
+    color: #334b6c !important;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.userhistory-page .userhistory-label {
+    color: #5b6f8f !important;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.userhistory-page .userhistory-date {
+    color: #7185a3 !important;
+    font-size: 13px;
+}
+
+.userhistory-page .userhistory-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.userhistory-page .userhistory-delete {
+    background: #fff1f2;
+    color: #b42318;
+    border: 1px solid #fecdd3;
+    border-radius: 9px;
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+.userhistory-page .userhistory-delete:hover {
+    background: #ffe4e6;
+}

@@ -108,4 +108,11 @@ public class LLMClient {
                     + e.getClass().getSimpleName() + ").";
         }
     }
+
+public String getActiveModel() {
+    return model;
 }
+
+public boolean isApiKeyConfigured() {
+    return !resolveKey().isEmpty();
+}}

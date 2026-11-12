@@ -1,4 +1,7 @@
 package com.example.hallucinationdetector.controller;
+import com.example.hallucinationdetector.repository.SavedQueryRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.example.hallucinationdetector.repository.AppUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,13 +16,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AuthController {
     
     private final AppUserRepository repository;
+    private final SavedQueryRepository savedQueryRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthController(AppUserRepository repository, PasswordEncoder passwordEncoder) {
-        this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    public AuthController(
+        AppUserRepository repository,
+        SavedQueryRepository savedQueryRepository,
+        PasswordEncoder passwordEncoder) {
 
+    this.repository = repository;
+    this.savedQueryRepository = savedQueryRepository;
+    this.passwordEncoder = passwordEncoder;
+    }
     @GetMapping("/login")
     public String showLogin() {
         return "Html/login";
@@ -36,9 +44,25 @@ public class AuthController {
     }    
 
     @GetMapping("/admin")
-    public String showAdmin() {
-        return "Html/admin_mainview";
-    }
+    public String showAdmin(Model model) {
+
+    model.addAttribute("totalUsers", repository.count());
+
+    model.addAttribute("totalQueries", savedQueryRepository.count());
+
+    model.addAttribute(
+        "recentQuestions",
+        savedQueryRepository.findAll(
+            PageRequest.of(
+                0,
+                5,
+                Sort.by(Sort.Direction.DESC, "createdAt")
+            )
+        ).getContent()
+    );
+
+    return "Html/admin_mainview";
+}
 
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String role, Model model) {

@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Datasets | Detector System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #dcecff;
+            color: #102c58;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #0c2854;
+            color: white;
+            padding: 28px 20px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 45px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 14px;
+            color: #dce9ff;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2d83f4;
+            color: white;
+        }
+
+        .content {
+            flex: 1;
+            padding: 45px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #5b7193;
+            margin-bottom: 30px;
+        }
+
+        .dataset-card {
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 20px;
+            max-width: 900px;
+            box-shadow: 0 8px 24px rgba(15, 54, 105, 0.06);
+        }
+
+        .dataset-card h2 {
+            margin-top: 0;
+        }
+
+        .dataset-card p {
+            line-height: 1.7;
+            color: #49658b;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e6f1ff;
+            color: #1761ba;
+            border-radius: 20px;
+            padding: 7px 13px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f6ff;
+            border-radius: 10px;
+            color: #49658b;
+        }
+
+        @media (max-width: 700px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .content {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">🧠 Detector System</div>
+
+        <a th:href="@{/}" href="/">🏠 Home</a>
+
+        <a th:href="@{/history}" href="/history">
+            🕒 Question History
+        </a>
+
+        <a th:href="@{/admin}" href="/admin">
+            🛠️ Admin Dashboard
+        </a>
+
+        <a class="active"
+           th:href="@{/admin/datasets}"
+           href="/admin/datasets">
+            🗂️ Manage Datasets
+        </a>
+
+        <a th:href="@{/admin/api-models}"
+           href="/admin/api-models">
+            ⚙️ API &amp; Models
+        </a>
+    </aside>
+
+    <main class="content">
+
+        <h1>🗂️ Manage Datasets</h1>
+
+        <p class="subtitle">
+            Evidence sources and evaluation datasets used by
+            the AI Hallucination Detector.
+        </p>
+
+        <section class="dataset-card">
+            <h2>📚 Wikipedia</h2>
+
+            <span class="tag">Evidence Source</span>
+
+            <p>
+                Wikipedia provides reference information
+                used by the Hallucination Detector to
+                verify AI-generated claims.
+            </p>
+
+            <div class="info">
+                <strong>Purpose:</strong>
+                Retrieve supporting information for claim verification.
+                <p><strong>Connection status:</strong> Not checked</p>
+            </div>
+        </section>
+
+        <section class="dataset-card">
+            <h2>🧪 FEVER Dataset</h2>
+
+            <span class="tag">Evaluation Dataset</span>
+
+            <p>
+                FEVER contains labeled claims that can be used
+                to evaluate how accurately the detector identifies
+                supported, refuted, and unverifiable statements.
+            </p>
+
+            <div class="info">
+                <strong>Purpose:</strong>
+                Evaluate hallucination detection performance.
+                <p><strong>Dataset status:</strong> Not checked</p>
+            </div>
+        </section>
+
+        <p class="subtitle">
+            Dataset management is currently read-only.
+            Availability and evaluation statistics will be shown
+            when connected to the backend.
+        </p>
+
+    </main>
+
+</div>
+
+</body>
+</html>

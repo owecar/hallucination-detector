@@ -100,7 +100,7 @@
                                 </h2>
 
                                 <span class="userhistory-date"
-                                        th:text="${record.createdAt}">
+                                        th:text="${#temporals.format(record.createdAt, 'MMM dd, yyyy · hh:mm a')}">
                                     Date
                                 </span>
                             </div>

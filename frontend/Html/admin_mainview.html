@@ -23,7 +23,11 @@ h1{font-size:28px;color:var(--navy)}
 .badge{display:none;background:var(--warnbg);color:var(--warn);font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;vertical-align:middle;margin-left:10px}
 h2{font-size:17px;margin:26px 0 12px;color:var(--navy)}
 .card{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 18px rgba(30,90,180,.08)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
 .stat{display:flex;align-items:center;gap:14px}
 .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:21px;background:#e3efff}
 .stat.ok .ico{background:var(--okbg)}.stat.bad .ico{background:var(--badbg)}
@@ -108,11 +112,11 @@ tr:last-child td{border-bottom:0}
       👥 Manage Users
     </a>
 
-    <a href="#">
+    <a th:href="@{/admin/datasets}" href="/admin/datasets">
       🗂️ Manage Datasets
     </a>
 
-    <a href="#">
+    <a th:href="@{/admin/api-models}" href="/admin/api-models">
       ⚙️ API &amp; Models
     </a>
 
@@ -124,7 +128,7 @@ tr:last-child td{border-bottom:0}
 
   <div class="me">
     Signed in as
-    <b id="uname">Admin</b>
+    <b>Administrator</b>
     <span id="urole"></span>
 
     <a href="#">↪ Log Out</a>
@@ -133,10 +137,29 @@ tr:last-child td{border-bottom:0}
 
 
 <main>
-  <h1>Admin Dashboard <span class="badge" id="sample">Sample data</span></h1>
+  <h1>Admin Dashboard</h1>
   <p class="sub">An overview of who is using the system, how many answers were checked, and the services behind each check.</p>
 
-  <div class="stats" id="stats"></div>
+  
+  <div class="stats">
+
+    <div class="card stat">
+        <div class="ico">👥</div>
+        <div>
+            <small>Registered Users</small>
+            <strong th:text="${totalUsers}">0</strong>
+        </div>
+    </div>
+
+    <div class="card stat">
+        <div class="ico">💬</div>
+        <div>
+            <small>Total Questions</small>
+            <strong th:text="${totalQueries}">0</strong>
+        </div>
+    </div>
+
+  </div>
 
   <h2>How a question is checked</h2>
   <div class="flow">
@@ -147,7 +170,58 @@ tr:last-child td{border-bottom:0}
     <div class="step"><b>Judge &amp; score</b>Each claim is labeled and given a confidence.</div>
   </div>
 
-  <h2>Services &amp; usage</h2>
+  
+<h2>System Services</h2>
+
+<div class="card wrap">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th>Purpose</th>
+                <th>Configuration</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>✨ Google Gemini</td>
+                <td>Generates AI answers</td>
+                <td>
+                    <a th:href="@{/admin/api-models}"
+                       href="/admin/api-models">
+                        View Configuration
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>📚 Wikipedia</td>
+                <td>Provides evidence for claim verification</td>
+                <td>
+                    <a th:href="@{/admin/datasets}"
+                       href="/admin/datasets">
+                        View Dataset Information
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>🧪 FEVER</td>
+                <td>Evaluation dataset</td>
+                <td>
+                    <a th:href="@{/admin/datasets}"
+                       href="/admin/datasets">
+                        View Dataset Information
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
   <div class="card wrap">
     <table>
       <thead><tr><th>Service</th><th>What it does here</th><th>Usage</th><th>Status</th></tr></thead>
@@ -155,115 +229,99 @@ tr:last-child td{border-bottom:0}
     </table>
   </div>
 
-  <h2>Results overview</h2>
-  <div class="two">
-    <div class="card">
-      <div class="donut" id="donut"><div><span><b id="rate">0%</b>hallucination rate</span></div></div>
-      <div class="legend"><span style="--c:var(--ok)">Factual</span><span style="--c:var(--bad)">Hallucination</span></div>
+
+<h2>Hallucination Overview</h2>
+
+<div class="card" style="max-width:350px; text-align:center;">
+
+    <div class="donut" id="donut"
+         style="background:conic-gradient(
+             #dc2626 0% 0%,
+             #16a34a 0% 100%
+         );">
+
+        <div>
+            <span>
+                <b id="rate">—</b>
+                Hallucination Rate
+            </span>
+        </div>
+
     </div>
-    <div class="card wrap">
-      <table>
-        <thead><tr><th>Recent question</th><th>Result</th><th>Confidence</th><th>Date</th></tr></thead>
-        <tbody id="recent"></tbody>
-      </table>
+
+    <div class="legend">
+        <span style="--c:var(--ok)">Supported</span>
+        <span style="--c:var(--bad)">Contradicted</span>
     </div>
-  </div>
+
+    <p style="font-size:12px;color:#5b6f8f;margin-top:12px;">
+        Awaiting saved verification statistics
+    </p>
+
+</div>
+
+<h2>Recent Questions</h2>
+
+<div class="card wrap">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Submitted Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:if="${#lists.isEmpty(recentQuestions)}">
+                <td colspan="2">
+                    No questions have been submitted yet.
+                </td>
+            </tr>
+
+            <tr th:each="record : ${recentQuestions}">
+
+                <td th:text="${record.question}">
+                    Example question
+                </td>
+
+                <td th:text="${record.createdAt}">
+                    Submission date
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p style="margin-top:16px;">
+        <a th:href="@{/history}"
+           href="/history"
+           style="color:#1d6fe8;font-weight:600;">
+            View Full Question History
+        </a>
+    </p>
+
+</div>
+
 
   <h2>Quick actions</h2>
   <div class="qa">
     <a class="card" href="#"><div class="ico">👥</div>Manage Users<small>Accounts and roles</small></a>
-    <a class="card" href="#"><div class="ico">🗂️</div>Manage Datasets<small>Wikipedia / FEVER</small></a>
-    <a class="card" href="#"><div class="ico">⚙️</div>API Keys &amp; Models<small>Gemini settings</small></a>
-    <a class="card" href="#"><div class="ico">🗄️</div>Manage DB Tables<small>Users, questions, results</small></a>
+    <a class="card" th:href="@{/admin/datasets}" href="/admin/datasets">
+    <div class="ico">🗂️</div>
+        Manage Datasets
+    <small>Wikipedia / FEVER</small>
+    </a>
+    <a class="card" th:href="@{/admin/api-models}" href="/admin/api-models">
+    <div class="ico">⚙️</div>
+        API Keys &amp; Models
+    <small>View Gemini configuration</small>
+    </a> 
   </div>
 
   <p class="note">Detector System · Admin</p>
 </main>
-
-<script>
-/* ------------------------------------------------------------------
-   DATA: replace this object with real numbers from your backend.
-   e.g.  const DATA = await (await fetch("/api/admin/stats")).json();
-   Set sample:false once real data is wired so the badge disappears.
-------------------------------------------------------------------- */
-const DATA = {
-  sample: true,
-  user: { name: "_rifahtasfia", role: "Admin" },
-  stats: { users: 128, queries: 1542, factual: 1230, hallucination: 312 },
-  services: [
-    { icon: "✨", name: "Gemini API", does: "Writes the AI answer to each question and judges every claim in it against the evidence.", used: 214, limit: 1500, unit: "calls today", status: "Connected" },
-    { icon: "📚", name: "Wikipedia API", does: "Supplies the evidence passages each claim is checked against. Free, no key needed.", used: 1312, limit: null, unit: "searches today", status: "Connected" },
-    { icon: "🧪", name: "FEVER dataset", does: "Benchmark of labeled claims used offline to measure how accurate the detector is.", used: 3, limit: null, unit: "evaluation runs", status: "Offline" }
-  ],
-  recent: [
-    { q: "Is the Eiffel Tower in Germany?", verdict: "Hallucination", conf: 97, date: "Nov 5, 2026" },
-    { q: "Who won the 2022 World Cup?", verdict: "Factual", conf: 99, date: "Nov 4, 2026" },
-    { q: "Is water a renewable resource?", verdict: "Factual", conf: 92, date: "Nov 3, 2026" },
-    { q: "Does the Sun orbit the Earth?", verdict: "Hallucination", conf: 98, date: "Nov 2, 2026" }
-  ]
-};
-
-const $ = s => document.querySelector(s);
-const fmt = n => Number(n).toLocaleString("en-US");
-function el(tag, cls, text) {
-  const e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (text !== undefined) e.textContent = text;
-  return e;
-}
-function row(tbody, cells) {
-  const tr = el("tr");
-  cells.forEach(c => { const td = el("td"); td.append(c); tr.append(td); });
-  tbody.append(tr);
-}
-
-// header / user
-$("#uname").textContent = DATA.user.name;
-$("#urole").textContent = " · " + DATA.user.role;
-if (DATA.sample) $("#sample").style.display = "inline-block";
-
-// stat cards
-const S = DATA.stats;
-[
-  ["👥", "Users", S.users, ""],
-  ["💬", "Total Queries", S.queries, ""],
-  ["✅", "Factual", S.factual, "ok"],
-  ["❌", "Hallucination", S.hallucination, "bad"]
-].forEach(([icon, label, value, cls]) => {
-  const card = el("div", "card stat " + cls);
-  const box = el("div");
-  box.append(el("small", "", label), el("strong", "", fmt(value)));
-  card.append(el("div", "ico", icon), box);
-  $("#stats").append(card);
-});
-
-// services & usage
-DATA.services.forEach(s => {
-  const name = el("div", "svc"); name.append(el("span", "", s.icon), el("span", "", s.name));
-  const usage = el("div");
-  if (s.limit) {
-    usage.append(el("div", "", fmt(s.used) + " / " + fmt(s.limit) + " " + s.unit));
-    const bar = el("div", "bar"), fill = el("i");
-    fill.style.width = Math.min(100, s.used / s.limit * 100) + "%";
-    bar.append(fill); usage.append(bar);
-  } else {
-    usage.append(el("div", "", fmt(s.used) + " " + s.unit));
-  }
-  row($("#services"), [name, el("div", "does", s.does), usage,
-    el("span", "chip " + (s.status === "Connected" ? "ok" : "off"), s.status)]);
-});
-
-// donut
-const total = S.factual + S.hallucination;
-const badPct = total ? S.hallucination / total * 100 : 0;
-$("#donut").style.background = "conic-gradient(var(--bad) 0 " + badPct + "%, var(--ok) 0)";
-$("#rate").textContent = badPct.toFixed(1) + "%";
-
-// recent questions
-DATA.recent.forEach(r => {
-  const bad = r.verdict === "Hallucination";
-  row($("#recent"), [r.q, el("span", "chip " + (bad ? "bad" : "ok"), r.verdict), r.conf + "%", r.date]);
-});
-</script>
 </body>
 </html>
