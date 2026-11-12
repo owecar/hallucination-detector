@@ -14,6 +14,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller 
 public class AuthController {
+    @GetMapping("/login")
+    public String showLogin() {
+    return "Html/login";
+}
+
+    @GetMapping("/register")
+    public String showRegister() {
+    return "Html/register";
+}
     
     private final AppUserRepository repository;
     private final SavedQueryRepository savedQueryRepository;
