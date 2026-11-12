@@ -20,6 +20,10 @@ public class SavedQuery {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private AppUser owner;
+
     public SavedQuery() {
     }
 
@@ -27,6 +31,19 @@ public class SavedQuery {
         this.question = question;
         this.answer = answer;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public SavedQuery(String question, String answer, AppUser owner) {
+        this(question, answer);
+        this.owner = owner;
+    }
+
+    public AppUser getOwner() {
+        return owner;
+    }
+
+    public void setOwner(AppUser owner) {
+        this.owner = owner;
     }
 
     public Long getId() {
