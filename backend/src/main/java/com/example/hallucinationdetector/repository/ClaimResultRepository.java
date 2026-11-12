@@ -1,4 +1,3 @@
-
 package com.example.hallucinationdetector.repository;
 
 import com.example.hallucinationdetector.model.ClaimResult;
@@ -11,6 +10,8 @@ public interface ClaimResultRepository
         extends JpaRepository<ClaimResult, Long> {
 
     long countByVerdict(String verdict);
+
+    java.util.List<ClaimResult> findBySavedQuery_IdOrderByIdAsc(Long savedQueryId);
 
     @Modifying
     @Query("delete from ClaimResult result where result.savedQuery.id = :questionId")

@@ -184,10 +184,6 @@
     }
 }
 
-/* ==========================================
-   QUESTION HISTORY — SKY BLUE THEME
-   ========================================== */
-
 .userhistory-page {
     margin: 0;
     min-height: 100vh;
@@ -196,7 +192,6 @@
     font-family: Arial, sans-serif;
 }
 
-/* Main content */
 
 .userhistory-page .userhistory-container {
     flex: 1;
@@ -226,7 +221,6 @@
     font-size: 16px;
 }
 
-/* White history card */
 
 .history-content-card {
     background: #ffffff;
@@ -242,21 +236,18 @@
     margin: 0 0 20px;
 }
 
-/* Feedback */
 
 .userhistory-page #userhistory-feedback {
     color: #5b6f8f;
     font-size: 15px;
 }
 
-/* History results */
 
 .userhistory-page #userhistory-list {
     width: 100%;
     color: #12284a;
 }
 
-/* Responsive layout */
 
 @media (max-width: 720px) {
     .userhistory-page .userhistory-container {
@@ -267,10 +258,6 @@
         padding: 20px;
     }
 }
-
-/* =====================================
-   FIX HISTORY CARD READABILITY
-   ===================================== */
 
 .userhistory-page .userhistory-card {
     background: #ffffff !important;
@@ -327,3 +314,21 @@
 .userhistory-page .userhistory-delete:hover {
     background: #ffe4e6;
 }
+
+/* Stored verification summaries */
+.userhistory-page .history-verification{margin:22px 0;padding:18px;background:#f7fbff;border:1px solid #d6e4f7;border-radius:14px;color:#12284a}
+.userhistory-page .history-verification h3{margin:0 0 14px;color:#0b2a5b;font-size:18px}
+.userhistory-page .history-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.userhistory-page .history-stats>div{padding:12px;border:1px solid #d6e4f7;border-radius:10px;background:white;text-align:center}
+.userhistory-page .history-stats span{display:block;font-size:12px;color:#5b6f8f}
+.userhistory-page .history-stats strong{display:block;margin-top:5px;font-size:22px;color:#0b2a5b}
+.userhistory-page .history-counts{display:flex;flex-wrap:wrap;gap:12px;margin:15px 0;color:#334b6c;font-weight:600}
+.userhistory-page .history-note{font-size:13px;line-height:1.5;color:#5b6f8f;margin:12px 0}
+.userhistory-page .history-verification details{margin-top:16px}
+.userhistory-page .history-verification summary{cursor:pointer;color:#1457c9;font-weight:600}
+.userhistory-page .history-claim{background:#fff;border:1px solid #d6e4f7;border-radius:10px;padding:14px;margin-top:10px;overflow-wrap:anywhere}
+.userhistory-page .history-claim p{margin:8px 0;line-height:1.5}
+.userhistory-page .history-claim-text{font-weight:600}
+.userhistory-page .history-verdict{font-size:13px;font-weight:700;color:#0b2a5b}
+.userhistory-page .history-claim a{color:#1457c9;text-decoration:underline}
+@media(max-width:640px){.userhistory-page .history-stats{grid-template-columns:1fr}}

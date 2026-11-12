@@ -20,6 +20,14 @@ public class SavedQuery {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    // Nullable so existing history records remain valid.
+    private Double hallucinationScore;
+    private Double accuracyScore;
+    private Double verificationCoverage;
+    private Integer supportedClaims;
+    private Integer contradictedClaims;
+    private Integer unresolvedClaims;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private AppUser owner;
@@ -37,6 +45,19 @@ public class SavedQuery {
         this(question, answer);
         this.owner = owner;
     }
+
+    public Double getHallucinationScore() { return hallucinationScore; }
+    public void setHallucinationScore(Double value) { this.hallucinationScore = value; }
+    public Double getAccuracyScore() { return accuracyScore; }
+    public void setAccuracyScore(Double value) { this.accuracyScore = value; }
+    public Double getVerificationCoverage() { return verificationCoverage; }
+    public void setVerificationCoverage(Double value) { this.verificationCoverage = value; }
+    public Integer getSupportedClaims() { return supportedClaims; }
+    public void setSupportedClaims(Integer value) { this.supportedClaims = value; }
+    public Integer getContradictedClaims() { return contradictedClaims; }
+    public void setContradictedClaims(Integer value) { this.contradictedClaims = value; }
+    public Integer getUnresolvedClaims() { return unresolvedClaims; }
+    public void setUnresolvedClaims(Integer value) { this.unresolvedClaims = value; }
 
     public AppUser getOwner() {
         return owner;

@@ -14,6 +14,11 @@ public class VerificationSummary {
         this.unresolved = unresolved;
     }
 
+    /** Rebuild a summary from stored claim verdict counts. */
+    public static VerificationSummary fromCounts(int supported, int contradicted, int unresolved) {
+        return new VerificationSummary(supported, contradicted, unresolved);
+    }
+
     public static VerificationSummary from(List<VerifiedClaim> claims) {
         int supported = 0;
         int contradicted = 0;

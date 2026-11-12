@@ -25,14 +25,16 @@ public class VerificationController {
     private final ClaimVerifier verifier;
     private final SavedQueryRepository repository;
     private final AppUserRepository userRepository;
+    private final com.example.hallucinationdetector.verification.VerificationHistoryService historyService;
  
-    public VerificationController(LLMClient llm, ClaimExtractor extractor, TopicValidator topicValidator, ClaimVerifier verifier, SavedQueryRepository repository, AppUserRepository userRepository) {
+    public VerificationController(LLMClient llm, ClaimExtractor extractor, TopicValidator topicValidator, ClaimVerifier verifier, SavedQueryRepository repository, AppUserRepository userRepository, com.example.hallucinationdetector.verification.VerificationHistoryService historyService) {
         this.llm = llm;
         this.extractor = extractor;
         this.topicValidator = topicValidator;
         this.verifier = verifier;
         this.repository = repository;
         this.userRepository = userRepository;
+        this.historyService = historyService;
     }
     @GetMapping("/verify")
     public String form() {
@@ -56,9 +58,14 @@ public class VerificationController {
             try {
                 AppUser user = userRepository.findByUsername(authentication.getName())
                         .orElseThrow(() -> new org.springframework.security.access.AccessDeniedException("User not found"));
-                repository.save(new SavedQuery(question, answer, user));
+                boolean detailsSaved = historyService.save(question, answer, user, claims);
+                if (!detailsSaved) {
+                    model.addAttribute("notice", "Question and scores saved, but claim details could not be saved. Check the server log.");
+                }
             } catch (Exception e) {
-                model.addAttribute("notice", "The result could not be saved to the database.");
+                org.slf4j.LoggerFactory.getLogger(VerificationController.class)
+                        .error("Failed to save verification history", e);
+                model.addAttribute("notice", "The result could not be saved to the database. Check the server log.");
             }
         }
         model.addAttribute("question", question);
