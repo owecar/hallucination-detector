@@ -32,6 +32,7 @@ public class QuestionController {
     private final ClaimVerifier verifier;
     private final AppUserRepository userRepository;
     private final ClaimResultRepository claimResultRepository;
+    private final com.example.hallucinationdetector.verification.VerificationHistoryService historyService;
 
    
 public QuestionController(
@@ -40,7 +41,8 @@ public QuestionController(
         SavedQueryRepository repository,
         ClaimVerifier verifier,
         AppUserRepository userRepository,
-        ClaimResultRepository claimResultRepository) {
+        ClaimResultRepository claimResultRepository,
+        com.example.hallucinationdetector.verification.VerificationHistoryService historyService) {
 
     this.llm = llm;
     this.extractor = extractor;
@@ -48,6 +50,7 @@ public QuestionController(
     this.verifier = verifier;
     this.userRepository = userRepository;
     this.claimResultRepository = claimResultRepository;
+    this.historyService = historyService;
 }
 
 
@@ -111,22 +114,16 @@ public QuestionController(
                         new AccessDeniedException("User not found"));
 
         
-SavedQuery savedQuery =
-        repository.save(new SavedQuery(question, answer, user));
-
-for (VerifiedClaim claim : claims) {
-
-    ClaimResult result = new ClaimResult(
-            savedQuery,
-            claim.getText(),
-            claim.getLabel(),
-            claim.getSource(),
-            claim.getExplanation()
-    );
-
-    claimResultRepository.save(result);
-}
-
+try {
+            boolean detailsSaved = historyService.save(question, answer, user, claims);
+            if (!detailsSaved) {
+                model.addAttribute("notice", "Question and scores saved to history, but claim details could not be saved. Check the server log.");
+            }
+        } catch (RuntimeException ex) {
+            org.slf4j.LoggerFactory.getLogger(QuestionController.class)
+                    .error("Failed to save question to user history", ex);
+            model.addAttribute("notice", "Verification completed, but the question could not be saved to history. Check the server log.");
+        }
 
         return "Html/results";
     }
