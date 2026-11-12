@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.hallucinationdetector.repository.ClaimResultRepository;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.List;
+import com.example.hallucinationdetector.model.SavedQuery;
+import com.example.hallucinationdetector.model.ClaimResult;
 
 @Controller
 public class HistoryController {
@@ -32,9 +38,32 @@ public class HistoryController {
     public String viewHistory(Model model, Authentication authentication) {
         AppUser user = currentUser(authentication);
 
-        model.addAttribute(
-                "history",
-                repository.findByOwner_IdOrderByCreatedAtDesc(user.getId()));
+        List<SavedQuery> history = repository.findByOwner_IdOrderByCreatedAtDesc(user.getId());
+        Map<Long, List<ClaimResult>> claimsByQuestion = new LinkedHashMap<>();
+        Map<Long, com.example.hallucinationdetector.verification.VerificationSummary> summaries = new LinkedHashMap<>();
+        for (SavedQuery record : history) {
+            List<ClaimResult> claims = claimResultRepository.findBySavedQuery_IdOrderByIdAsc(record.getId());
+            claimsByQuestion.put(record.getId(), claims);
+            // Reconstruct legacy scores from persisted claim verdicts when available.
+            int supported = 0, contradicted = 0, unresolved = 0;
+            for (ClaimResult claim : claims) {
+                if ("Supported".equalsIgnoreCase(claim.getVerdict())) supported++;
+                else if ("Contradicted".equalsIgnoreCase(claim.getVerdict())) contradicted++;
+                else unresolved++;
+            }
+            // Use the persisted summary when claim details are unavailable.
+            if (claims.isEmpty() && record.getSupportedClaims() != null) {
+                supported = record.getSupportedClaims();
+                contradicted = record.getContradictedClaims() == null ? 0 : record.getContradictedClaims();
+                unresolved = record.getUnresolvedClaims() == null ? 0 : record.getUnresolvedClaims();
+            }
+            summaries.put(record.getId(),
+                com.example.hallucinationdetector.verification.VerificationSummary.fromCounts(
+                    supported, contradicted, unresolved));
+        }
+        model.addAttribute("history", history);
+        model.addAttribute("claimsByQuestion", claimsByQuestion);
+        model.addAttribute("summaries", summaries);
 
         return "Html/userhistory";
     }
