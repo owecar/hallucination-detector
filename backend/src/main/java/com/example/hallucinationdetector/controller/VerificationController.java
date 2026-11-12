@@ -52,7 +52,7 @@ public class VerificationController {
         String answer = llm.askLLM(question);
         List<VerifiedClaim> claims = new java.util.ArrayList<>();
         if (answer != null && !answer.startsWith("Error:")) {
-            claims = verifier.verify(extractor.extractClaims(answer));
+            claims = verifier.verify(question, extractor.extractClaims(answer));
             try {
                 AppUser user = userRepository.findByUsername(authentication.getName())
                         .orElseThrow(() -> new org.springframework.security.access.AccessDeniedException("User not found"));

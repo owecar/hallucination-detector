@@ -132,10 +132,6 @@ public class WikipediaClient {
 
             passages.sort(
                     Comparator.comparingInt(Passage::getRank));
-            System.out.println("Wikipedia search: " + searchQuery);
-            for (Passage passage : passages) {
-                System.out.println("  " + passage.getRank() + ": " + passage.getTitle());
-            }
 
         } catch (Exception e) {
             System.err.println(

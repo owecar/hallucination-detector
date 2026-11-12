@@ -94,7 +94,7 @@ public QuestionController(
         }
 
         List<VerifiedClaim> claims =
-                verifier.verify(extractor.extractClaims(answer));
+                verifier.verify(question, extractor.extractClaims(answer));
 
         model.addAttribute("claims", claims);
         model.addAttribute("summary",
