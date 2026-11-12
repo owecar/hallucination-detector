@@ -8,27 +8,13 @@
 
 
         <link rel="stylesheet" th:href="@{/Css/style.css}" href="../Css/style.css">
+        <link rel="stylesheet" th:href="@{/Css/admin-sidebar.css}" href="../Css/admin-sidebar.css">
         
         <script th:src="@{/JavaScript/home.js}" src="../JavaScript/home.js" defer></script>
     </head>
 
-    <body class="home-page">
-        <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
-        <header class="site-header">
-            <nav class="main-nav" aria-label="Main navigation">
-
-                <a th:href="@{/}" href="index.html">
-                    Home
-                </a>
-
-                <a th:href="@{/history}" href="userhistory.html">
-                    Question History
-                </a>
-                <a th:href="@{/admin}" href="/admin">
-                    🛠️ Admin Dashboard
-                </a>
-            </nav>
-        </header>
+    <body class="home-page admin-workspace">
+        <aside th:replace="~{Html/fragments/admin-sidebar :: sidebar('home')}"></aside>
 
         <main class="hero">
             <h1>Hallucination Detector</h1>

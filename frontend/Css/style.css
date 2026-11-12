@@ -204,18 +204,6 @@ button:disabled {
     background: rgba(116, 236, 255, 0.12);
 }
 
-.home-page {
-    display: flex;
-    flex-direction: column;
-}
-
-.home-page > .hero {
-    flex: 1;
-    min-height: 0;
-    padding: 30px 20px;
-    box-sizing: border-box;
-}
-
 .account-header a {
     color: #74ecff;
     text-decoration: none;
@@ -236,59 +224,6 @@ button:disabled {
 /* =========================================
    HOME PAGE — SKY BLUE / WHITE DESIGN
    ========================================= */
-
-.home-page {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(135deg, #eaf5ff, #d4e7ff);
-    color: #102d58;
-    font-family: Arial, sans-serif;
-}
-
-/* Account header */
-
-.home-page .account-header {
-    background: #102d58;
-    border-bottom: 1px solid #284d80;
-    color: white;
-    padding: 16px 30px;
-}
-
-.home-page .account-header p,
-.home-page .account-header strong {
-    color: white;
-}
-
-.home-page .account-header a,
-.home-page .account-header button {
-    color: #d5ecff;
-}
-
-/* Navigation */
-
-.home-page .site-header {
-    padding: 18px 30px;
-    background: #ffffff;
-    border-bottom: 1px solid #d4e4f7;
-}
-
-.home-page .main-nav {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-}
-
-.home-page .main-nav a {
-    color: #102d58;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.home-page .main-nav a:hover {
-    color: #2879df;
-}
 
 /* Main content */
 
@@ -427,9 +362,5 @@ button:disabled {
 
     .home-page .hero {
         padding: 30px 16px;
-    }
-
-    .home-page .account-header {
-        flex-wrap: wrap;
     }
 }

@@ -15,11 +15,12 @@
 
     <script src="../JavaScript/dbadmin.js"
             th:src="@{/JavaScript/dbadmin.js}" defer></script>
+    <link rel="stylesheet" th:href="@{/Css/admin-sidebar.css}" href="../Css/admin-sidebar.css">
 </head>
 
-<body class="dbadmin-page" data-dbadmin-page="main">
+<body class="dbadmin-page admin-workspace" data-dbadmin-page="main">
 
-    <div th:replace="~{Html/fragments/account-header :: accountHeader}"></div>
+    <aside th:replace="~{Html/fragments/admin-sidebar :: sidebar('db-dashboard')}"></aside>
 
     <main class="dbadmin-container" id="dbadmin-main">
 

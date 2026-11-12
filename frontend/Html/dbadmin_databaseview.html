@@ -15,40 +15,14 @@
     <link rel="stylesheet"
           href="../Css/dbadmin.css?v=7"
           th:href="@{/Css/dbadmin.css(v=7)}">
+    <link rel="stylesheet" th:href="@{/Css/admin-sidebar.css}" href="../Css/admin-sidebar.css">
 </head>
 
-<body class="dbadmin-page" data-dbadmin-page="view">
+<body class="dbadmin-page admin-workspace" data-dbadmin-page="view">
 
-    <div th:replace="~{Html/fragments/account-header :: accountHeader}">
-    </div>
+    <aside th:replace="~{Html/fragments/admin-sidebar :: sidebar('db-data')}"></aside>
 
     <main class="dbadmin-container">
-
-        <nav class="dbadmin-topnav"
-             aria-label="Database administration navigation">
-
-            <a class="dbadmin-link"
-               href="/dbadmin"
-               th:href="@{/dbadmin}">
-                ← Database Admin Dashboard
-            </a>
-
-            <div class="dbadmin-actions">
-
-                <a class="dbadmin-link"
-                   href="/dbadmin/database"
-                   th:href="@{/dbadmin/database}">
-                    View Data
-                </a>
-
-                <a class="dbadmin-link"
-                   href="/dbadmin/update"
-                   th:href="@{/dbadmin/update}">
-                    Edit Records
-                </a>
-
-            </div>
-        </nav>
 
         <header class="dbadmin-header">
 

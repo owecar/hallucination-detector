@@ -1,0 +1,44 @@
+h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #5b7193;
+            margin-bottom: 30px;
+        }
+
+        .dataset-card {
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 20px;
+            max-width: 900px;
+            box-shadow: 0 8px 24px rgba(15, 54, 105, 0.06);
+        }
+
+        .dataset-card h2 {
+            margin-top: 0;
+        }
+
+        .dataset-card p {
+            line-height: 1.7;
+            color: #49658b;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e6f1ff;
+            color: #1761ba;
+            border-radius: 20px;
+            padding: 7px 13px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f6ff;
+            border-radius: 10px;
+            color: #49658b;
+        }

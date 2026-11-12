@@ -1,0 +1,76 @@
+.admin-workspace, .admin-workspace * { box-sizing: border-box; }
+body.admin-workspace {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    font-family: "Segoe UI", system-ui, Arial, sans-serif;
+    color: #12284a;
+    background: linear-gradient(135deg, #eaf4ff, #cfe4ff 60%, #e6f1ff);
+}
+.admin-workspace > main { flex: 1; min-width: 0; padding: 28px 34px; }
+.admin-sidebar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex: 0 0 236px;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    font-family: "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.4;
+    padding: 22px 14px;
+    background: linear-gradient(180deg, #0b2a5b, #08224b);
+    color: white;
+}
+.admin-sidebar-brand { padding: 0 10px 22px; font-size: 18px; font-weight: 700; }
+.admin-sidebar-section {
+    margin: 22px 12px 10px;
+    color: #91b7eb;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+.admin-sidebar nav a,
+.admin-sidebar-disabled {
+    display: block;
+    margin-bottom: 6px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    color: #cfe0ff;
+    font-size: 15px;
+    font-weight: 400;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+.admin-sidebar-disabled { color: #a4b9d7; }
+
+.admin-sidebar nav a:hover, .admin-sidebar button:hover { background: rgba(255, 255, 255, 0.12); }
+.admin-sidebar nav a[aria-current="page"] { background: #2f86f6; color: white; font-weight: 600; }
+.admin-sidebar-account {
+    margin-top: auto;
+    padding: 14px 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    color: #cfe0ff;
+    font-size: 13px;
+}
+.admin-sidebar-account strong { display: block; overflow-wrap: anywhere; color: white; font-size: 14px; }
+.admin-sidebar button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: 1px solid #91b7eb;
+    border-radius: 8px;
+    background: transparent;
+    color: white;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+.admin-sidebar :is(a, button):focus-visible { outline: 2px solid white; outline-offset: 2px; }
+@media (max-width: 720px) {
+    body.admin-workspace { flex-direction: column; }
+    .admin-sidebar { position: static; flex: none; height: auto; }
+    .admin-workspace > main { padding: 20px 16px; }
+}

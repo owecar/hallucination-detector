@@ -1,0 +1,46 @@
+<aside th:fragment="sidebar(currentPage)" class="admin-sidebar">
+    <div class="admin-sidebar-brand">🧠 Detector System</div>
+
+    <nav aria-label="Main navigation">
+        <p class="admin-sidebar-section">Main menu</p>
+        <a th:href="@{/}" href="/" th:attr="aria-current=${currentPage == 'home' ? 'page' : null}">Home</a>
+        <a th:href="@{/history}" href="/history" th:attr="aria-current=${currentPage == 'history' ? 'page' : null}">Question History</a>
+
+        <th:block th:if="${signedInRole == 'Admin'}">
+            <p class="admin-sidebar-section">Administration</p>
+            <a th:href="@{/admin}" href="/admin"
+               th:attr="aria-current=${currentPage == 'dashboard' ? 'page' : null}">
+                Admin Dashboard
+            </a>
+            <span class="admin-sidebar-disabled" role="link" aria-disabled="true">Manage Users</span>
+            <a th:href="@{/admin/datasets}" href="/admin/datasets"
+               th:attr="aria-current=${currentPage == 'datasets' ? 'page' : null}">
+                Manage Datasets
+            </a>
+            <a th:href="@{/admin/api-models}" href="/admin/api-models"
+               th:attr="aria-current=${currentPage == 'models' ? 'page' : null}">
+                API &amp; Models
+            </a>
+            <span class="admin-sidebar-disabled" role="link" aria-disabled="true">Database</span>
+        </th:block>
+
+        <th:block th:if="${signedInRole == 'Database Admin'}">
+            <p class="admin-sidebar-section">Administration</p>
+            <a th:href="@{/dbadmin}" href="/dbadmin"
+               th:attr="aria-current=${currentPage == 'db-dashboard' ? 'page' : null}">Database Admin Dashboard</a>
+            <a th:href="@{/dbadmin/database}" href="/dbadmin/database"
+               th:attr="aria-current=${currentPage == 'db-data' ? 'page' : null}">View Database Data</a>
+            <a th:href="@{/dbadmin/update}" href="/dbadmin/update"
+               th:attr="aria-current=${currentPage == 'db-edit' ? 'page' : null}">Update Database Records</a>
+        </th:block>
+    </nav>
+
+    <div class="admin-sidebar-account" th:if="${signedInUsername != null}">
+        Signed in as
+        <strong th:text="${signedInUsername}">Administrator</strong>
+        <span th:text="${signedInRole}">Admin</span>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Log Out</button>
+        </form>
+    </div>
+</aside>

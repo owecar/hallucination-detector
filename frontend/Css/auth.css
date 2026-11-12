@@ -118,3 +118,29 @@
     outline: 2px solid #74ecff;
     outline-offset: 3px;
 }
+
+body.auth-page.register-page {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #092766;
+    background: linear-gradient(135deg, #eaf9ff, #9cddff);
+}
+.register-page .auth-container {
+    background: #f7fcff;
+    border: 1px solid #c5e3fa;
+    box-shadow: 0 24px 65px rgba(15, 89, 160, 0.20);
+}
+.register-page .auth-container p { color: #24436b; }
+.register-page .auth-container input, .register-page .auth-container select {
+    background: white;
+    border-color: #9ab9d9;
+    color: #092766;
+}
+.register-page .auth-container button[type="submit"] { border: 0; background: #155bc3; color: white; }
+.register-page .auth-container button[type="button"] { border-color: #709ed0; color: #124e9f; }
+.register-page .auth-container :is(input, select, button, a):focus-visible {
+    outline: 2px solid #155bc3;
+    outline-offset: 3px;
+}
+.register-page .auth-container a { color: #124e9f; }
+.register-page .auth-container #register-error { color: #a61b25; }

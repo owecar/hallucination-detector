@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,16 +7,7 @@
 <style>
 :root{--navy:#0b2a5b;--blue:#1d6fe8;--ink:#12284a;--mute:#5b6f8f;--line:#d6e4f7;--ok:#16a34a;--okbg:#e3f6e9;--bad:#dc2626;--badbg:#fde8e8;--warn:#b45309;--warnbg:#fef3c7}
 *{box-sizing:border-box;margin:0}
-body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#eaf4ff,#cfe4ff 60%,#e6f1ff);min-height:100vh;display:flex}
 a{color:inherit;text-decoration:none}
-.side{width:236px;flex:none;background:linear-gradient(180deg,var(--navy),#08224b);color:#fff;padding:22px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
-.brand{font-weight:700;font-size:18px;padding:0 10px 22px}
-.nav a{display:block;padding:11px 12px;border-radius:10px;margin-bottom:6px;font-size:15px;color:#cfe0ff}
-.nav a.on{background:#2f86f6;color:#fff;font-weight:600}
-.nav a:hover:not(.on){background:rgba(255,255,255,.1)}
-.me{margin-top:auto;padding:14px 10px;border-top:1px solid rgba(255,255,255,.2);font-size:13px;color:#cfe0ff}
-.me b{display:block;color:#fff;font-size:14px}
-.me a{display:inline-block;margin-top:10px;color:#fff;font-weight:600}
 main{flex:1;padding:28px 34px;min-width:0}
 h1{font-size:28px;color:var(--navy)}
 .sub{color:var(--mute);margin:4px 0 22px}
@@ -61,79 +52,13 @@ tr:last-child td{border-bottom:0}
 .qa small{display:block;color:var(--mute);font-weight:400;margin-top:3px;font-size:12.5px}
 .note{margin-top:26px;color:var(--mute);font-size:12.5px;text-align:center}
 @media(max-width:1000px){.stats,.qa{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
-@media(max-width:720px){body{flex-direction:column}.side{width:100%;height:auto;position:static}.nav{display:flex;flex-wrap:wrap;gap:6px}.nav a{margin:0}main{padding:20px 16px}}
-
-/* Sidebar section headings */
-
-.nav-section {
-    margin: 22px 12px 10px;
-    color: #91b7eb;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-}
-
-/* Sidebar spacing */
-
-.nav a {
-    transition: background 0.2s ease;
-}
-
-.nav a:hover {
-    background: rgba(255,255,255,0.12);
-}
 </style>
+<link rel="stylesheet" th:href="@{/Css/admin-sidebar.css}" href="../Css/admin-sidebar.css">
 </head>
-<body>
+<body class="admin-workspace">
 
 
-<aside class="side">
-  <div class="brand">🧠 Detector System</div>
-
-  <nav class="nav" aria-label="Admin navigation">
-
-    <div class="nav-section">MAIN MENU</div>
-
-    <a th:href="@{/}" href="/">
-      🏠 Home / Ask a Question
-    </a>
-
-    <a th:href="@{/history}" href="/history">
-      🕒 Question History
-    </a>
-
-    <div class="nav-section">ADMINISTRATION</div>
-
-    <a class="on" href="#" aria-current="page">
-      🛠️ Admin Dashboard
-    </a>
-
-    <a href="#">
-      👥 Manage Users
-    </a>
-
-    <a th:href="@{/admin/datasets}" href="/admin/datasets">
-      🗂️ Manage Datasets
-    </a>
-
-    <a th:href="@{/admin/api-models}" href="/admin/api-models">
-      ⚙️ API &amp; Models
-    </a>
-
-    <a href="#">
-      🗄️ Database
-    </a>
-
-  </nav>
-
-  <div class="me">
-    Signed in as
-    <b>Administrator</b>
-    <span id="urole"></span>
-
-    <a href="#">↪ Log Out</a>
-  </div>
-</aside>
+<aside th:replace="~{Html/fragments/admin-sidebar :: sidebar('dashboard')}"></aside>
 
 
 <main>
@@ -186,7 +111,7 @@ tr:last-child td{border-bottom:0}
 
         <tbody>
             <tr>
-                <td>✨ Google Gemini</td>
+                <td>Google Gemini</td>
                 <td>Generates AI answers</td>
                 <td>
                     <a th:href="@{/admin/api-models}"
@@ -197,7 +122,7 @@ tr:last-child td{border-bottom:0}
             </tr>
 
             <tr>
-                <td>📚 Wikipedia</td>
+                <td>Wikipedia</td>
                 <td>Provides evidence for claim verification</td>
                 <td>
                     <a th:href="@{/admin/datasets}"
@@ -208,7 +133,7 @@ tr:last-child td{border-bottom:0}
             </tr>
 
             <tr>
-                <td>🧪 FEVER</td>
+                <td>FEVER</td>
                 <td>Evaluation dataset</td>
                 <td>
                     <a th:href="@{/admin/datasets}"
@@ -267,3 +192,6 @@ tr:last-child td{border-bottom:0}
     </p>
 
 </div>
+</main>
+</body>
+</html>
