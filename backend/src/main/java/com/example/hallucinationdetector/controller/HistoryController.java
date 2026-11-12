@@ -1,8 +1,10 @@
 package com.example.hallucinationdetector.controller;
 
 import com.example.hallucinationdetector.repository.SavedQueryRepository;
+import com.example.hallucinationdetector.repository.AppUserRepository;
+import com.example.hallucinationdetector.model.AppUser;
+import org.springframework.security.core.Authentication;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,20 +16,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class HistoryController {
 
     private final SavedQueryRepository repository;
+    private final AppUserRepository userRepository;
 
-    public HistoryController(SavedQueryRepository repository) {
+    public HistoryController(SavedQueryRepository repository, AppUserRepository userRepository) {
         this.repository = repository;
+        this.userRepository = userRepository;
     }
 
-    // View Question History
     @GetMapping("/history")
-    public String viewHistory(Model model) {
+    public String viewHistory(Model model, Authentication authentication) {
+        AppUser user = currentUser(authentication);
 
         model.addAttribute(
             "history",
-            repository.findAll(
-                Sort.by(Sort.Direction.DESC, "createdAt")
-            )
+            repository.findByOwner_IdOrderByCreatedAtDesc(user.getId())
         );
 
         return "Html/userhistory";
@@ -37,11 +39,14 @@ public class HistoryController {
     @PostMapping("/history/delete/{id}")
     public String deleteQuestion(
             @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Authentication authentication) {
+        AppUser user = currentUser(authentication);
+        var record = repository.findByIdAndOwner_Id(id, user.getId());
 
-        if (repository.existsById(id)) {
+        if (record.isPresent()) {
 
-            repository.deleteById(id);
+            repository.delete(record.get());
 
             redirectAttributes.addFlashAttribute(
                 "message",
@@ -57,5 +62,12 @@ public class HistoryController {
         }
 
         return "redirect:/history";
+    }
+    private AppUser currentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new org.springframework.security.access.AccessDeniedException("Login required");
+        }
+        return userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new org.springframework.security.access.AccessDeniedException("User not found"));
     }
 }
